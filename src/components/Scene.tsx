@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { CameraControls, Sky, ContactShadows } from "@react-three/drei";
+import { CameraControls, Sky, ContactShadows, Stars } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import FloatingIsland from "./FloatingIsland";
 import Ocean from "./Ocean";
@@ -38,14 +38,11 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
     onSectionClick(section);
     
     if (position && cameraControlsRef.current) {
-      // Animate camera to focus on the building
-      // We also slightly zoom in for orthographic effect if needed, but setLookAt pans the view beautifully.
       cameraControlsRef.current.setLookAt(
         position[0] + 15, position[1] + 15, position[2] + 15, // eye
         position[0], position[1], position[2],             // target
         true
       );
-      // Zoom in a bit
       cameraControlsRef.current.zoomTo(80, true);
     }
   };
@@ -69,16 +66,19 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
         {isLight ? (
           <Sky distance={450000} sunPosition={[10, 20, 15]} inclination={0} azimuth={0.25} />
         ) : (
-          <color attach="background" args={[bgColor]} />
+          <>
+            <color attach="background" args={[bgColor]} />
+            <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+          </>
         )}
         
-        <ambientLight intensity={isLight ? 1.2 : 0.4} color="#ffffff" />
+        <ambientLight intensity={isLight ? 1.2 : 0.2} color={isLight ? "#ffffff" : "#60a5fa"} />
         
         <directionalLight
-          position={[10, 20, 15]}
+          position={isLight ? [10, 20, 15] : [-10, 20, -15]}
           castShadow
-          intensity={isLight ? 2.0 : 1.0}
-          color="#ffffff"
+          intensity={isLight ? 2.5 : 0.5}
+          color={isLight ? "#fff3e0" : "#93c5fd"}
           shadow-mapSize={isMobile ? [1024, 1024] : [2048, 2048]}
           shadow-camera-left={-40}
           shadow-camera-right={40}

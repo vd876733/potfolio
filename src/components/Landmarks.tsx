@@ -424,3 +424,60 @@ export function WoodenDock({ position, isLight = false }: LandmarkProps) {
     </group>
   );
 }
+
+export function TreasureChest({ position, isLight = false }: LandmarkProps) {
+  const glowColor = "#facc15"; // Golden glow
+  
+  return (
+    <group position={position}>
+      {/* Base */}
+      <mesh position={[0, 0.5, 0]} castShadow receiveShadow>
+        <boxGeometry args={[2, 1, 1.5]} />
+        <meshStandardMaterial color="#78350f" roughness={0.9} />
+      </mesh>
+      
+      {/* Golden trim / lock */}
+      <mesh position={[0, 0.5, 0.76]}>
+        <boxGeometry args={[0.4, 0.4, 0.1]} />
+        <meshStandardMaterial color="#fbbf24" metalness={0.8} roughness={0.2} />
+      </mesh>
+
+      {/* Open Lid */}
+      <mesh position={[0, 1.3, -0.6]} rotation={[-Math.PI / 4, 0, Math.PI / 2]} castShadow>
+        <cylinderGeometry args={[1, 1, 2, 16, 1, false, 0, Math.PI]} />
+        <meshStandardMaterial color="#78350f" roughness={0.9} />
+      </mesh>
+
+      {/* Glowing Treasure Inside */}
+      <mesh position={[0, 1, 0]}>
+        <boxGeometry args={[1.8, 0.2, 1.3]} />
+        <meshStandardMaterial 
+          color={glowColor} 
+          emissive={glowColor} 
+          emissiveIntensity={2} 
+          toneMapped={false} 
+        />
+      </mesh>
+    </group>
+  );
+}
+
+export function WoodenBarrel({ position, isLight = false }: LandmarkProps) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 1, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.8, 0.8, 2, 12]} />
+        <meshStandardMaterial color="#451a03" roughness={0.9} />
+      </mesh>
+      {/* Metal bands */}
+      <mesh position={[0, 1.5, 0]}>
+        <cylinderGeometry args={[0.82, 0.82, 0.1, 12]} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.8} roughness={0.4} />
+      </mesh>
+      <mesh position={[0, 0.5, 0]}>
+        <cylinderGeometry args={[0.82, 0.82, 0.1, 12]} />
+        <meshStandardMaterial color="#94a3b8" metalness={0.8} roughness={0.4} />
+      </mesh>
+    </group>
+  );
+}

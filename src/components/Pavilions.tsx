@@ -2,7 +2,7 @@
 
 import { Text } from "@react-three/drei";
 import Pavilion from "./Pavilion";
-import { DetailedHouse, Lighthouse, Windmill, TownHall, Fountain, StoneArena, HouseCluster, Volcano } from "./Landmarks";
+import { DetailedHouse, Lighthouse, Windmill, TownHall, Fountain, StoneArena, HouseCluster, Volcano, TreasureChest, WoodenBarrel } from "./Landmarks";
 
 interface PavilionsProps {
   onSectionClick: (section: string, position?: [number, number, number]) => void;
@@ -26,34 +26,49 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
         </group>
       </Pavilion>
 
-      {/* 2. Arena Complex (Base Tier) */}
+      {/* 2. Arena / Rock Compound (Mid-West) */}
       <Pavilion
-        position={[-12, 0, 8]}
+        position={[-14, 2, 4]}
         label="Arena Complex"
         color="#F43F5E"
         onClick={onSectionClick}
       >
-        <StoneArena position={[0, 0, 0]} isLight={isLight} />
+        <group>
+          <StoneArena position={[0, 0, 0]} isLight={isLight} />
+          {/* Rock Ruins */}
+          <mesh position={[-4, 0, -3]} rotation={[Math.PI / 4, 0, 0]} castShadow>
+            <dodecahedronGeometry args={[1.5]} />
+            <meshStandardMaterial color={isLight ? "#94a3b8" : "#334155"} />
+          </mesh>
+          <mesh position={[4, 0, 4]} rotation={[0, Math.PI / 3, 0]} castShadow>
+            <dodecahedronGeometry args={[2]} />
+            <meshStandardMaterial color={isLight ? "#94a3b8" : "#334155"} />
+          </mesh>
+        </group>
       </Pavilion>
 
-      {/* 3. Project Workshops (Base Tier) */}
+      {/* 3. Knowledge Forge / Skills Village (Central Road) */}
       <Pavilion
-        position={[12, 0, 8]}
-        label="Project Workshops"
+        position={[10, 2, -10]}
+        label="Knowledge Forge"
         color="#10B981"
         onClick={onSectionClick}
       >
         <HouseCluster position={[0, 0, 0]} isLight={isLight} />
       </Pavilion>
 
-      {/* 4. Knowledge Forge (Mid Tier) */}
+      {/* 4. Treasure Island (Northeast Plateau) */}
       <Pavilion
-        position={[-10, 2, -10]}
-        label="Knowledge Forge"
+        position={[22, 0, -12]}
+        label="Treasure Island"
         color="#F59E0B"
         onClick={onSectionClick}
       >
-        <Windmill position={[0, 0, 0]} isLight={isLight} />
+        <group>
+          <TreasureChest position={[0, 0, 0]} isLight={isLight} />
+          <WoodenBarrel position={[3, 0, -1]} isLight={isLight} />
+          <WoodenBarrel position={[2, 0, -2]} isLight={isLight} />
+        </group>
       </Pavilion>
 
       {/* 5. Creative Atelier (North-West Cliff Base) */}

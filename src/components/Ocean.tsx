@@ -10,7 +10,7 @@ interface OceanProps {
 
 export default function Ocean({ isLight = false }: OceanProps) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const waterColor = isLight ? "#00a8ff" : "#020617";
+  const waterColor = isLight ? "#22d3ee" : "#1e3a8a"; // Cyan for day, Deep Blue for night
 
   return (
     <mesh ref={meshRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, -5, 0]} receiveShadow>
@@ -18,7 +18,7 @@ export default function Ocean({ isLight = false }: OceanProps) {
       <MeshDistortMaterial
         color={waterColor}
         transparent
-        opacity={isLight ? 0.7 : 0.9}
+        opacity={isLight ? 0.6 : 0.8}
         roughness={0.1}
         metalness={0.8}
         distort={0.4} // strength of the distortion
