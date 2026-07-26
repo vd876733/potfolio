@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --color-obsidian: #0B0C0E;
+  --color-charcoal: #1C1D21;
+  --color-matte-silver: #A0A0A0;
+  --color-neon-accent: #38BDF8;
+  --font-inter: var(--font-inter), sans-serif;
+  --font-space-grotesk: var(--font-space-grotesk), sans-serif;
+}
+
+@layer base {
+  html, body {
+    background-color: var(--color-obsidian);
+    color: #F3F4F6;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    background-color: rgba(28, 29, 33, 0.4);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+}

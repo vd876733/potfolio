@@ -1,0 +1,254 @@
+{
+  "personal": {
+    "firstName": "Varad",
+    "lastName": "Deshmukh",
+    "title": "Software Engineer & Creative Developer",
+    "location": "San Francisco, CA",
+    "bio": "I am a passionate software engineer specializing in building exceptional digital experiences. Currently, I am focused on creating accessible, human-centered products and exploring the intersection of web development and 3D graphics using React Three Fiber.",
+    "social": {
+      "github": "https://github.com/vd876733",
+      "linkedin": "https://www.linkedin.com/in/varad-deshmukh-31173a374/",
+      "twitter": "#"
+    },
+    "resumeUrl": "/varad_deshmukh_resume.docx"
+  },
+  "codingStats": {
+    "leetcode": {
+      "profileUrl": "https://leetcode.com/u/Varad_Max11/",
+      "globalRanking": "Top 5%",
+      "problemsSolved": "450+",
+      "progressPercentage": 65
+    },
+    "codechef": {
+      "profileUrl": "https://www.codechef.com/users/varad_11082005",
+      "rating": "1850",
+      "highestDivision": "Div 2",
+      "stars": 4
+    },
+    "hackerrank": {
+      "profileUrl": "https://www.hackerrank.com/profile/vd876733",
+      "badges": [
+        {
+          "topic": "Problem Solving",
+          "stars": 5
+        },
+        {
+          "topic": "10 Days of JS",
+          "stars": 5
+        }
+      ]
+    }
+  },
+  "projects": [
+    {
+      "id": "expense-tracker-pro",
+      "title": "Expense Tracker",
+      "stack": ["React", "Spring Boot", "Java", "Tailwind CSS"],
+      "description": "A comprehensive full-stack expense tracking application built with Spring Boot and React. Enables users to securely log daily expenses, monitor budgets, and visualize financial trends with an intuitive UI.",
+      "liveUrl": "#",
+      "githubUrl": "https://github.com/vd876733/Expense_Tracker-Spring-boot-And-React-"
+    },
+    {
+      "id": "nextjs-3d-portfolio",
+      "title": "Next.js 3D Portfolio",
+      "stack": ["Next.js", "Three.js", "Tailwind CSS"],
+      "description": "An immersive 3D architectural portfolio leveraging React Three Fiber and Framer Motion for interactive physics and beautiful post-processing bloom effects.",
+      "liveUrl": "#",
+      "githubUrl": "#"
+    }
+  ],
+  "skills": {
+    "Frontend": ["React", "Next.js", "Three.js", "Tailwind CSS", "Framer Motion"],
+    "Backend": ["Node.js", "Spring Boot", "PostgreSQL", "MongoDB"],
+    "AI/ML": ["TensorFlow", "PyTorch", "OpenAI API", "Python"],
+    "DevOps": ["Docker", "Kubernetes", "AWS", "CI/CD"]
+  },
+  "certificates": [
+    {
+      "id": "103481398OCI26DCFA",
+      "title": "Oracle AI Database Certified Foundations Associate",
+      "issuer": "Oracle Corporation",
+      "date": "July 2026",
+      "score": "88%",
+      "pdfUrl": "/certificates/oci26dcfa.jpg",
+      "verificationUrl": "https://certview.oracle.com"
+    },
+    {
+      "id": "google-ai-essentials",
+      "title": "Google AI Essentials Specialization",
+      "issuer": "Google & Coursera",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/coursera-hj8r7zq91zs9.pdf",
+      "verificationUrl": "https://www.credly.com/go/vPh8FLuY"
+    },
+    {
+      "id": "google-prompting-essentials",
+      "title": "Google Prompting Essentials Specialization",
+      "issuer": "Google & Coursera",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/coursera-migrstt467uf.pdf",
+      "verificationUrl": "https://www.credly.com/go/pPY0myAt"
+    },
+    {
+      "id": "ibm-sql-101",
+      "title": "SQL and Relational Databases 101",
+      "issuer": "IBM Skills Network / Cognitive Class",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/ibm-skills-network-db0101en-certificate--cognitive-class.pdf",
+      "verificationUrl": "https://courses.cognitiveclass.ai/certificates/e9feb19a9a7440fdb974e7155c8342c7"
+    },
+    {
+      "id": "3gf81c031719xGWXO8",
+      "title": "Introduction to Data Engineering and Bigdata",
+      "issuer": "GUVI HCL (Google for Education Partner)",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/hcl-guvi-certification---3gf81c031719xgwxo8.png"
+    },
+    {
+      "id": "Qwl8t170m70B503278",
+      "title": "Build & Deploy AI Apps with Google AI Studio",
+      "issuer": "GUVI HCL (Google for Education Partner)",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/hcl-guvi-certification---qwi8t170m70b503278.png"
+    },
+    {
+      "id": "hKCttMcQFKGy44mmm",
+      "title": "Software Engineering Job Simulation",
+      "issuer": "JPMorgan Chase & Co.",
+      "date": "June 2026",
+      "pdfUrl": "/certificates/jp-morgan-certificate.pdf"
+    },
+    {
+      "id": "oqxPCHPF6T3NnXzRo",
+      "title": "Data Analytics Job Simulation",
+      "issuer": "Deloitte",
+      "date": "June 2026",
+      "pdfUrl": "/certificates/deloitte-certificate.pdf"
+    },
+    {
+      "id": "93wqeRJ97BeWAhHQP",
+      "title": "Cyber Job Simulation",
+      "issuer": "Deloitte",
+      "date": "June 2026",
+      "pdfUrl": "/certificates/e9pa6qsdbeyekp3ti9pbtqmsxaf6zztsep6a28083c5a3d669fe0a72c081781923874806completioncertificate.pdf"
+    },
+    {
+      "id": "PFR1YNIXELSI",
+      "title": "Introduction to AI",
+      "issuer": "Google (via Coursera)",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/coursera-pfr1ynixelsi.pdf"
+    },
+    {
+      "id": "YPMUTHKZK0ZE",
+      "title": "Maximize Productivity With AI Tools",
+      "issuer": "Google (via Coursera)",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/coursera-ypmuthkzk0ze.pdf",
+      "verificationUrl": "https://coursera.org/verify/YPMUTHKZK0ZE"
+    },
+    {
+      "id": "J20UB8B2DH15",
+      "title": "Discover the Art of Prompting",
+      "issuer": "Google (via Coursera)",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/coursera-j20ub8b2dh15.pdf"
+    },
+    {
+      "id": "DKO43C57VMY8",
+      "title": "Start Writing Prompts like a Pro",
+      "issuer": "Google (via Coursera)",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/coursera-dko43c57vmy8.pdf"
+    },
+    {
+      "id": "K4541N7U2BCU",
+      "title": "Design Prompts for Everyday Work Tasks",
+      "issuer": "Google (via Coursera)",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/coursera-k4541n7u2bcu.pdf"
+    },
+    {
+      "id": "O7RT9G1W5MFY",
+      "title": "Speed Up Data Analysis and Presentation Building",
+      "issuer": "Google (via Coursera)",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/coursera-o7rt9g1w5mfy.pdf"
+    },
+    {
+      "id": "BYE98I6PKXZI",
+      "title": "Use AI as a Creative or Expert Partner",
+      "issuer": "Google (via Coursera)",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/coursera-bye98i6pkxzi.pdf"
+    },
+    {
+      "id": "OHNG5E871II7",
+      "title": "Use AI Responsibly",
+      "issuer": "Google (via Coursera)",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/coursera-ohng5e871ii7.pdf"
+    },
+    {
+      "id": "PH7TL8G42XXV",
+      "title": "Stay Ahead of the AI Curve",
+      "issuer": "Google (via Coursera)",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/coursera-ph7tl8g42xxv.pdf",
+      "verificationUrl": "https://coursera.org/verify/PH7TL8G42XXV"
+    },
+    {
+      "id": "google-ai-mod1",
+      "title": "Google AI Essentials – Module 1: Introduction to AI",
+      "issuer": "Google",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/googleaiessentialsv1badge20260711-20-u8zy49.pdf"
+    },
+    {
+      "id": "google-ai-mod2",
+      "title": "Google AI Essentials – Module 2: Maximize Productivity With AI Tools",
+      "issuer": "Google",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/google-ai-essentials-v1-1.png"
+    },
+    {
+      "id": "google-ai-mod3",
+      "title": "Google Prompting Essentials Badge",
+      "issuer": "Google",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/googlepromptingessentialsbadge20260711-20-bz6zqz.pdf"
+    },
+    {
+      "id": "google-ai-mod4",
+      "title": "Oracle E-Certificate",
+      "issuer": "Oracle",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/ecertificate.pdf"
+    },
+    {
+      "id": "google-ai-mod5",
+      "title": "Oracle Score Report",
+      "issuer": "Oracle",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/scorereport.pdf"
+    }
+  ],
+  "sketches": [
+    {
+      "id": 1,
+      "img": "https://picsum.photos/seed/sketch1/800/800"
+    },
+    {
+      "id": 2,
+      "img": "https://picsum.photos/seed/sketch2/800/800"
+    },
+    {
+      "id": 3,
+      "img": "https://picsum.photos/seed/sketch3/800/800"
+    },
+    {
+      "id": 4,
+      "img": "https://picsum.photos/seed/sketch4/800/800"
+    }
+  ]
+}
