@@ -8,6 +8,9 @@ import { OrbitControls } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import Ground from "./Ground";
 import Pavilions from "./Pavilions";
+import RoadNetwork from "./RoadNetwork";
+import Cars from "./Cars";
+import Birds from "./Birds";
 
 interface SceneProps {
   onSectionClick: (section: string) => void;
@@ -54,6 +57,11 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
         />
 
         <Ground isLight={isLight} />
+
+        {/* Dynamic Scene Additions */}
+        <RoadNetwork isLight={isLight} />
+        <Cars />
+        <Birds isLight={isLight} />
 
         {/* The 5 Portfolio Sections */}
         <Pavilions onSectionClick={onSectionClick} />
