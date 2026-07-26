@@ -10,7 +10,7 @@ interface OceanProps {
 
 export default function Ocean({ isLight = false }: OceanProps) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const waterColor = isLight ? "#38bdf8" : "#020617";
+  const waterColor = isLight ? "#00a8ff" : "#020617";
 
   return (
     <mesh ref={meshRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, -5, 0]} receiveShadow>
