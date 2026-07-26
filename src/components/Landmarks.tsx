@@ -268,12 +268,33 @@ export function StoneArena({ position, isLight = false }: LandmarkProps) {
   );
 }
 
+export function StrawHut({ position, isLight = false }: LandmarkProps) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 1, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[1.5, 1.5, 2, 8]} />
+        <meshStandardMaterial color="#d4d4d8" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, 2.5, 0]} castShadow receiveShadow>
+        <coneGeometry args={[1.8, 1.5, 8]} />
+        <meshStandardMaterial color="#fcd34d" roughness={1.0} />
+      </mesh>
+      <mesh position={[0, 0.6, 1.45]}>
+        <boxGeometry args={[0.6, 1.2, 0.1]} />
+        <meshStandardMaterial color="#451a03" />
+      </mesh>
+    </group>
+  );
+}
+
 export function HouseCluster({ position, isLight = false }: LandmarkProps) {
   return (
     <group position={position}>
       <DetailedHouse position={[-2, 0, 1]} isLight={isLight} color="#f472b6" />
-      <DetailedHouse position={[2, 0, 0]} isLight={isLight} color="#38bdf8" />
-      <DetailedHouse position={[0, 0, -2]} isLight={isLight} color="#facc15" />
+      <DetailedHouse position={[3, 0, 0]} isLight={isLight} color="#38bdf8" />
+      <DetailedHouse position={[0, 0, -3]} isLight={isLight} color="#facc15" />
+      <StrawHut position={[-3, 0, -2]} isLight={isLight} />
+      <StrawHut position={[2, 0, 2]} isLight={isLight} />
     </group>
   );
 }
@@ -299,7 +320,7 @@ export function Volcano({ position, isLight = false }: LandmarkProps) {
   });
 
   return (
-    <group position={position}>
+    <group position={position} scale={[1.8, 1.8, 1.8]}>
       {/* Volcano Cone */}
       <mesh position={[0, 4, 0]} castShadow receiveShadow>
         <cylinderGeometry args={[2, 8, 8, 32]} />

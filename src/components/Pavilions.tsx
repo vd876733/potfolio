@@ -16,13 +16,11 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
       <Pavilion
         position={[0, 10.8, 0]}
         label="Town Plaza"
-        color="#38BDF8"
+        color="#EF4444"
         onClick={onSectionClick}
       >
         <group position={[0, 0, 0]}>
-          <Volcano position={[0, 0, -4]} isLight={isLight} />
-          <TownHall position={[0, 0, 2]} isLight={isLight} />
-          <Fountain position={[4, 0, 0]} isLight={isLight} />
+          <TownHall position={[0, 0, 0]} isLight={isLight} />
         </group>
       </Pavilion>
 
@@ -57,15 +55,15 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
         <HouseCluster position={[0, 0, 0]} isLight={isLight} />
       </Pavilion>
 
-      {/* 4. Treasure Island (Northeast Plateau) */}
+      {/* 4. Project Workshops (Northeast Plateau) */}
       <Pavilion
         position={[48.4, 0, -26.4]}
-        label="Treasure Island"
+        label="Project Workshops"
         color="#F59E0B"
         onClick={onSectionClick}
       >
         <group>
-          <TreasureChest position={[0, 0, 0]} isLight={isLight} />
+          <Windmill position={[0, 0, 0]} isLight={isLight} />
           <WoodenBarrel position={[3, 0, -1]} isLight={isLight} />
           <WoodenBarrel position={[2, 0, -2]} isLight={isLight} />
         </group>
