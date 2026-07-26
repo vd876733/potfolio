@@ -88,7 +88,7 @@ export default function Ocean({ isLight = false }: OceanProps) {
   };
 
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -5, 0]} receiveShadow>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} receiveShadow>
       <planeGeometry args={[3000, 3000, 128, 128]} />
       <meshStandardMaterial
         ref={materialRef}

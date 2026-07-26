@@ -21,16 +21,18 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
     }
   });
 
-  const terrainGeometry = useMemo(() => {
+  const { terrainGeo, beachGeo } = useMemo(() => {
     const width = 60;
     const height = 60;
     const segments = 128;
-    const geo = new THREE.PlaneGeometry(width, height, segments, segments);
-    const pos = geo.attributes.position;
+    const tGeo = new THREE.PlaneGeometry(width, height, segments, segments);
+    const bGeo = new THREE.PlaneGeometry(width, height, segments, segments);
+    const tPos = tGeo.attributes.position;
+    const bPos = bGeo.attributes.position;
     
-    for (let i = 0; i < pos.count; i++) {
-      const x = pos.getX(i);
-      const y = pos.getY(i);
+    for (let i = 0; i < tPos.count; i++) {
+      const x = tPos.getX(i);
+      const y = tPos.getY(i);
       
       const u = x / (width / 2); // [-1, 1]
       const v = y / (height / 2); // [-1, 1]
@@ -44,6 +46,7 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
       const D = Math.max(1 - d_south, 1 - d_north, 1 - d_mid);
       
       let z = -2; // Ocean floor depth
+      let baseH = -2;
       
       if (D > 0) {
         let edgeProfile = D;
@@ -74,6 +77,7 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
         peakHeight *= craterDip;
         
         h = Math.max(h, peakHeight);
+        baseH = h;
         
         // Jagged noise for cliffs and rocks
         const noise = (Math.sin(u * 31.4) * Math.cos(v * 43.1) * 0.15) + 
@@ -85,21 +89,61 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
         z = h;
       } else {
         z = -2 + D * 5; // Under water sloping
+        baseH = z;
       }
       
-      pos.setZ(i, z);
+      tPos.setZ(i, z);
+      
+      // Calculate sand mask for beach geometry
+      let sandFactor = 0;
+      let sandMinZ = 0.5; // Starts underwater
+      let sandMaxZ = 1.6; // Ends above water
+      
+      // East/South wider
+      sandMaxZ += Math.max(0, u) * 0.8;
+      sandMaxZ += Math.max(0, -v) * 0.8;
+      
+      // West thinner / tapered
+      if (u < -0.05) {
+        sandMaxZ = 1.15; // Just barely above the waterline (which is ~1.055)
+      }
+      
+      if (baseH >= sandMinZ && baseH <= sandMaxZ) {
+        if (baseH < sandMinZ + 0.2) {
+          sandFactor = (baseH - sandMinZ) / 0.2;
+        } else if (baseH > sandMaxZ - 0.2) {
+          sandFactor = (sandMaxZ - baseH) / 0.2;
+        } else {
+          sandFactor = 1.0;
+        }
+      }
+      
+      // Bury non-sand parts deeply inside the terrain
+      const bZ = z - 0.8 * (1 - sandFactor);
+      bPos.setZ(i, bZ);
     }
     
-    geo.computeVertexNormals();
-    return geo;
+    tGeo.computeVertexNormals();
+    bGeo.computeVertexNormals();
+    return { terrainGeo: tGeo, beachGeo: bGeo };
   }, []);
 
   return (
     <group ref={group}>
       {/* Scaled Terrain */}
       <group scale={[2.2, 1.8, 2.2]}>
-        <mesh geometry={terrainGeometry} rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow castShadow>
+        <mesh geometry={terrainGeo} rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow castShadow>
           <meshStandardMaterial color="#6d4c41" roughness={0.9} />
+        </mesh>
+        
+        <mesh geometry={beachGeo} rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow castShadow>
+          <meshStandardMaterial 
+            color="#eedc9a" 
+            roughness={0.9} 
+            polygonOffset 
+            polygonOffsetFactor={-1} 
+            polygonOffsetUnits={-1} 
+          />
         </mesh>
       </group>
       

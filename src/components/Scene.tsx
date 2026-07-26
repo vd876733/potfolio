@@ -84,15 +84,7 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
           shadow-bias={-0.0001}
         />
 
-        <ContactShadows
-          position={[0, -0.1, 0]}
-          opacity={0.6}
-          scale={100}
-          blur={2}
-          far={10}
-        />
-
-        {/* <Ocean isLight={isLight} /> */}
+        <Ocean isLight={isLight} />
 
         <FloatingIsland isLight={isLight}>
           <Props isLight={isLight} />
