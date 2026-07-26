@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { Instances, Instance } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 
 interface PropsProps {
   isLight?: boolean;
@@ -75,6 +77,41 @@ export default function Props({ isLight = false }: PropsProps) {
           <Instance key={`rock-${i}`} position={props.position} scale={props.scale} rotation={props.rotation} />
         ))}
       </Instances>
+
+      {/* Boats */}
+      <BobbingBoat position={[25, -2.5, 10]} />
+      <BobbingBoat position={[-28, -2.5, -5]} scale={0.8} />
+    </group>
+  );
+}
+
+function BobbingBoat({ position, scale = 1 }: { position: [number, number, number]; scale?: number }) {
+  const boatRef = useRef<THREE.Group>(null);
+  
+  useFrame((state) => {
+    if (boatRef.current) {
+      const t = state.clock.getElapsedTime();
+      // Subtle rocking in water
+      boatRef.current.position.y = position[1] + Math.sin(t * 1.5) * 0.08;
+      boatRef.current.rotation.x = Math.sin(t * 1.2) * 0.05;
+      boatRef.current.rotation.z = Math.cos(t * 1.0) * 0.04;
+    }
+  });
+
+  return (
+    <group ref={boatRef} position={position} scale={scale}>
+      <mesh position={[0, -0.2, 0]} castShadow>
+        <boxGeometry args={[1.5, 0.5, 3]} />
+        <meshStandardMaterial color="#8b5a2b" roughness={0.8} />
+      </mesh>
+      <mesh position={[0, 1, 0.5]} castShadow>
+        <cylinderGeometry args={[0.05, 0.05, 2]} />
+        <meshStandardMaterial color="#333333" />
+      </mesh>
+      <mesh position={[0, 1, 0.5]} rotation={[0, Math.PI / 4, 0]} castShadow>
+        <planeGeometry args={[1.5, 1.8]} />
+        <meshStandardMaterial color="#ffffff" side={THREE.DoubleSide} />
+      </mesh>
     </group>
   );
 }

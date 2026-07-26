@@ -17,7 +17,10 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
 
   useFrame(({ clock }) => {
     if (group.current) {
-      group.current.position.y = Math.sin(clock.elapsedTime) * 0.5;
+      const t = clock.elapsedTime;
+      // Gentle vertical bobbing & slight rotation tilt
+      group.current.position.y = Math.sin(t * 0.8) * 0.15;
+      group.current.rotation.z = Math.sin(t * 0.5) * 0.01;
     }
   });
 
