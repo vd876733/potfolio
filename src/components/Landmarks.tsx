@@ -307,7 +307,7 @@ export function Volcano({ position, isLight = false }: LandmarkProps) {
       </mesh>
       <mesh position={[0, 8.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[1.9, 16]} />
-        <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={2} toneMapped={false} />
+        <meshStandardMaterial color="#ff3d00" emissive="#ff3d00" emissiveIntensity={2} toneMapped={false} />
       </mesh>
       {/* Smoke */}
       <group ref={smokeRef} position={[0, 8, 0]}>
@@ -385,12 +385,12 @@ export function PirateShip({ position, isLight = false }: LandmarkProps) {
       {/* Hull */}
       <mesh position={[0, 1.5, 0]} castShadow>
         <boxGeometry args={[4, 2, 8]} />
-        <meshStandardMaterial color="#451a03" />
+        <meshStandardMaterial color="#4e3629" />
       </mesh>
       {/* Bow */}
       <mesh position={[0, 1.5, 5]} rotation={[Math.PI / 2, 0, 0]} castShadow>
         <coneGeometry args={[2, 4, 4]} />
-        <meshStandardMaterial color="#451a03" />
+        <meshStandardMaterial color="#4e3629" />
       </mesh>
       {/* Mast */}
       <mesh position={[0, 5, 0]} castShadow>
@@ -402,6 +402,34 @@ export function PirateShip({ position, isLight = false }: LandmarkProps) {
         <planeGeometry args={[5, 5]} />
         <meshStandardMaterial color="#000000" side={THREE.DoubleSide} />
       </mesh>
+      {/* Skull Motif on Sail */}
+      <group position={[0, 5, 0.22]}>
+        <mesh position={[0, 0.5, 0]}>
+          <planeGeometry args={[1.5, 1.2]} />
+          <meshStandardMaterial color="#ffffff" side={THREE.DoubleSide} />
+        </mesh>
+        <mesh position={[-0.4, -0.4, 0]}>
+          <planeGeometry args={[0.5, 0.5]} />
+          <meshStandardMaterial color="#ffffff" side={THREE.DoubleSide} />
+        </mesh>
+        <mesh position={[0.4, -0.4, 0]}>
+          <planeGeometry args={[0.5, 0.5]} />
+          <meshStandardMaterial color="#ffffff" side={THREE.DoubleSide} />
+        </mesh>
+        <mesh position={[0, -0.2, 0]}>
+          <planeGeometry args={[0.8, 0.6]} />
+          <meshStandardMaterial color="#ffffff" side={THREE.DoubleSide} />
+        </mesh>
+        {/* Eyes (Black) */}
+        <mesh position={[-0.3, 0.5, 0.01]}>
+          <planeGeometry args={[0.3, 0.3]} />
+          <meshStandardMaterial color="#000000" side={THREE.DoubleSide} />
+        </mesh>
+        <mesh position={[0.3, 0.5, 0.01]}>
+          <planeGeometry args={[0.3, 0.3]} />
+          <meshStandardMaterial color="#000000" side={THREE.DoubleSide} />
+        </mesh>
+      </group>
     </group>
   );
 }

@@ -64,7 +64,7 @@ function StreetLamp({ position, isLight }: { position: [number, number, number],
 }
 
 export default function RoadNetwork({ isLight = false }: RoadNetworkProps) {
-  const roadColor = isLight ? "#94a3b8" : "#2c3e50"; // Dark asphalt road
+  const roadColor = isLight ? "#2c3e50" : "#1e293b"; // Dark asphalt road
 
   // Create points for the yellow central line, elevated slightly above the tube
   const centerLinePoints = useMemo(() => {
@@ -82,7 +82,7 @@ export default function RoadNetwork({ isLight = false }: RoadNetworkProps) {
       {/* Yellow Central Line */}
       <Line
         points={centerLinePoints}
-        color="#eab308"
+        color="#ffffff"
         lineWidth={2}
         dashed={true}
         dashScale={5}

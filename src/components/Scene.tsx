@@ -67,10 +67,10 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
           </>
         )}
         
-        <ambientLight intensity={isLight ? 1.2 : 0.2} color={isLight ? "#ffffff" : "#60a5fa"} />
+        <ambientLight intensity={isLight ? 0.9 : 0.2} color={isLight ? "#e0f7fa" : "#60a5fa"} />
         
         <directionalLight
-          position={isLight ? [10, 20, 15] : [-10, 20, -15]}
+          position={isLight ? [20, 30, 20] : [-10, 20, -15]}
           castShadow
           intensity={isLight ? 2.5 : 0.5}
           color={isLight ? "#fff3e0" : "#93c5fd"}
@@ -83,10 +83,10 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
         />
 
         <ContactShadows
-          position={[0, -2.05, 0]}
+          position={[0, -0.1, 0]}
           opacity={0.6}
-          scale={50}
-          blur={1.5}
+          scale={100}
+          blur={2}
           far={10}
         />
 
