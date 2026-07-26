@@ -2,6 +2,7 @@
 
 import { Monitor, Layers } from "lucide-react";
 import portfolioData from "@/data/portfolio.json";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface TopNavProps {
   onNavClick: (section: string) => void;
@@ -52,6 +53,8 @@ export default function TopNav({ onNavClick, viewMode, toggleViewMode }: TopNavP
             <Monitor className="w-4 h-4 text-neon-accent" />
             {viewMode === "3D" ? "2D Mode" : "3D Map"}
           </button>
+          
+          <ThemeToggle />
         </div>
       </nav>
     </div>
