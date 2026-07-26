@@ -90,11 +90,11 @@ export default function ForgeModal() {
               className="absolute inset-0 w-full grid grid-cols-1 md:grid-cols-2 gap-4 p-2 max-h-[600px] overflow-y-auto"
             >
               {certificates.map((cert, index) => (
-                <div key={index} className="flex flex-col justify-between p-4 bg-zinc-900 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-all">
+                <div key={index} className="flex flex-col justify-between p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-slate-300 dark:hover:border-slate-700 transition-all">
                   <div>
-                    <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">{cert.issuer || "Certification"}</span>
+                    <span className="text-xs font-semibold text-indigo-500 dark:text-indigo-400 uppercase tracking-wider">{cert.issuer || "Certification"}</span>
                     <h4 className="text-base font-bold text-slate-900 dark:text-white mt-1 mb-2">{cert.title || cert.name}</h4>
-                    {cert.date && <p className="text-xs text-zinc-400 mb-3">{cert.date}</p>}
+                    {cert.date && <p className="text-xs text-slate-600 dark:text-slate-400 mb-3">{cert.date}</p>}
                   </div>
 
                   {/* PROMINENT ACTION BUTTON */}
@@ -102,7 +102,7 @@ export default function ForgeModal() {
                     href={cert.pdfUrl || cert.url || cert.link || cert.verificationUrl || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2 w-full py-2 px-3 bg-indigo-600 hover:bg-indigo-500 text-slate-900 dark:text-white font-medium text-xs rounded-lg flex items-center justify-center gap-2 transition-all shadow-sm"
+                    className="mt-2 w-full py-2 px-3 bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs rounded-lg flex items-center justify-center gap-2 transition-all shadow-sm"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

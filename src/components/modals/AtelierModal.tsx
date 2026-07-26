@@ -42,7 +42,7 @@ export default function AtelierModal() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedImage(null)}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-slate-900/40 dark:bg-black/90 backdrop-blur-md cursor-pointer"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-white/80 dark:bg-black/90 backdrop-blur-md cursor-pointer"
           >
             <motion.div
               layoutId={`sketch-${sketches.find(s => s.img === selectedImage)?.id}`}
