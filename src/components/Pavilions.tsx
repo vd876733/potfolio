@@ -12,15 +12,15 @@ interface PavilionsProps {
 export default function Pavilions({ onSectionClick, isLight = false }: PavilionsProps) {
   return (
     <group>
-      {/* 1. Volcano Peak Pavilion (Peak Tier) */}
+      {/* 1. Town Plaza Pavilion (Peak Tier) */}
       <Pavilion
         position={[0, 10.8, 0]}
-        label="Volcano Peak"
+        label="Town Plaza"
         color="#EF4444"
         onClick={onSectionClick}
       >
         <group position={[0, 0, 0]}>
-          <Volcano position={[0, 0, 0]} isLight={isLight} />
+          <TownHall position={[0, 0, 0]} isLight={isLight} />
         </group>
       </Pavilion>
 
@@ -55,15 +55,15 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
         <HouseCluster position={[0, 0, 0]} isLight={isLight} />
       </Pavilion>
 
-      {/* 4. Treasure Island (Northeast Plateau) */}
+      {/* 4. Project Workshops (Northeast Plateau) */}
       <Pavilion
         position={[48.4, 0, -26.4]}
-        label="Treasure Island"
+        label="Project Workshops"
         color="#F59E0B"
         onClick={onSectionClick}
       >
         <group>
-          <TreasureChest position={[0, 0, 0]} isLight={isLight} />
+          <Windmill position={[0, 0, 0]} isLight={isLight} />
           <WoodenBarrel position={[3, 0, -1]} isLight={isLight} />
           <WoodenBarrel position={[2, 0, -2]} isLight={isLight} />
         </group>

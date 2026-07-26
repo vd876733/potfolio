@@ -75,10 +75,12 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
           intensity={isLight ? 2.2 : 0.5}
           color={isLight ? "#fff4e0" : "#93c5fd"}
           shadow-mapSize={isMobile ? [1024, 1024] : [2048, 2048]}
-          shadow-camera-left={-40}
-          shadow-camera-right={40}
-          shadow-camera-top={40}
-          shadow-camera-bottom={-40}
+          shadow-camera-left={-80}
+          shadow-camera-right={80}
+          shadow-camera-top={80}
+          shadow-camera-bottom={-80}
+          shadow-camera-near={0.1}
+          shadow-camera-far={200}
           shadow-bias={-0.0001}
         />
 

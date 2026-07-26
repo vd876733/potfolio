@@ -14,8 +14,8 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
   const group = useRef<THREE.Group>(null);
   const noiseTexture = useMemo(() => createNoiseTexture(), []);
   
-  const grassColor = isLight ? "#4ca64c" : "#388e3c";
-  const rockColor = isLight ? "#8d6e63" : "#795548";
+  const grassColor = isLight ? "#2e7d32" : "#388e3c";
+  const rockColor = isLight ? "#6d4c41" : "#5d4037";
 
   useFrame(({ clock }) => {
     if (group.current) {
@@ -35,7 +35,7 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
           {/* Grass */}
           <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
             <circleGeometry args={[26, 64]} />
-            <meshStandardMaterial color={grassColor} roughness={0.8} metalness={0} bumpMap={noiseTexture || undefined} bumpScale={0.02} />
+            <meshStandardMaterial color={grassColor} roughness={0.8} metalness={0} />
           </mesh>
           {/* Sandy Beach Border */}
           <mesh position={[0, 2.01, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
@@ -54,7 +54,7 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
           {/* Grass */}
           <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
             <circleGeometry args={[10, 32]} />
-            <meshStandardMaterial color={grassColor} roughness={0.8} bumpMap={noiseTexture || undefined} bumpScale={0.02} />
+            <meshStandardMaterial color={grassColor} roughness={0.8} />
           </mesh>
           {/* Rock Base */}
           <mesh receiveShadow castShadow>
@@ -67,7 +67,7 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
         <group position={[0, 2, 0]}>
           <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
             <circleGeometry args={[18, 64]} />
-            <meshStandardMaterial color={grassColor} roughness={0.8} metalness={0} bumpMap={noiseTexture || undefined} bumpScale={0.02} />
+            <meshStandardMaterial color={grassColor} roughness={0.8} metalness={0} />
           </mesh>
           <mesh receiveShadow castShadow>
             <cylinderGeometry args={[18, 22, 4, 64]} />
@@ -79,7 +79,7 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
         <group position={[0, 6, 0]}>
           <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
             <circleGeometry args={[8, 64]} />
-            <meshStandardMaterial color={grassColor} roughness={0.8} metalness={0} bumpMap={noiseTexture || undefined} bumpScale={0.02} />
+            <meshStandardMaterial color={grassColor} roughness={0.8} metalness={0} />
           </mesh>
           <mesh receiveShadow castShadow>
             <cylinderGeometry args={[8, 12, 4, 64]} />
