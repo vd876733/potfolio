@@ -112,8 +112,15 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
         sandFactor = 1.0;
       }
       
-      // Store in an array to build the beach geometry index
-      (tGeo as any).userData = (tGeo as any).userData || { sandFactors: [] };
+      // Properly initialize userData and sandFactors array
+      if (!(tGeo as any).userData) {
+        (tGeo as any).userData = {};
+      }
+      if (!(tGeo as any).userData.sandFactors) {
+        (tGeo as any).userData.sandFactors = [];
+      }
+      
+      // Now safely set the value
       (tGeo as any).userData.sandFactors[i] = sandFactor;
     }
     
