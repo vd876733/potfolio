@@ -277,3 +277,150 @@ export function HouseCluster({ position, isLight = false }: LandmarkProps) {
     </group>
   );
 }
+
+export function Volcano({ position, isLight = false }: LandmarkProps) {
+  const smokeRef = useRef<THREE.Group>(null);
+  const particles = Array.from({ length: 20 });
+  
+  useFrame(({ clock }) => {
+    if (smokeRef.current) {
+      smokeRef.current.children.forEach((child, i) => {
+        const meshChild = child as THREE.Mesh;
+        const t = clock.elapsedTime + i * 0.5;
+        meshChild.position.y = (t % 3) * 2;
+        meshChild.position.x = Math.sin(t * 2) * 0.5 * (meshChild.position.y * 0.2);
+        meshChild.position.z = Math.cos(t * 2.5) * 0.5 * (meshChild.position.y * 0.2);
+        meshChild.scale.setScalar(Math.max(0.1, 1 - (meshChild.position.y / 6)));
+        if (meshChild.material) {
+          (meshChild.material as THREE.MeshStandardMaterial).opacity = Math.max(0, 1 - (meshChild.position.y / 6));
+        }
+      });
+    }
+  });
+
+  return (
+    <group position={position}>
+      {/* Volcano Cone */}
+      <mesh position={[0, 4, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[2, 8, 8, 32]} />
+        <meshStandardMaterial color="#3f3f46" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, 8.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[1.9, 16]} />
+        <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={2} toneMapped={false} />
+      </mesh>
+      {/* Smoke */}
+      <group ref={smokeRef} position={[0, 8, 0]}>
+        {particles.map((_, i) => (
+          <mesh key={i}>
+            <sphereGeometry args={[0.8, 8, 8]} />
+            <meshStandardMaterial color={isLight ? "#94a3b8" : "#475569"} transparent opacity={0} />
+          </mesh>
+        ))}
+      </group>
+    </group>
+  );
+}
+
+export function Whale({ position, isLight = false }: LandmarkProps) {
+  const spoutRef = useRef<THREE.Group>(null);
+  const whaleRef = useRef<THREE.Group>(null);
+
+  useFrame(({ clock }) => {
+    if (spoutRef.current) {
+      spoutRef.current.children.forEach((child, i) => {
+        const t = clock.elapsedTime * 2 + i * 0.2;
+        child.position.y = (t % 1) * 3;
+        child.scale.setScalar(Math.max(0.1, 1 - child.position.y / 3));
+      });
+    }
+    if (whaleRef.current) {
+      whaleRef.current.position.y = Math.sin(clock.elapsedTime * 1.5) * 0.2;
+    }
+  });
+
+  return (
+    <group position={position}>
+      <group ref={whaleRef}>
+        {/* Whale Body */}
+        <mesh position={[0, 1, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+          <cylinderGeometry args={[1.5, 2, 6, 12]} />
+          <meshStandardMaterial color="#0284c7" roughness={0.7} />
+        </mesh>
+        <mesh position={[4, 1, 0]} castShadow>
+          <sphereGeometry args={[1.5, 12, 12]} />
+          <meshStandardMaterial color="#0284c7" roughness={0.7} />
+        </mesh>
+        {/* Tail */}
+        <mesh position={[-3, 1.5, 0]} rotation={[-Math.PI / 2, 0, -Math.PI / 6]} castShadow>
+          <coneGeometry args={[1.5, 3, 4]} />
+          <meshStandardMaterial color="#0284c7" roughness={0.7} />
+        </mesh>
+        {/* Spout */}
+        <group ref={spoutRef} position={[3, 2, 0]}>
+          {Array.from({ length: 10 }).map((_, i) => (
+            <mesh key={i}>
+              <sphereGeometry args={[0.3, 8, 8]} />
+              <meshStandardMaterial color="#bae6fd" transparent opacity={0.6} />
+            </mesh>
+          ))}
+        </group>
+      </group>
+    </group>
+  );
+}
+
+export function PirateShip({ position, isLight = false }: LandmarkProps) {
+  const shipRef = useRef<THREE.Group>(null);
+  
+  useFrame(({ clock }) => {
+    if (shipRef.current) {
+      shipRef.current.rotation.z = Math.sin(clock.elapsedTime * 1.2) * 0.05;
+      shipRef.current.rotation.x = Math.cos(clock.elapsedTime * 0.8) * 0.03;
+    }
+  });
+
+  return (
+    <group ref={shipRef} position={position}>
+      {/* Hull */}
+      <mesh position={[0, 1.5, 0]} castShadow>
+        <boxGeometry args={[4, 2, 8]} />
+        <meshStandardMaterial color="#451a03" />
+      </mesh>
+      {/* Bow */}
+      <mesh position={[0, 1.5, 5]} rotation={[Math.PI / 2, 0, 0]} castShadow>
+        <coneGeometry args={[2, 4, 4]} />
+        <meshStandardMaterial color="#451a03" />
+      </mesh>
+      {/* Mast */}
+      <mesh position={[0, 5, 0]} castShadow>
+        <cylinderGeometry args={[0.2, 0.2, 8]} />
+        <meshStandardMaterial color="#292524" />
+      </mesh>
+      {/* Sail */}
+      <mesh position={[0, 5, 0.2]} castShadow>
+        <planeGeometry args={[5, 5]} />
+        <meshStandardMaterial color="#000000" side={THREE.DoubleSide} />
+      </mesh>
+    </group>
+  );
+}
+
+export function WoodenDock({ position, isLight = false }: LandmarkProps) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 1.5, 0]} castShadow receiveShadow>
+        <boxGeometry args={[8, 0.2, 3]} />
+        <meshStandardMaterial color="#78350f" />
+      </mesh>
+      {[-3, 3].map((x) => (
+        [-1, 1].map((z) => (
+          <mesh key={`${x}-${z}`} position={[x, 0.75, z]} castShadow>
+            <cylinderGeometry args={[0.2, 0.2, 1.5]} />
+            <meshStandardMaterial color="#451a03" />
+          </mesh>
+        ))
+      ))}
+    </group>
+  );
+}

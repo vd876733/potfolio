@@ -10,18 +10,32 @@ export interface RoadNetworkProps {
 
 // Export the path so Cars.tsx can animate along it
 export const windingPath = new THREE.CatmullRomCurve3([
-  new THREE.Vector3(0, -2, 22),       // Start at base edge
-  new THREE.Vector3(15, -1, 15),      // Winding up base
-  new THREE.Vector3(18, 0, 0),        // Base right
-  new THREE.Vector3(10, 1.5, -15),    // Up to mid tier
-  new THREE.Vector3(-10, 2, -10),     // Around mid tier (Knowledge Forge)
-  new THREE.Vector3(-15, 3.5, 5),     // Winding up to peak
-  new THREE.Vector3(0, 6.2, 8),       // Arriving at peak
-  new THREE.Vector3(5, 6.2, 0),       // Peak circle
-  new THREE.Vector3(0, 6.2, -5),      // Peak circle
-  new THREE.Vector3(-5, 6.2, 0),      // Peak circle
-  new THREE.Vector3(0, 6.2, 8),       // Close peak loop
-], false, 'catmullrom', 0.5);
+  // Roundabout (Peak)
+  new THREE.Vector3(0, 6.2, 6),
+  new THREE.Vector3(5, 6.2, 0),
+  new THREE.Vector3(0, 6.2, -5),
+  new THREE.Vector3(-5, 6.2, 0),
+  
+  // S-Curve descending
+  new THREE.Vector3(-8, 4.5, 8),
+  new THREE.Vector3(0, 3.5, 12),
+  new THREE.Vector3(12, 2.5, 4),
+  new THREE.Vector3(10, 1.5, -12),
+  new THREE.Vector3(-12, 0.5, -12),
+  
+  // Perimeter Loop (Beach/Base)
+  new THREE.Vector3(-22, -1.9, -5),
+  new THREE.Vector3(-15, -1.9, 18),
+  new THREE.Vector3(0, -1.9, 24),
+  new THREE.Vector3(18, -1.9, 15),
+  new THREE.Vector3(24, -1.9, 0),
+  new THREE.Vector3(15, -1.9, -15),
+  
+  // Ascending back to roundabout
+  new THREE.Vector3(5, 1, -15),
+  new THREE.Vector3(0, 3, -10),
+  new THREE.Vector3(-3, 4.5, -5),
+], true, 'catmullrom', 0.5);
 
 function StreetLamp({ position, isLight }: { position: [number, number, number], isLight: boolean }) {
   const poleColor = isLight ? "#64748b" : "#334155";

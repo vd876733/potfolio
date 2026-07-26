@@ -26,14 +26,35 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
 
   return (
     <group ref={group}>
-      {/* Tier 1 (Base) */}
+      {/* Tier 1 (Base & Beach) */}
       <group position={[0, -2, 0]}>
+        {/* Grass */}
         <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-          <circleGeometry args={[28, 64]} />
+          <circleGeometry args={[26, 64]} />
           <meshStandardMaterial color={grassColor} roughness={1} metalness={0} />
         </mesh>
+        {/* Sandy Beach Border */}
+        <mesh position={[0, 2.01, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <ringGeometry args={[26, 30, 64]} />
+          <meshStandardMaterial color="#fcd34d" roughness={0.9} />
+        </mesh>
+        {/* Rock Base */}
         <mesh receiveShadow castShadow>
-          <cylinderGeometry args={[28, 22, 4, 64]} />
+          <cylinderGeometry args={[30, 24, 4, 64]} />
+          <meshStandardMaterial color={rockColor} roughness={0.9} metalness={0.1} />
+        </mesh>
+      </group>
+
+      {/* North-West Cliff (For Lighthouse) */}
+      <group position={[-20, -2, -20]}>
+        {/* Grass */}
+        <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <circleGeometry args={[10, 32]} />
+          <meshStandardMaterial color={grassColor} roughness={1} />
+        </mesh>
+        {/* Rock Base */}
+        <mesh receiveShadow castShadow>
+          <cylinderGeometry args={[10, 7, 4, 32]} />
           <meshStandardMaterial color={rockColor} roughness={0.9} metalness={0.1} />
         </mesh>
       </group>

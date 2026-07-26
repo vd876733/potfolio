@@ -2,7 +2,7 @@
 
 import { Text } from "@react-three/drei";
 import Pavilion from "./Pavilion";
-import { DetailedHouse, Lighthouse, Windmill, TownHall, Fountain, StoneArena, HouseCluster } from "./Landmarks";
+import { DetailedHouse, Lighthouse, Windmill, TownHall, Fountain, StoneArena, HouseCluster, Volcano } from "./Landmarks";
 
 interface PavilionsProps {
   onSectionClick: (section: string, position?: [number, number, number]) => void;
@@ -20,8 +20,9 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
         onClick={onSectionClick}
       >
         <group position={[0, 0, 0]}>
-          <TownHall position={[0, 0, -2]} isLight={isLight} />
-          <Fountain position={[0, 0, 2]} isLight={isLight} />
+          <Volcano position={[0, 0, -4]} isLight={isLight} />
+          <TownHall position={[0, 0, 2]} isLight={isLight} />
+          <Fountain position={[4, 0, 0]} isLight={isLight} />
         </group>
       </Pavilion>
 
@@ -55,9 +56,9 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
         <Windmill position={[0, 0, 0]} isLight={isLight} />
       </Pavilion>
 
-      {/* 5. Creative Atelier (Mid Tier) */}
+      {/* 5. Creative Atelier (North-West Cliff Base) */}
       <Pavilion
-        position={[10, 2, -10]}
+        position={[-20, 0, -20]}
         label="Creative Atelier"
         color="#A855F7"
         onClick={onSectionClick}

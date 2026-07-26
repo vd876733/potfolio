@@ -4,6 +4,7 @@ import { useMemo, useRef } from "react";
 import { Instances, Instance } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { Whale, PirateShip, WoodenDock } from "./Landmarks";
 
 interface PropsProps {
   isLight?: boolean;
@@ -78,8 +79,13 @@ export default function Props({ isLight = false }: PropsProps) {
         ))}
       </Instances>
 
+      {/* Tropical Island Additions */}
+      <Whale position={[-30, -2, 30]} isLight={isLight} />
+      <WoodenDock position={[32, -2, 0]} isLight={isLight} />
+      <PirateShip position={[32, -2.5, 4]} isLight={isLight} />
+
       {/* Boats */}
-      <BobbingBoat position={[25, -2.5, 10]} />
+      <BobbingBoat position={[25, -2.5, 12]} />
       <BobbingBoat position={[-28, -2.5, -5]} scale={0.8} />
     </group>
   );
