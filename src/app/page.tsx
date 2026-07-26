@@ -65,11 +65,11 @@ export default function Home() {
 
   // Prevent flashing of wrong mode before initialization
   if (!isInitialized) {
-    return <div className="w-full h-screen bg-obsidian" />;
+    return <div className="w-full h-screen bg-slate-50 dark:bg-obsidian transition-colors duration-300" />;
   }
 
   return (
-    <main className="relative w-full h-screen overflow-hidden bg-obsidian">
+    <main className="relative w-full h-screen overflow-hidden bg-slate-50 dark:bg-obsidian transition-colors duration-300">
       <TopNav 
         onNavClick={handleNavClick} 
         viewMode={viewMode} 

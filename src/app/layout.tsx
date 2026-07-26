@@ -29,7 +29,7 @@ export default function RootLayout({
       className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
       suppressHydrationWarning
     >
-      <body>
+      <body className="bg-slate-50 text-slate-900 dark:bg-obsidian dark:text-slate-100 transition-colors duration-300">
         <ThemeProvider attribute="class" defaultTheme="dark">
           {children}
         </ThemeProvider>
