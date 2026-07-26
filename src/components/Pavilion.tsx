@@ -21,24 +21,22 @@ export default function Pavilion({
   children,
 }: PavilionProps) {
   const group = useRef<THREE.Group>(null);
-  const coreMaterial = useRef<THREE.MeshStandardMaterial>(null);
+  const textRef = useRef<any>(null);
   const [hovered, setHovered] = useState(false);
 
   useFrame((state, delta) => {
     if (!group.current) return;
     
     // Smoothly interpolate Y position for floating effect
-    const targetY = hovered ? 0.2 : 0;
+    const targetY = hovered ? 0.4 : 0;
     group.current.position.y = THREE.MathUtils.lerp(group.current.position.y, targetY, 0.1);
 
-    // Smoothly interpolate glow intensity
-    if (coreMaterial.current) {
-      const targetIntensity = hovered ? 4 : 0.8;
-      coreMaterial.current.emissiveIntensity = THREE.MathUtils.lerp(
-        coreMaterial.current.emissiveIntensity,
-        targetIntensity,
-        0.1
-      );
+    if (textRef.current) {
+      const targetScale = hovered ? 1.1 : 1.0;
+      textRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.15);
+      
+      // Floating animation for text
+      textRef.current.position.y = 9.5 + Math.sin(state.clock.elapsedTime * 2) * 0.1;
     }
   });
 
@@ -46,13 +44,14 @@ export default function Pavilion({
     <group position={position}>
       {/* Sleek Floating Label */}
       <Text
-        position={[0, 4.5, 0]}
-        fontSize={0.6}
-        color={hovered ? "#ffffff" : "#a0a0a0"}
+        ref={textRef}
+        position={[0, 9.5, 0]}
+        fontSize={0.8}
+        color={hovered ? "#ffffff" : "#cbd5e1"}
         anchorX="center"
         anchorY="middle"
-        outlineWidth={0.02}
-        outlineColor="#000000"
+        outlineWidth={0.04}
+        outlineColor="#0f172a"
       >
         {label}
       </Text>
@@ -76,18 +75,6 @@ export default function Pavilion({
       >
         {/* Custom architectural shell passed as children */}
         {children}
-
-        {/* Internal Glowing Core */}
-        <mesh position={[0, 1.5, 0]}>
-          <boxGeometry args={[1, 2, 1]} />
-          <meshStandardMaterial
-            ref={coreMaterial}
-            color={color}
-            emissive={color}
-            emissiveIntensity={0.8}
-            toneMapped={false} // Important for bloom effect
-          />
-        </mesh>
       </group>
     </group>
   );

@@ -12,7 +12,7 @@ interface FloatingIslandProps {
 export default function FloatingIsland({ isLight = false, children }: FloatingIslandProps) {
   const group = useRef<THREE.Group>(null);
   
-  const grassColor = isLight ? "#4ade80" : "#064e3b";
+  const grassColor = isLight ? "#3a7d44" : "#14532d"; // Updated realistic green grass
   const rockColor = isLight ? "#a8a29e" : "#292524";
 
   useFrame(({ clock }) => {

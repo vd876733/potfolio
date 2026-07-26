@@ -1,9 +1,10 @@
 "use client";
 
 import * as THREE from 'three';
-import { Tube } from '@react-three/drei';
+import { Tube, Line } from '@react-three/drei';
+import { useMemo } from 'react';
 
-interface RoadNetworkProps {
+export interface RoadNetworkProps {
   isLight?: boolean;
 }
 
@@ -49,7 +50,13 @@ function StreetLamp({ position, isLight }: { position: [number, number, number],
 }
 
 export default function RoadNetwork({ isLight = false }: RoadNetworkProps) {
-  const roadColor = isLight ? "#94a3b8" : "#1e293b";
+  const roadColor = isLight ? "#94a3b8" : "#2c3e50"; // Dark asphalt road
+
+  // Create points for the yellow central line, elevated slightly above the tube
+  const centerLinePoints = useMemo(() => {
+    const pts = windingPath.getPoints(200);
+    return pts.map(p => new THREE.Vector3(p.x, p.y + 1.22, p.z));
+  }, []);
 
   return (
     <group position={[0, 0.1, 0]}>
@@ -57,6 +64,17 @@ export default function RoadNetwork({ isLight = false }: RoadNetworkProps) {
       <Tube args={[windingPath, 100, 1.2, 8, false]} receiveShadow castShadow>
         <meshStandardMaterial color={roadColor} roughness={0.9} />
       </Tube>
+
+      {/* Yellow Central Line */}
+      <Line
+        points={centerLinePoints}
+        color="#eab308"
+        lineWidth={2}
+        dashed={true}
+        dashScale={5}
+        dashSize={1.5}
+        dashOffset={0}
+      />
 
       {/* Street Lamps along the path */}
       <StreetLamp position={[13, -1, 14]} isLight={isLight} />

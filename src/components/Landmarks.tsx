@@ -154,3 +154,126 @@ export function DetailedHouse({ position, isLight = false, color = "#38bdf8" }: 
     </group>
   );
 }
+
+export function Fountain({ position, isLight = false }: LandmarkProps) {
+  const waterRef = useRef<THREE.Mesh>(null);
+  const waterColor = isLight ? "#38bdf8" : "#0284c7";
+
+  useFrame(({ clock }) => {
+    if (waterRef.current) {
+      waterRef.current.position.y = 1.1 + Math.sin(clock.elapsedTime * 4) * 0.05;
+    }
+  });
+
+  return (
+    <group position={position}>
+      <mesh position={[0, 0.5, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[2, 2, 1, 16]} />
+        <meshStandardMaterial color="#cbd5e1" roughness={0.8} />
+      </mesh>
+      <mesh position={[0, 0.6, 0]} receiveShadow>
+        <cylinderGeometry args={[1.8, 1.8, 1, 16]} />
+        <meshStandardMaterial color="#94a3b8" roughness={0.9} />
+      </mesh>
+      <mesh ref={waterRef} position={[0, 1.1, 0]}>
+        <cylinderGeometry args={[1.75, 1.75, 0.1, 16]} />
+        <meshStandardMaterial color={waterColor} transparent opacity={0.8} />
+      </mesh>
+      <mesh position={[0, 1.5, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.4, 0.6, 2, 8]} />
+        <meshStandardMaterial color="#cbd5e1" roughness={0.8} />
+      </mesh>
+      <mesh position={[0, 2.5, 0]} castShadow receiveShadow>
+        <sphereGeometry args={[0.5, 8, 8]} />
+        <meshStandardMaterial color="#94a3b8" roughness={0.7} />
+      </mesh>
+    </group>
+  );
+}
+
+export function TownHall({ position, isLight = false }: LandmarkProps) {
+  const glowColor = "#fef08a";
+  return (
+    <group position={position}>
+      <mesh position={[0, 2, 0]} castShadow receiveShadow>
+        <boxGeometry args={[6, 4, 4]} />
+        <meshStandardMaterial color="#e2e8f0" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, 5, 0]} rotation={[0, Math.PI / 4, 0]} castShadow receiveShadow>
+        <coneGeometry args={[5, 2, 4]} />
+        <meshStandardMaterial color="#334155" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, 6, 0]} castShadow receiveShadow>
+        <boxGeometry args={[2, 4, 2]} />
+        <meshStandardMaterial color="#cbd5e1" roughness={0.8} />
+      </mesh>
+      <mesh position={[0, 8.5, 0]} rotation={[0, Math.PI / 4, 0]} castShadow receiveShadow>
+        <coneGeometry args={[1.8, 1.5, 4]} />
+        <meshStandardMaterial color="#334155" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, 6.5, 1.01]}>
+        <circleGeometry args={[0.6, 16]} />
+        <meshStandardMaterial color="#f8fafc" />
+      </mesh>
+      <mesh position={[0, 6.5, 1.02]}>
+        <boxGeometry args={[0.05, 0.4, 0.01]} />
+        <meshBasicMaterial color="#000000" />
+      </mesh>
+      {[-1.5, 1.5].map((x, i) => (
+        <mesh key={`win-${i}`} position={[x, 2, 2.01]}>
+          <boxGeometry args={[1, 1.5, 0.05]} />
+          <meshStandardMaterial 
+            color={isLight ? "#94a3b8" : glowColor} 
+            emissive={isLight ? "#000000" : glowColor} 
+            emissiveIntensity={isLight ? 0 : 1.5} 
+            toneMapped={false} 
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+export function StoneArena({ position, isLight = false }: LandmarkProps) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 0.5, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[5, 5.5, 1, 24]} />
+        <meshStandardMaterial color="#cbd5e1" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, 1.5, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[4, 4.5, 1, 24]} />
+        <meshStandardMaterial color="#94a3b8" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, 2.5, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[3, 3.5, 1, 24]} />
+        <meshStandardMaterial color="#64748b" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, 2.51, 0]} receiveShadow>
+        <cylinderGeometry args={[2.5, 2.5, 1, 24]} />
+        <meshStandardMaterial color="#1e293b" roughness={0.9} />
+      </mesh>
+      {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => {
+        const angle = (i / 8) * Math.PI * 2;
+        const x = Math.cos(angle) * 2.8;
+        const z = Math.sin(angle) * 2.8;
+        return (
+          <mesh key={`pillar-${i}`} position={[x, 4, z]} castShadow receiveShadow>
+            <cylinderGeometry args={[0.2, 0.2, 2, 8]} />
+            <meshStandardMaterial color="#f8fafc" roughness={0.8} />
+          </mesh>
+        );
+      })}
+    </group>
+  );
+}
+
+export function HouseCluster({ position, isLight = false }: LandmarkProps) {
+  return (
+    <group position={position}>
+      <DetailedHouse position={[-2, 0, 1]} isLight={isLight} color="#f472b6" />
+      <DetailedHouse position={[2, 0, 0]} isLight={isLight} color="#38bdf8" />
+      <DetailedHouse position={[0, 0, -2]} isLight={isLight} color="#facc15" />
+    </group>
+  );
+}

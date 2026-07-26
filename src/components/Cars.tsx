@@ -72,10 +72,10 @@ function Car({ offset, color, speed }: { offset: number; color: string; speed: n
 export default function Cars() {
   return (
     <group position={[0, 1.5, 0]}>
-      {/* White cars tracing the winding road */}
-      <Car offset={0} color="#ffffff" speed={0.05} />
-      <Car offset={0.3} color="#ffffff" speed={0.05} />
-      <Car offset={0.6} color="#ffffff" speed={0.05} />
+      {/* Cars tracing the winding road */}
+      <Car offset={0} color="#ef4444" speed={0.05} />    {/* Red */}
+      <Car offset={0.3} color="#facc15" speed={0.06} />  {/* Yellow */}
+      <Car offset={0.7} color="#ffffff" speed={0.04} />  {/* White */}
     </group>
   );
 }

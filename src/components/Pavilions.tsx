@@ -2,7 +2,7 @@
 
 import { Text } from "@react-three/drei";
 import Pavilion from "./Pavilion";
-import { DetailedHouse, Lighthouse, Windmill } from "./Landmarks";
+import { DetailedHouse, Lighthouse, Windmill, TownHall, Fountain, StoneArena, HouseCluster } from "./Landmarks";
 
 interface PavilionsProps {
   onSectionClick: (section: string) => void;
@@ -19,7 +19,10 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
         color="#38BDF8"
         onClick={onSectionClick}
       >
-        <DetailedHouse position={[0, 0, 0]} isLight={isLight} color="#38BDF8" />
+        <group position={[0, 0, 0]}>
+          <TownHall position={[0, 0, -2]} isLight={isLight} />
+          <Fountain position={[0, 0, 2]} isLight={isLight} />
+        </group>
       </Pavilion>
 
       {/* 2. Arena Complex (Base Tier) */}
@@ -29,7 +32,7 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
         color="#F43F5E"
         onClick={onSectionClick}
       >
-        <DetailedHouse position={[0, 0, 0]} isLight={isLight} color="#F43F5E" />
+        <StoneArena position={[0, 0, 0]} isLight={isLight} />
       </Pavilion>
 
       {/* 3. Project Workshops (Base Tier) */}
@@ -39,7 +42,7 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
         color="#10B981"
         onClick={onSectionClick}
       >
-        <DetailedHouse position={[0, 0, 0]} isLight={isLight} color="#10B981" />
+        <HouseCluster position={[0, 0, 0]} isLight={isLight} />
       </Pavilion>
 
       {/* 4. Knowledge Forge (Mid Tier) */}
