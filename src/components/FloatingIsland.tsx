@@ -37,21 +37,13 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
       const u = x / (width / 2); // [-1, 1]
       const v = y / (height / 2); // [-1, 1]
       
-      // Blobs for asymmetrical kidney shape
+      // Blobs for asymmetrical shape
       const d_south = Math.sqrt(Math.pow(u - 0.0, 2) + Math.pow(v + 0.3, 2)) / 0.65;
-      const d_north = Math.sqrt(Math.pow(u + 0.2, 2) + Math.pow(v - 0.5, 2)) / 0.4;
+      const d_north = Math.sqrt(Math.pow(u + 0.2, 2) + Math.pow(v - 0.5, 2)) / 0.45;
       const d_mid = Math.sqrt(Math.pow(u + 0.1, 2) + Math.pow(v - 0.1, 2)) / 0.55;
+      const d_east = Math.sqrt(Math.pow(u - 0.5, 2) + Math.pow(v - 0.1, 2)) / 0.4; // East extension for dock
       
-      let D = Math.max(1 - d_south, 1 - d_north, 1 - d_mid);
-      
-      // Carve Coastal Inlets (Bays)
-      // Southwest Bay
-      const bay_sw = Math.sqrt(Math.pow(u + 0.3, 2) + Math.pow(v + 0.45, 2)) / 0.25;
-      // East Dock Inlet
-      const bay_e = Math.sqrt(Math.pow(u - 0.4, 2) + Math.pow(v - 0.1, 2)) / 0.2;
-      
-      D -= Math.max(0, 1 - bay_sw) * 0.5;
-      D -= Math.max(0, 1 - bay_e) * 0.5;
+      let D = Math.max(1 - d_south, 1 - d_north, 1 - d_mid, 1 - d_east);
       
       let z = -2; // Ocean floor depth
       let baseH = -2;
@@ -59,43 +51,29 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
       if (D > 0) {
         let h = 0;
         
-        // --- 1. North Volcano Peak ---
+        // --- 1. Top North: High volcanic mountain peak ---
         const peakMask = Math.max(0, 1 - d_north);
         let peakHeight = Math.pow(peakMask, 1.5) * 16; 
-        const craterDip = 1.0 - 0.5 * Math.max(0, 1 - Math.pow(d_north / 0.12, 2)); 
+        const craterDip = 1.0 - 0.5 * Math.max(0, 1 - Math.pow(d_north / 0.15, 2)); 
         peakHeight *= craterDip;
         h = Math.max(h, peakHeight);
         
-        // --- 2. Central Roundabout Plateau ---
+        // --- 2. Middle Center: Flat circular plateau ---
         const d_center = Math.sqrt(Math.pow(u + 0.05, 2) + Math.pow(v + 0.1, 2));
-        const terraceMask = Math.max(0, 1 - d_center / 0.35); 
-        const centralTerrace = Math.pow(terraceMask, 0.2) * 5; 
+        const terraceMask = Math.max(0, 1 - d_center / 0.4); 
+        const centralTerrace = Math.pow(terraceMask, 0.1) * 5.0; // flat terrace at 5.0
         h = Math.max(h, centralTerrace);
-        
-        // --- 3. S-Curve Slope ---
-        let sCurve = 0;
-        if (v < -0.05 && u > -0.2 && u < 0.3) {
-            const t = Math.min(1, Math.max(0, (-0.05 - v) / 0.5)); 
-            sCurve = 5 - t * 3.8; 
-            
-            const curveCenterU = Math.sin(v * Math.PI) * 0.15;
-            const distToCurve = Math.abs(u - curveCenterU);
-            const sCurveMask = Math.max(0, 1 - distToCurve / 0.25);
-            sCurve *= Math.pow(sCurveMask, 0.5); 
-        }
-        h = Math.max(h, sCurve);
 
-        // --- 4 & 5. West Cliffside & South/East Lowlands ---
+        // --- 3. Lower South/East & West Cliff ---
         let edgeProfile = 0;
-        if (u < -0.05) {
-          // West cliff: sharp jagged sheer drop-off, small taper at base
+        if (u < -0.05 && v > -0.2) {
+          // West cliff: sharp vertical rocky cliff wall (except for far south)
           let cliffD = Math.max(0, D - 0.02);
           edgeProfile = Math.pow(cliffD, 0.15) * 4; 
         } else {
-          // South & East Lowlands: flush with water (local z = 1.11)
-          let shoreRise = Math.min(1.0, D / 0.1); 
-          edgeProfile = Math.pow(shoreRise, 0.5) * 1.2; 
-          edgeProfile += D * 1.5; 
+          // Lower South/East: wide flat shelf sitting flush with water (local z ~ 1.15)
+          let shoreRise = Math.min(1.0, D / 0.05); 
+          edgeProfile = shoreRise * 1.4; // flat shelf at 1.4
         }
         h = Math.max(h, edgeProfile);
         
@@ -106,10 +84,10 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
                       (Math.sin(u * 87.2 + v * 73.1) * 0.05) +
                       (Math.cos(u * 14.5 - v * 22.3) * 0.1);
         
-        // Smooth out plateaus and shelves so buildings can sit flat
+        // Smooth out plateaus and shelves so they are completely flat
         let plateauFlatness = 1.0;
-        if (h > 4.5 && h < 5.2) plateauFlatness = 0.1; // Central terrace
-        if (h > 1.1 && h < 1.6) plateauFlatness = 0.3; // Lowland shelves
+        if (h > 4.5 && h < 5.5) plateauFlatness = 0.0; // Middle Center plateau - totally flat
+        if (h > 1.2 && h < 1.6) plateauFlatness = 0.0; // Lower shelf - totally flat
         
         h += noise * (D > 0.05 ? 1 : D * 20) * plateauFlatness; 
         
