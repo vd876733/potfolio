@@ -14,7 +14,7 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
     <group>
       {/* 1. Town Plaza Pavilion (Peak Tier) */}
       <Pavilion
-        position={[0, 6, 0]}
+        position={[0, 10.8, 0]}
         label="Town Plaza"
         color="#38BDF8"
         onClick={onSectionClick}
@@ -28,7 +28,7 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
 
       {/* 2. Arena / Rock Compound (Mid-West) */}
       <Pavilion
-        position={[-14, 2, 4]}
+        position={[-30.8, 3.6, 8.8]}
         label="Arena Complex"
         color="#F43F5E"
         onClick={onSectionClick}
@@ -49,7 +49,7 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
 
       {/* 3. Knowledge Forge / Skills Village (Central Road) */}
       <Pavilion
-        position={[10, 2, -10]}
+        position={[22, 3.6, -22]}
         label="Knowledge Forge"
         color="#10B981"
         onClick={onSectionClick}
@@ -59,7 +59,7 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
 
       {/* 4. Treasure Island (Northeast Plateau) */}
       <Pavilion
-        position={[22, 0, -12]}
+        position={[48.4, 0, -26.4]}
         label="Treasure Island"
         color="#F59E0B"
         onClick={onSectionClick}
@@ -73,7 +73,7 @@ export default function Pavilions({ onSectionClick, isLight = false }: Pavilions
 
       {/* 5. Creative Atelier (North-West Cliff Base) */}
       <Pavilion
-        position={[-20, 0, -20]}
+        position={[-44, 0, -44]}
         label="Creative Atelier"
         color="#A855F7"
         onClick={onSectionClick}

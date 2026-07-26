@@ -8,33 +8,33 @@ export interface RoadNetworkProps {
   isLight?: boolean;
 }
 
-// Export the path so Cars.tsx can animate along it
-export const windingPath = new THREE.CatmullRomCurve3([
+// The path for the road curve
+const windingPath = new THREE.CatmullRomCurve3([
   // Roundabout (Peak)
-  new THREE.Vector3(0, 6.2, 6),
-  new THREE.Vector3(5, 6.2, 0),
-  new THREE.Vector3(0, 6.2, -5),
-  new THREE.Vector3(-5, 6.2, 0),
+  new THREE.Vector3(0, 11.16, 13.2),
+  new THREE.Vector3(11, 11.16, 0),
+  new THREE.Vector3(0, 11.16, -11),
+  new THREE.Vector3(-11, 11.16, 0),
   
   // S-Curve descending
-  new THREE.Vector3(-8, 4.5, 8),
-  new THREE.Vector3(0, 3.5, 12),
-  new THREE.Vector3(12, 2.5, 4),
-  new THREE.Vector3(10, 1.5, -12),
-  new THREE.Vector3(-12, 0.5, -12),
+  new THREE.Vector3(-17.6, 8.1, 17.6),
+  new THREE.Vector3(0, 6.3, 26.4),
+  new THREE.Vector3(26.4, 4.5, 8.8),
+  new THREE.Vector3(22, 2.7, -26.4),
+  new THREE.Vector3(-26.4, 0.9, -26.4),
   
   // Perimeter Loop (Beach/Base)
-  new THREE.Vector3(-22, -1.9, -5),
-  new THREE.Vector3(-15, -1.9, 18),
-  new THREE.Vector3(0, -1.9, 24),
-  new THREE.Vector3(18, -1.9, 15),
-  new THREE.Vector3(24, -1.9, 0),
-  new THREE.Vector3(15, -1.9, -15),
+  new THREE.Vector3(-48.4, -3.42, -11),
+  new THREE.Vector3(-33, -3.42, 39.6),
+  new THREE.Vector3(0, -3.42, 52.8),
+  new THREE.Vector3(39.6, -3.42, 33),
+  new THREE.Vector3(52.8, -3.42, 0),
+  new THREE.Vector3(33, -3.42, -33),
   
   // Ascending back to roundabout
-  new THREE.Vector3(5, 1, -15),
-  new THREE.Vector3(0, 3, -10),
-  new THREE.Vector3(-3, 4.5, -5),
+  new THREE.Vector3(11, 1.8, -33),
+  new THREE.Vector3(0, 5.4, -22),
+  new THREE.Vector3(-6.6, 8.1, -11),
 ], true, 'catmullrom', 0.5);
 
 function StreetLamp({ position, isLight }: { position: [number, number, number], isLight: boolean }) {
@@ -75,7 +75,7 @@ export default function RoadNetwork({ isLight = false }: RoadNetworkProps) {
   return (
     <group position={[0, 0.1, 0]}>
       {/* Winding Road */}
-      <Tube args={[windingPath, 100, 1.2, 8, false]} receiveShadow castShadow>
+      <Tube args={[windingPath, 100, 2.64, 8, false]} receiveShadow castShadow>
         <meshStandardMaterial color={roadColor} roughness={0.9} />
       </Tube>
 
@@ -91,12 +91,12 @@ export default function RoadNetwork({ isLight = false }: RoadNetworkProps) {
       />
 
       {/* Street Lamps along the path */}
-      <StreetLamp position={[13, -1, 14]} isLight={isLight} />
-      <StreetLamp position={[10, 1.5, -13]} isLight={isLight} />
-      <StreetLamp position={[-8, 2, -8]} isLight={isLight} />
-      <StreetLamp position={[-13, 3.5, 4]} isLight={isLight} />
-      <StreetLamp position={[0, 6.2, 6]} isLight={isLight} />
-      <StreetLamp position={[0, 6.2, -3]} isLight={isLight} />
+      <StreetLamp position={[28.6, -1.8, 30.8]} isLight={isLight} />
+      <StreetLamp position={[22, 2.7, -28.6]} isLight={isLight} />
+      <StreetLamp position={[-17.6, 3.6, -17.6]} isLight={isLight} />
+      <StreetLamp position={[-28.6, 6.3, 8.8]} isLight={isLight} />
+      <StreetLamp position={[0, 11.16, 13.2]} isLight={isLight} />
+      <StreetLamp position={[0, 11.16, -6.6]} isLight={isLight} />
     </group>
   );
 }

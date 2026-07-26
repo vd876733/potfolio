@@ -14,7 +14,7 @@ export default function Ocean({ isLight = false }: OceanProps) {
 
   return (
     <mesh ref={meshRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, -5, 0]} receiveShadow>
-      <planeGeometry args={[1000, 1000, 64, 64]} />
+      <planeGeometry args={[3000, 3000, 64, 64]} />
       <MeshDistortMaterial
         color={waterColor}
         transparent

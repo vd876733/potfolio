@@ -16,8 +16,8 @@ export default function Props({ isLight = false }: PropsProps) {
     const arr = [];
     for (let i = 0; i < 40; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const radius = 5 + Math.random() * 12; // Inner radiuses
-      const y = radius > 8 ? 4 : 8;
+      const radius = (5 + Math.random() * 12) * 2.2; // Inner radiuses
+      const y = radius > 17.6 ? 7.2 : 14.4;
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
       const scale = 0.5 + Math.random() * 0.5;
@@ -32,7 +32,7 @@ export default function Props({ isLight = false }: PropsProps) {
     for (let i = 0; i < 30; i++) {
       // Focus on south, east, and west beach edges
       const angle = (Math.random() * Math.PI) + Math.PI / 2; // mostly front side
-      const radius = 18 + Math.random() * 6; // Outer beach radius
+      const radius = (18 + Math.random() * 6) * 2.2; // Outer beach radius
       const y = 0;
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
@@ -46,8 +46,8 @@ export default function Props({ isLight = false }: PropsProps) {
     const arr = [];
     for (let i = 0; i < 20; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const radius = 8 + Math.random() * 10;
-      const y = 4;
+      const radius = (8 + Math.random() * 10) * 2.2;
+      const y = 7.2;
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
       const scale = 0.3 + Math.random() * 0.7;
@@ -61,8 +61,8 @@ export default function Props({ isLight = false }: PropsProps) {
     const arr = [];
     for (let i = 0; i < 25; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const radius = 28 + Math.random() * 20; // Scattered far out in the ocean
-      const y = -3; // Partially submerged
+      const radius = (28 + Math.random() * 20) * 2.2; // Scattered far out in the ocean
+      const y = -5.4; // Partially submerged
       const x = Math.cos(angle) * radius;
       const z = Math.sin(angle) * radius;
       const scale = 1 + Math.random() * 2;
@@ -79,7 +79,7 @@ export default function Props({ isLight = false }: PropsProps) {
   const oceanRockColor = isLight ? "#475569" : "#1e293b";
 
   return (
-    <group position={[0, -2, 0]}>
+    <group position={[0, -3.6, 0]}>
       {/* Pine Trees */}
       <Instances limit={100} castShadow receiveShadow>
         <cylinderGeometry args={[0.2, 0.4, 2, 8]} />
@@ -120,18 +120,18 @@ export default function Props({ isLight = false }: PropsProps) {
       </Instances>
 
       {/* Beach Kits */}
-      <BeachKit position={[5, 0.1, 20]} isLight={isLight} />
-      <BeachKit position={[-8, 0.1, 19]} isLight={isLight} rotation={[0, -Math.PI / 6, 0]} />
-      <BeachKit position={[12, 0.1, 16]} isLight={isLight} rotation={[0, Math.PI / 4, 0]} />
+      <BeachKit position={[11, 0.18, 44]} isLight={isLight} />
+      <BeachKit position={[-17.6, 0.18, 41.8]} isLight={isLight} rotation={[0, -Math.PI / 6, 0]} />
+      <BeachKit position={[26.4, 0.18, 35.2]} isLight={isLight} rotation={[0, Math.PI / 4, 0]} />
 
       {/* Tropical Island Additions */}
-      <Whale position={[-30, -2, 30]} isLight={isLight} />
-      <WoodenDock position={[32, -2, 0]} isLight={isLight} />
-      <PirateShip position={[32, -2.5, 4]} isLight={isLight} />
+      <Whale position={[-66, -3.6, 66]} isLight={isLight} />
+      <WoodenDock position={[70.4, -3.6, 0]} isLight={isLight} />
+      <PirateShip position={[70.4, -4.5, 8.8]} isLight={isLight} />
 
       {/* Boats */}
-      <BobbingBoat position={[25, -2.5, 12]} />
-      <BobbingBoat position={[-28, -2.5, -5]} scale={0.8} />
+      <BobbingBoat position={[55, -4.5, 26.4]} />
+      <BobbingBoat position={[-61.6, -4.5, -11]} scale={0.8} />
     </group>
   );
 }

@@ -11,8 +11,6 @@ import FloatingIsland from "./FloatingIsland";
 import Ocean from "./Ocean";
 import Pavilions from "./Pavilions";
 import RoadNetwork from "./RoadNetwork";
-import Cars from "./Cars";
-import Birds from "./Birds";
 import Props from "./Props";
 
 interface SceneProps {
@@ -43,15 +41,13 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
         position[0], position[1], position[2],             // target
         true
       );
-      cameraControlsRef.current.zoomTo(80, true);
     }
   };
 
   const handleResetView = () => {
     setSelectedSection(null);
     if (cameraControlsRef.current) {
-      cameraControlsRef.current.setLookAt(25, 25, 25, 0, 0, 0, true);
-      cameraControlsRef.current.zoomTo(40, true);
+      cameraControlsRef.current.setLookAt(0, 35, 45, 0, 0, 0, true);
     }
   };
 
@@ -59,8 +55,7 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
     <div className="w-full h-full absolute inset-0 z-0">
       <Canvas
         shadows
-        orthographic
-        camera={{ position: [25, 25, 25], zoom: 40, near: -100, far: 500 }}
+        camera={{ position: [0, 35, 45], fov: 45, near: 0.1, far: 1000 }}
         dpr={isMobile ? [1, 1.5] : [1, 2]}
       >
         {isLight ? (
@@ -100,8 +95,6 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
         <FloatingIsland isLight={isLight}>
           <Props isLight={isLight} />
           <RoadNetwork isLight={isLight} />
-          <Cars />
-          <Birds isLight={isLight} />
 
           {/* The 5 Portfolio Sections */}
           <Pavilions onSectionClick={handleSectionClick} isLight={isLight} />
