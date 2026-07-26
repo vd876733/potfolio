@@ -5,7 +5,7 @@ import Pavilion from "./Pavilion";
 import { DetailedHouse, Lighthouse, Windmill, TownHall, Fountain, StoneArena, HouseCluster } from "./Landmarks";
 
 interface PavilionsProps {
-  onSectionClick: (section: string) => void;
+  onSectionClick: (section: string, position?: [number, number, number]) => void;
   isLight?: boolean;
 }
 

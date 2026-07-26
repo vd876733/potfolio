@@ -9,7 +9,7 @@ interface PavilionProps {
   position: [number, number, number];
   label: string;
   color?: string;
-  onClick: (label: string) => void;
+  onClick: (label: string, pos?: [number, number, number]) => void;
   children: React.ReactNode;
 }
 
@@ -70,8 +70,10 @@ export default function Pavilion({
         }}
         onClick={(e) => {
           e.stopPropagation();
-          onClick(label);
+          onClick(label, position);
         }}
+        // Add scaling on hover
+        scale={hovered ? [1.1, 1.1, 1.1] : [1, 1, 1]}
       >
         {/* Custom architectural shell passed as children */}
         {children}

@@ -3,8 +3,9 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
+import { useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Sky, ContactShadows } from "@react-three/drei";
+import { CameraControls, Sky, ContactShadows } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import FloatingIsland from "./FloatingIsland";
 import Ocean from "./Ocean";
@@ -22,6 +23,8 @@ interface SceneProps {
 export default function Scene({ onSectionClick, isMobile }: SceneProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const cameraControlsRef = useRef<CameraControls>(null);
+  const [selectedSection, setSelectedSection] = useState<string | null>(null);
   
   useEffect(() => {
     setMounted(true);
@@ -29,6 +32,31 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
 
   const isLight = mounted && theme === "light";
   const bgColor = isLight ? "#87ceeb" : "#090d16";
+
+  const handleSectionClick = (section: string, position?: [number, number, number]) => {
+    setSelectedSection(section);
+    onSectionClick(section);
+    
+    if (position && cameraControlsRef.current) {
+      // Animate camera to focus on the building
+      // We also slightly zoom in for orthographic effect if needed, but setLookAt pans the view beautifully.
+      cameraControlsRef.current.setLookAt(
+        position[0] + 15, position[1] + 15, position[2] + 15, // eye
+        position[0], position[1], position[2],             // target
+        true
+      );
+      // Zoom in a bit
+      cameraControlsRef.current.zoomTo(80, true);
+    }
+  };
+
+  const handleResetView = () => {
+    setSelectedSection(null);
+    if (cameraControlsRef.current) {
+      cameraControlsRef.current.setLookAt(25, 25, 25, 0, 0, 0, true);
+      cameraControlsRef.current.zoomTo(40, true);
+    }
+  };
 
   return (
     <div className="w-full h-full absolute inset-0 z-0">
@@ -70,25 +98,20 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
         <Ocean isLight={isLight} />
 
         <FloatingIsland isLight={isLight}>
-          {/* Environment Props (Trees and Rocks) */}
           <Props isLight={isLight} />
-
-          {/* Dynamic Scene Additions */}
           <RoadNetwork isLight={isLight} />
           <Cars />
           <Birds isLight={isLight} />
 
           {/* The 5 Portfolio Sections */}
-          <Pavilions onSectionClick={onSectionClick} isLight={isLight} />
+          <Pavilions onSectionClick={handleSectionClick} isLight={isLight} />
         </FloatingIsland>
 
-        <OrbitControls
+        <CameraControls
+          ref={cameraControlsRef}
           maxPolarAngle={Math.PI / 2 - 0.02}
           minPolarAngle={0}
-          enableDamping
-          dampingFactor={0.05}
-          minZoom={10}
-          maxZoom={100}
+          dollyToCursor={true}
         />
 
         <EffectComposer>
@@ -99,6 +122,18 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
           />
         </EffectComposer>
       </Canvas>
+
+      {/* Reset View Button */}
+      {selectedSection && (
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+          <button
+            onClick={handleResetView}
+            className="px-6 py-3 bg-slate-900/80 hover:bg-slate-800 text-white dark:bg-white/90 dark:hover:bg-white dark:text-slate-900 rounded-full shadow-lg backdrop-blur-md transition-all font-medium text-sm border border-slate-700/50 dark:border-slate-300/50"
+          >
+            Reset View
+          </button>
+        </div>
+      )}
     </div>
   );
 }
