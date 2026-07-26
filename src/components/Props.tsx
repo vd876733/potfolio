@@ -126,6 +126,37 @@ export default function Props({ isLight = false }: PropsProps) {
       <BeachKit position={[-17.6, 0.18, 41.8]} isLight={isLight} rotation={[0, -Math.PI / 6, 0]} />
       <BeachKit position={[26.4, 0.18, 35.2]} isLight={isLight} rotation={[0, Math.PI / 4, 0]} />
 
+      {/* West Cliff Rocks - Tall gray rock pillars hugging the steep west cliffside */}
+      <group position={[-55, -2, 0]}>
+        <Instances limit={20} castShadow receiveShadow>
+          <cylinderGeometry args={[0.5, 1.5, 1, 6]} />
+          <meshStandardMaterial color="#616161" roughness={0.9} />
+          {Array.from({ length: 8 }).map((_, i) => {
+            const x = Math.sin(i * 1.5) * 5 + Math.random() * 2;
+            const z = Math.cos(i * 1.2) * 15 + Math.random() * 2;
+            const scaleY = 15 + Math.random() * 10;
+            const rotY = Math.random() * Math.PI;
+            return <Instance key={`west-cliff-rock-${i}`} position={[x, scaleY / 2 - 2, z]} scale={[1 + Math.random(), scaleY, 1 + Math.random()]} rotation={[0, rotY, 0]} />;
+          })}
+        </Instances>
+      </group>
+
+      {/* Pointed Sea Rocks near Lighthouse (NW) and East Coast */}
+      <group>
+        <Instances limit={20} castShadow receiveShadow>
+          <cylinderGeometry args={[0.1, 1.8, 8, 5]} />
+          <meshStandardMaterial color={rockColor} roughness={0.95} />
+          {/* Lighthouse area: ~[-50, -4, -50] */}
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Instance key={`sea-rock-nw-${i}`} position={[-48 - Math.random() * 8, -2, -50 - Math.random() * 8]} rotation={[(Math.random() - 0.5) * 0.4, Math.random() * Math.PI, (Math.random() - 0.5) * 0.4]} scale={0.8 + Math.random() * 0.5} />
+          ))}
+          {/* East coast area: ~[55, -4, 10] */}
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Instance key={`sea-rock-e-${i}`} position={[55 + Math.random() * 10, -2, 5 + Math.random() * 15]} rotation={[(Math.random() - 0.5) * 0.4, Math.random() * Math.PI, (Math.random() - 0.5) * 0.4]} scale={0.8 + Math.random() * 0.5} />
+          ))}
+        </Instances>
+      </group>
+
       {/* Tropical Island Additions */}
       <Whale position={[-66, -3.6, 66]} isLight={isLight} />
       <WoodenDock position={[70.4, -3.6, 0]} isLight={isLight} />
@@ -137,7 +168,6 @@ export default function Props({ isLight = false }: PropsProps) {
     </group>
   );
 }
-
 function PalmTree({ position, scale = 1, leafColor }: { position: [number, number, number]; scale: number; leafColor: string }) {
   return (
     <group position={position} scale={scale}>

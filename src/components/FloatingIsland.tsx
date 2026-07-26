@@ -3,7 +3,6 @@
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { createNoiseTexture } from "../utils/textures";
 
 interface FloatingIslandProps {
   isLight?: boolean;
@@ -12,10 +11,6 @@ interface FloatingIslandProps {
 
 export default function FloatingIsland({ isLight = false, children }: FloatingIslandProps) {
   const group = useRef<THREE.Group>(null);
-  const noiseTexture = useMemo(() => createNoiseTexture(), []);
-  
-  const grassColor = isLight ? "#2e7d32" : "#388e3c";
-  const rockColor = isLight ? "#6d4c41" : "#5d4037";
 
   useFrame(({ clock }) => {
     if (group.current) {
@@ -26,66 +21,145 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
     }
   });
 
+  const terrainGeometry = useMemo(() => {
+    const width = 60;
+    const height = 60;
+    const segments = 128;
+    const geo = new THREE.PlaneGeometry(width, height, segments, segments);
+    const pos = geo.attributes.position;
+    
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i);
+      const y = pos.getY(i);
+      
+      const u = x / (width / 2); // [-1, 1]
+      const v = y / (height / 2); // [-1, 1]
+      
+      // Blobs for asymmetrical kidney shape
+      // Wider south (v < 0), tapering to peak at north (v > 0)
+      const d_south = Math.sqrt(Math.pow(u - 0.0, 2) + Math.pow(v + 0.3, 2)) / 0.65;
+      const d_north = Math.sqrt(Math.pow(u + 0.2, 2) + Math.pow(v - 0.5, 2)) / 0.4;
+      const d_mid = Math.sqrt(Math.pow(u + 0.1, 2) + Math.pow(v - 0.1, 2)) / 0.55;
+      
+      const D = Math.max(1 - d_south, 1 - d_north, 1 - d_mid);
+      
+      let z = -2; // Ocean floor depth
+      
+      if (D > 0) {
+        let edgeProfile = D;
+        
+        // West cliffside (u < -0.05) vs East/South gentle slopes
+        if (u < -0.05) {
+          // Sharp jagged cliff drop-off
+          edgeProfile = Math.pow(D, 0.15); 
+        } else {
+          // Gently sloping flat ground leading down to sea level
+          edgeProfile = Math.pow(D, 0.8);
+        }
+        
+        // Base terrain elevation
+        let h = edgeProfile * 3;
+        
+        // Center Plateau (Mid-height flat area for the main village)
+        const d_center = Math.sqrt(Math.pow(u + 0.05, 2) + Math.pow(v + 0.1, 2));
+        const plateau = Math.max(0, 1 - d_center / 0.45);
+        h = Math.max(h, Math.min(4, plateau * 15)); // Flattens at height 4
+        
+        // North Peak (Steep, tall volcanic crater hill)
+        const peakMask = Math.max(0, 1 - d_north);
+        let peakHeight = Math.pow(peakMask, 1.5) * 14; 
+        
+        // Volcanic crater dip at the very top
+        const craterDip = 1.0 - 0.4 * Math.max(0, 1 - Math.pow(d_north / 0.15, 2)); 
+        peakHeight *= craterDip;
+        
+        h = Math.max(h, peakHeight);
+        
+        // Jagged noise for cliffs and rocks
+        const noise = (Math.sin(u * 31.4) * Math.cos(v * 43.1) * 0.15) + 
+                      (Math.sin(u * 87.2 + v * 73.1) * 0.05) +
+                      (Math.cos(u * 14.5 - v * 22.3) * 0.1);
+        
+        h += noise * (D > 0.05 ? 1 : D * 20); // Fade noise at coastline
+        
+        z = h;
+      } else {
+        z = -2 + D * 5; // Under water sloping
+      }
+      
+      pos.setZ(i, z);
+    }
+    
+    geo.computeVertexNormals();
+    return geo;
+  }, []);
+
+  const beachGeometry = useMemo(() => {
+    const width = 60;
+    const height = 60;
+    const segments = 128;
+    const geo = new THREE.PlaneGeometry(width, height, segments, segments);
+    const pos = geo.attributes.position;
+    
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i);
+      const y = pos.getY(i);
+      
+      const u = x / (width / 2); // [-1, 1]
+      const v = y / (height / 2); // [-1, 1]
+      
+      const d_south = Math.sqrt(Math.pow(u - 0.0, 2) + Math.pow(v + 0.3, 2)) / 0.65;
+      const d_north = Math.sqrt(Math.pow(u + 0.2, 2) + Math.pow(v - 0.5, 2)) / 0.4;
+      const d_mid = Math.sqrt(Math.pow(u + 0.1, 2) + Math.pow(v - 0.1, 2)) / 0.55;
+      
+      const D = Math.max(1 - d_south, 1 - d_north, 1 - d_mid);
+      
+      let beachWidth = 0.05; 
+      beachWidth += Math.max(0, u) * 0.15; // East coast
+      beachWidth += Math.max(0, -v) * 0.15; // South coast
+      
+      if (u < -0.05) {
+        const westFactor = Math.min(1, (-u - 0.05) * 4); 
+        beachWidth -= westFactor * 0.12; // Thinner on west
+      }
+      beachWidth = Math.max(0.005, beachWidth);
+      
+      const beachInnerEdge = 0.05; 
+      const beachOuterEdge = -beachWidth;
+      
+      let z = -4; 
+      
+      if (D >= beachInnerEdge) {
+        z = 0.2; // Buried under the main terrain
+      } else if (D > beachOuterEdge && D < beachInnerEdge) {
+        const t = (D - beachOuterEdge) / (beachInnerEdge - beachOuterEdge);
+        z = -0.05 + (t * 0.25); 
+        
+        const noise = (Math.sin(u * 120) * Math.cos(v * 120)) * 0.015;
+        z += noise * Math.min(1, t * 5); 
+      } else if (D <= beachOuterEdge && D > beachOuterEdge - 0.05) {
+        const t = (D - (beachOuterEdge - 0.05)) / 0.05; 
+        const smoothT = t * t * (3 - 2 * t);
+        z = -4 + (smoothT * 3.95); 
+      }
+      
+      pos.setZ(i, z);
+    }
+    
+    geo.computeVertexNormals();
+    return geo;
+  }, []);
+
   return (
     <group ref={group}>
       {/* Scaled Terrain */}
       <group scale={[2.2, 1.8, 2.2]}>
-        {/* Tier 1 (Base & Beach) */}
-        <group position={[0, -2, 0]}>
-          {/* Grass */}
-          <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-            <circleGeometry args={[26, 64]} />
-            <meshStandardMaterial color={grassColor} roughness={0.8} metalness={0} />
-          </mesh>
-          {/* Sandy Beach Border */}
-          <mesh position={[0, 2.01, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-            <ringGeometry args={[26, 30, 64]} />
-            <meshStandardMaterial color="#f4e1d2" roughness={0.9} />
-          </mesh>
-          {/* Rock Base */}
-          <mesh receiveShadow castShadow>
-            <cylinderGeometry args={[30, 24, 4, 64]} />
-            <meshStandardMaterial color={rockColor} roughness={0.9} metalness={0.1} bumpMap={noiseTexture || undefined} bumpScale={0.05} />
-          </mesh>
-        </group>
-
-        {/* North-West Cliff (For Lighthouse) */}
-        <group position={[-20, -2, -20]}>
-          {/* Grass */}
-          <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-            <circleGeometry args={[10, 32]} />
-            <meshStandardMaterial color={grassColor} roughness={0.8} />
-          </mesh>
-          {/* Rock Base */}
-          <mesh receiveShadow castShadow>
-            <cylinderGeometry args={[10, 7, 4, 32]} />
-            <meshStandardMaterial color={rockColor} roughness={0.9} metalness={0.1} bumpMap={noiseTexture || undefined} bumpScale={0.05} />
-          </mesh>
-        </group>
-
-        {/* Tier 2 (Middle) */}
-        <group position={[0, 2, 0]}>
-          <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-            <circleGeometry args={[18, 64]} />
-            <meshStandardMaterial color={grassColor} roughness={0.8} metalness={0} />
-          </mesh>
-          <mesh receiveShadow castShadow>
-            <cylinderGeometry args={[18, 22, 4, 64]} />
-            <meshStandardMaterial color={rockColor} roughness={0.9} metalness={0.1} bumpMap={noiseTexture || undefined} bumpScale={0.05} />
-          </mesh>
-        </group>
-
-        {/* Tier 3 (Peak) */}
-        <group position={[0, 6, 0]}>
-          <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-            <circleGeometry args={[8, 64]} />
-            <meshStandardMaterial color={grassColor} roughness={0.8} metalness={0} />
-          </mesh>
-          <mesh receiveShadow castShadow>
-            <cylinderGeometry args={[8, 12, 4, 64]} />
-            <meshStandardMaterial color={rockColor} roughness={0.9} metalness={0.1} bumpMap={noiseTexture || undefined} bumpScale={0.05} />
-          </mesh>
-        </group>
+        <mesh geometry={terrainGeometry} rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow castShadow>
+          <meshStandardMaterial color="#795548" roughness={0.9} metalness={0.1} />
+        </mesh>
+        <mesh geometry={beachGeometry} rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow castShadow>
+          <meshStandardMaterial color="#eedc9a" roughness={0.9} metalness={0.0} />
+        </mesh>
       </group>
       
       {/* Elements on the Island */}
