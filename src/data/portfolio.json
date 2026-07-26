@@ -55,6 +55,54 @@
       "description": "An immersive 3D architectural portfolio leveraging React Three Fiber and Framer Motion for interactive physics and beautiful post-processing bloom effects.",
       "liveUrl": "#",
       "githubUrl": "#"
+    },
+    {
+      "id": "spring-boot-redis-ratelimiter",
+      "title": "Spring Boot Redis Rate Limiter",
+      "stack": ["Java", "Spring Boot", "Redis"],
+      "description": "A rate limiting implementation using the sliding window algorithm with Spring Boot and Redis.",
+      "liveUrl": "#",
+      "githubUrl": "https://github.com/vd876733/spring-boot-redis-ratelimiter"
+    },
+    {
+      "id": "visual-indoor-positioning-system",
+      "title": "Visual Indoor Positioning System",
+      "stack": ["Java"],
+      "description": "An indoor positioning system leveraging visual data for accurate location tracking inside buildings.",
+      "liveUrl": "#",
+      "githubUrl": "https://github.com/vd876733/visual-indoor-positioning-system"
+    },
+    {
+      "id": "nexusflow-ingestion-engine",
+      "title": "NexusFlow Ingestion Engine",
+      "stack": ["Python"],
+      "description": "A robust data ingestion engine built in Python to handle high-throughput data processing workflows.",
+      "liveUrl": "#",
+      "githubUrl": "https://github.com/vd876733/NexusFlow-Ingestion-Engine"
+    },
+    {
+      "id": "nlp-code-analyzer",
+      "title": "NLP Code Analyzer",
+      "stack": ["Python", "NLP"],
+      "description": "A Natural Language Processing tool designed to analyze and extract insights from source code repositories.",
+      "liveUrl": "#",
+      "githubUrl": "https://github.com/vd876733/NLP-Code-Analyzer"
+    },
+    {
+      "id": "rubic-cube",
+      "title": "Rubik's Cube Simulator",
+      "stack": ["TypeScript", "HTML", "CSS"],
+      "description": "An interactive 3D Rubik's Cube simulation built with TypeScript.",
+      "liveUrl": "#",
+      "githubUrl": "https://github.com/vd876733/rubic_cube"
+    },
+    {
+      "id": "asl-fingerspelling-model",
+      "title": "ASL Fingerspelling Model",
+      "stack": ["HTML", "Machine Learning"],
+      "description": "A machine learning model for translating American Sign Language (ASL) fingerspelling in real-time.",
+      "liveUrl": "#",
+      "githubUrl": "https://github.com/vd876733/ASL-fingerspelling-model"
     }
   ],
   "skills": {
