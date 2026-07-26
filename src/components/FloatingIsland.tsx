@@ -53,8 +53,9 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
         
         // West cliffside (u < -0.05) vs East/South gentle slopes
         if (u < -0.05) {
-          // Sharp jagged cliff drop-off
-          edgeProfile = Math.pow(D, 0.15); 
+          // Sharp jagged cliff drop-off, but smoothly tapers at the very base to meet the sand
+          let cliffD = Math.max(0, D - 0.02);
+          edgeProfile = Math.pow(cliffD, 0.2); 
         } else {
           // Gently sloping flat ground leading down to sea level
           edgeProfile = Math.pow(D, 0.8);
@@ -95,17 +96,18 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
       tPos.setZ(i, z);
       
       // Compute Sand Factor
+      // The waterline is at worldY = 0 -> local z = 1.11
       let sandFactor = 0;
       let sandMinZ = 0.5; // Starts underwater
-      let sandMaxZ = 1.6; // Ends above water
+      let sandMaxZ = 1.5; // Ends slightly above water
       
       // East/South wider
-      sandMaxZ += Math.max(0, u) * 0.8;
-      sandMaxZ += Math.max(0, -v) * 0.8;
+      sandMaxZ += Math.max(0, u) * 1.0;
+      sandMaxZ += Math.max(0, -v) * 1.0;
       
       // West thinner / tapered
       if (u < -0.05) {
-        sandMaxZ = 1.15; // Just barely above the waterline
+        sandMaxZ = 1.25; // Just barely above the waterline
       }
       
       if (baseH >= sandMinZ && baseH <= sandMaxZ) {
