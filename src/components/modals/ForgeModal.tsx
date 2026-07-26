@@ -5,11 +5,25 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, Code, Database, Brain, Cloud, FileText } from "lucide-react";
 import portfolioData from "@/data/portfolio.json";
 
+interface Certificate {
+  id?: string;
+  title?: string;
+  name?: string;
+  issuer?: string;
+  date?: string;
+  score?: string;
+  pdfUrl?: string;
+  url?: string;
+  link?: string;
+  verificationUrl?: string;
+}
+
 const tabs = ["Technical Skills", "Certificates"];
 
 export default function ForgeModal() {
   const [activeTab, setActiveTab] = useState(tabs[0]);
-  const { skills, certificates } = portfolioData;
+  const { skills } = portfolioData;
+  const certificates = portfolioData.certificates as Certificate[];
 
   return (
     <div className="flex flex-col gap-6 min-h-[400px]">
