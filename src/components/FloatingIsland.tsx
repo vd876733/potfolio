@@ -23,17 +23,38 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
 
   return (
     <group ref={group}>
-      {/* Island Base */}
-      <group position={[0, -2.01, 0]}>
-        {/* Top Grass */}
+      {/* Tier 1 (Base) */}
+      <group position={[0, -2, 0]}>
         <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-          <circleGeometry args={[22, 64]} />
+          <circleGeometry args={[28, 64]} />
           <meshStandardMaterial color={grassColor} roughness={1} metalness={0} />
         </mesh>
-        
-        {/* Rocky Base */}
         <mesh receiveShadow castShadow>
-          <cylinderGeometry args={[22, 18, 4, 64]} />
+          <cylinderGeometry args={[28, 22, 4, 64]} />
+          <meshStandardMaterial color={rockColor} roughness={0.9} metalness={0.1} />
+        </mesh>
+      </group>
+
+      {/* Tier 2 (Middle) */}
+      <group position={[0, 2, 0]}>
+        <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <circleGeometry args={[18, 64]} />
+          <meshStandardMaterial color={grassColor} roughness={1} metalness={0} />
+        </mesh>
+        <mesh receiveShadow castShadow>
+          <cylinderGeometry args={[18, 22, 4, 64]} />
+          <meshStandardMaterial color={rockColor} roughness={0.9} metalness={0.1} />
+        </mesh>
+      </group>
+
+      {/* Tier 3 (Peak) */}
+      <group position={[0, 6, 0]}>
+        <mesh position={[0, 2, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+          <circleGeometry args={[8, 64]} />
+          <meshStandardMaterial color={grassColor} roughness={1} metalness={0} />
+        </mesh>
+        <mesh receiveShadow castShadow>
+          <cylinderGeometry args={[8, 12, 4, 64]} />
           <meshStandardMaterial color={rockColor} roughness={0.9} metalness={0.1} />
         </mesh>
       </group>

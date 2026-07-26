@@ -12,6 +12,7 @@ import Pavilions from "./Pavilions";
 import RoadNetwork from "./RoadNetwork";
 import Cars from "./Cars";
 import Birds from "./Birds";
+import Props from "./Props";
 
 interface SceneProps {
   onSectionClick: (section: string) => void;
@@ -60,6 +61,9 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
         <Ocean isLight={isLight} />
 
         <FloatingIsland isLight={isLight}>
+          {/* Environment Props (Trees and Rocks) */}
+          <Props isLight={isLight} />
+
           {/* Dynamic Scene Additions */}
           <RoadNetwork isLight={isLight} />
           <Cars />

@@ -3,24 +3,24 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { windingPath } from "./RoadNetwork";
 
-function Car({ offset, color, speed, radius, yOffset }: { offset: number; color: string; speed: number; radius: number, yOffset: number }) {
+function Car({ offset, color, speed }: { offset: number; color: string; speed: number }) {
   const group = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
     if (!group.current) return;
-    const time = clock.elapsedTime * speed + offset;
+    const time = (clock.elapsedTime * speed + offset) % 1;
+    const t = time < 0 ? 1 + time : time;
     
-    // Position on circle
-    const x = Math.cos(time) * radius;
-    const z = Math.sin(time) * radius;
-    group.current.position.set(x, yOffset, z);
+    // Position on curve
+    const pos = windingPath.getPointAt(t);
+    group.current.position.copy(pos);
     
-    // Look ahead on the circle
-    const nextT = time + (speed > 0 ? 0.05 : -0.05);
-    const nextX = Math.cos(nextT) * radius;
-    const nextZ = Math.sin(nextT) * radius;
-    group.current.lookAt(nextX, yOffset, nextZ);
+    // Look ahead on the curve
+    const tangent = windingPath.getTangentAt(t).normalize();
+    const nextPos = pos.clone().add(tangent);
+    group.current.lookAt(nextPos);
   });
 
   return (
@@ -70,17 +70,12 @@ function Car({ offset, color, speed, radius, yOffset }: { offset: number; color:
 }
 
 export default function Cars() {
-  const radius = 14.5;
   return (
-    <group>
-      {/* Inner Lane (Counter-Clockwise, speed > 0) */}
-      <Car offset={0} color="#F43F5E" speed={0.4} radius={radius - 0.4} yOffset={0.02} />
-      <Car offset={2.1} color="#38BDF8" speed={0.4} radius={radius - 0.4} yOffset={0.02} />
-      <Car offset={4.2} color="#10B981" speed={0.4} radius={radius - 0.4} yOffset={0.02} />
-      
-      {/* Outer Lane (Clockwise, speed < 0) */}
-      <Car offset={1.0} color="#F59E0B" speed={-0.35} radius={radius + 0.4} yOffset={0.02} />
-      <Car offset={3.5} color="#A855F7" speed={-0.35} radius={radius + 0.4} yOffset={0.02} />
+    <group position={[0, 1.5, 0]}>
+      {/* White cars tracing the winding road */}
+      <Car offset={0} color="#ffffff" speed={0.05} />
+      <Car offset={0.3} color="#ffffff" speed={0.05} />
+      <Car offset={0.6} color="#ffffff" speed={0.05} />
     </group>
   );
 }
