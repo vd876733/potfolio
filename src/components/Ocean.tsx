@@ -15,7 +15,7 @@ export default function Ocean({ isLight = false }: OceanProps) {
     () => ({
       uTime: { value: 0 },
       uColorNear: { value: new THREE.Color(isLight ? "#00a8ff" : "#0088cc") },
-      uColorFar: { value: new THREE.Color(isLight ? "#0055a5" : "#002255") },
+      uColorFar: { value: new THREE.Color(isLight ? "#1a82b8" : "#002255") },
     }),
     [isLight]
   );
@@ -88,8 +88,8 @@ export default function Ocean({ isLight = false }: OceanProps) {
   };
 
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} receiveShadow>
-      <planeGeometry args={[3000, 3000, 128, 128]} />
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.2, 0]} receiveShadow>
+      <planeGeometry args={[4000, 4000, 128, 128]} />
       <meshStandardMaterial
         ref={materialRef}
         transparent={true}

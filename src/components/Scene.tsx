@@ -58,13 +58,9 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
         camera={{ position: [0, 35, 45], fov: 45, near: 0.1, far: 1000 }}
         dpr={isMobile ? [1, 1.5] : [1, 2]}
       >
-        {isLight ? (
-          <Sky distance={450000} sunPosition={[10, 20, 15]} inclination={0} azimuth={0.25} />
-        ) : (
-          <>
-            <color attach="background" args={[bgColor]} />
-            <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-          </>
+        <color attach="background" args={[isLight ? "#1a82b8" : "#002255"]} />
+        {!isLight && (
+          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
         )}
         
         <ambientLight intensity={isLight ? 1.0 : 0.2} color={isLight ? "#e0f7fa" : "#60a5fa"} />

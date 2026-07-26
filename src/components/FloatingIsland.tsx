@@ -94,7 +94,7 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
       
       tPos.setZ(i, z);
       
-      // Calculate sand mask for beach geometry
+      // Compute Sand Factor
       let sandFactor = 0;
       let sandMinZ = 0.5; // Starts underwater
       let sandMaxZ = 1.6; // Ends above water
@@ -105,26 +105,40 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
       
       // West thinner / tapered
       if (u < -0.05) {
-        sandMaxZ = 1.15; // Just barely above the waterline (which is ~1.055)
+        sandMaxZ = 1.15; // Just barely above the waterline
       }
       
       if (baseH >= sandMinZ && baseH <= sandMaxZ) {
-        if (baseH < sandMinZ + 0.2) {
-          sandFactor = (baseH - sandMinZ) / 0.2;
-        } else if (baseH > sandMaxZ - 0.2) {
-          sandFactor = (sandMaxZ - baseH) / 0.2;
-        } else {
-          sandFactor = 1.0;
-        }
+        sandFactor = 1.0;
       }
       
-      // Bury non-sand parts deeply inside the terrain
-      const bZ = z - 0.8 * (1 - sandFactor);
-      bPos.setZ(i, bZ);
+      // Store in an array to build the beach geometry index
+      (tGeo as any).userData = (tGeo as any).userData || { sandFactors: [] };
+      (tGeo as any).userData.sandFactors[i] = sandFactor;
     }
     
     tGeo.computeVertexNormals();
-    bGeo.computeVertexNormals();
+
+    // Extract triangles for the beach
+    const indices = tGeo.index!.array;
+    const beachIndices = [];
+    const sandFactors = (tGeo as any).userData.sandFactors;
+    
+    for (let i = 0; i < indices.length; i += 3) {
+      const a = indices[i];
+      const b = indices[i+1];
+      const c = indices[i+2];
+      
+      if (sandFactors[a] > 0 || sandFactors[b] > 0 || sandFactors[c] > 0) {
+        beachIndices.push(a, b, c);
+      }
+    }
+    
+    bGeo.setIndex(beachIndices);
+    // Copy the positions and normals from the terrain
+    bGeo.setAttribute('position', tGeo.attributes.position);
+    bGeo.setAttribute('normal', tGeo.attributes.normal);
+    
     return { terrainGeo: tGeo, beachGeo: bGeo };
   }, []);
 
