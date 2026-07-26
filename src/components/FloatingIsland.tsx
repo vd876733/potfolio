@@ -38,7 +38,7 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
           {/* Sandy Beach Border */}
           <mesh position={[0, 2.01, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
             <ringGeometry args={[26, 30, 64]} />
-            <meshStandardMaterial color="#fcd34d" roughness={0.9} />
+            <meshStandardMaterial color="#f4e1d2" roughness={0.9} />
           </mesh>
           {/* Rock Base */}
           <mesh receiveShadow castShadow>

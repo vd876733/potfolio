@@ -67,13 +67,13 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
           </>
         )}
         
-        <ambientLight intensity={isLight ? 0.9 : 0.2} color={isLight ? "#e0f7fa" : "#60a5fa"} />
+        <ambientLight intensity={isLight ? 1.0 : 0.2} color={isLight ? "#e0f7fa" : "#60a5fa"} />
         
         <directionalLight
-          position={isLight ? [20, 30, 20] : [-10, 20, -15]}
+          position={isLight ? [30, 40, 20] : [-10, 20, -15]}
           castShadow
-          intensity={isLight ? 2.5 : 0.5}
-          color={isLight ? "#fff3e0" : "#93c5fd"}
+          intensity={isLight ? 2.2 : 0.5}
+          color={isLight ? "#fff4e0" : "#93c5fd"}
           shadow-mapSize={isMobile ? [1024, 1024] : [2048, 2048]}
           shadow-camera-left={-40}
           shadow-camera-right={40}
