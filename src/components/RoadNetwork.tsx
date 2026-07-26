@@ -6,6 +6,35 @@ interface RoadNetworkProps {
   isLight?: boolean;
 }
 
+function StreetLamp({ position, isLight }: { position: [number, number, number], isLight: boolean }) {
+  const poleColor = isLight ? "#64748b" : "#334155";
+  const glowColor = "#fde047";
+
+  return (
+    <group position={position}>
+      {/* Pole */}
+      <mesh position={[0, 1.5, 0]} castShadow>
+        <cylinderGeometry args={[0.05, 0.05, 3]} />
+        <meshStandardMaterial color={poleColor} roughness={0.7} />
+      </mesh>
+      {/* Bulb */}
+      <mesh position={[0, 3, 0]}>
+        <sphereGeometry args={[0.2]} />
+        <meshStandardMaterial 
+          color={isLight ? "#ffffff" : glowColor} 
+          emissive={isLight ? "#000000" : glowColor} 
+          emissiveIntensity={isLight ? 0 : 2} 
+          toneMapped={false}
+        />
+      </mesh>
+      {/* Light Source */}
+      {!isLight && (
+        <pointLight position={[0, 2.8, 0]} color={glowColor} intensity={0.5} distance={10} />
+      )}
+    </group>
+  );
+}
+
 export default function RoadNetwork({ isLight = false }: RoadNetworkProps) {
   const roadColor = isLight ? "#94a3b8" : "#1e293b";
   const markColor = isLight ? "#cbd5e1" : "#334155";
@@ -53,6 +82,16 @@ export default function RoadNetwork({ isLight = false }: RoadNetworkProps) {
         <cylinderGeometry args={[2.5, 2.5, 0.01, 32]} />
         <meshStandardMaterial color={roadColor} roughness={0.9} />
       </mesh>
+
+      {/* Street Lamps */}
+      <StreetLamp position={[-6, 0, 6]} isLight={isLight} />
+      <StreetLamp position={[6, 0, 6]} isLight={isLight} />
+      <StreetLamp position={[-6, 0, -6]} isLight={isLight} />
+      <StreetLamp position={[6, 0, -6]} isLight={isLight} />
+      <StreetLamp position={[-12, 0, 0]} isLight={isLight} />
+      <StreetLamp position={[12, 0, 0]} isLight={isLight} />
+      <StreetLamp position={[0, 0, 12]} isLight={isLight} />
+      <StreetLamp position={[0, 0, -12]} isLight={isLight} />
     </group>
   );
 }

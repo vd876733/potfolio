@@ -1,22 +1,26 @@
 "use client";
 
+import { Text } from "@react-three/drei";
 import Pavilion from "./Pavilion";
 
 interface PavilionsProps {
   onSectionClick: (section: string) => void;
+  isLight?: boolean;
 }
 
-export default function Pavilions({ onSectionClick }: PavilionsProps) {
+export default function Pavilions({ onSectionClick, isLight = false }: PavilionsProps) {
   const glassMaterial = (
     <meshPhysicalMaterial
-      color="#111111"
+      color={isLight ? "#e2e8f0" : "#111111"}
+      emissive={isLight ? "#000000" : "#38bdf8"}
+      emissiveIntensity={isLight ? 0 : 0.5}
       metalness={0.8}
       roughness={0.1}
-      transmission={0.9}
+      transmission={isLight ? 0.9 : 0.2}
       ior={1.5}
       thickness={1}
       transparent
-      opacity={0.9}
+      opacity={isLight ? 0.9 : 1}
     />
   );
 

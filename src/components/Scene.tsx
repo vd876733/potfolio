@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import Ground from "./Ground";
+import FloatingIsland from "./FloatingIsland";
+import Ocean from "./Ocean";
 import Pavilions from "./Pavilions";
 import RoadNetwork from "./RoadNetwork";
 import Cars from "./Cars";
@@ -26,7 +27,7 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
   }, []);
 
   const isLight = mounted && theme === "light";
-  const bgColor = isLight ? "#f8fafc" : "#090d16";
+  const bgColor = isLight ? "#87ceeb" : "#090d16"; // sky blue vs deep space
   const ambientIntensity = isLight ? 0.7 : 0.4;
   const dirIntensity = isLight ? 2.5 : 1.5;
 
@@ -56,15 +57,17 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
           shadow-bias={-0.0001}
         />
 
-        <Ground isLight={isLight} />
+        <Ocean isLight={isLight} />
 
-        {/* Dynamic Scene Additions */}
-        <RoadNetwork isLight={isLight} />
-        <Cars />
-        <Birds isLight={isLight} />
+        <FloatingIsland isLight={isLight}>
+          {/* Dynamic Scene Additions */}
+          <RoadNetwork isLight={isLight} />
+          <Cars />
+          <Birds isLight={isLight} />
 
-        {/* The 5 Portfolio Sections */}
-        <Pavilions onSectionClick={onSectionClick} />
+          {/* The 5 Portfolio Sections */}
+          <Pavilions onSectionClick={onSectionClick} isLight={isLight} />
+        </FloatingIsland>
 
         <OrbitControls
           maxPolarAngle={Math.PI / 2 - 0.02}
