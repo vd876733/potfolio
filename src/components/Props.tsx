@@ -67,7 +67,8 @@ export default function Props({ isLight = false }: PropsProps) {
       const z = Math.sin(angle) * radius;
       const scale = 1 + Math.random() * 2;
       const rotation = [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI] as [number, number, number];
-      arr.push({ position: [x, y, z] as [number, number, number], scale, rotation });
+      const type = Math.floor(Math.random() * 3); // 0, 1, 2 for diverse rock shapes
+      arr.push({ position: [x, y, z] as [number, number, number], scale, rotation, type });
     }
     return arr;
   }, []);
@@ -110,14 +111,15 @@ export default function Props({ isLight = false }: PropsProps) {
         ))}
       </Instances>
 
-      {/* Ocean Rocks */}
-      <Instances limit={100} castShadow receiveShadow>
-        <dodecahedronGeometry args={[1.5]} />
-        <meshStandardMaterial color={oceanRockColor} roughness={1.0} />
-        {oceanRocks.map((props, i) => (
-          <Instance key={`ocean-rock-${i}`} position={props.position} scale={props.scale} rotation={props.rotation} />
-        ))}
-      </Instances>
+      {/* Diverse Ocean Rocks */}
+      {oceanRocks.map((props, i) => (
+        <mesh key={`ocean-rock-${i}`} position={props.position} scale={props.scale} rotation={props.rotation} castShadow receiveShadow>
+          {props.type === 0 && <dodecahedronGeometry args={[1.5]} />}
+          {props.type === 1 && <icosahedronGeometry args={[1.5, 0]} />}
+          {props.type === 2 && <octahedronGeometry args={[1.5, 0]} />}
+          <meshStandardMaterial color={oceanRockColor} roughness={1.0} />
+        </mesh>
+      ))}
 
       {/* Beach Kits */}
       <BeachKit position={[11, 0.18, 44]} isLight={isLight} />
