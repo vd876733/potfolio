@@ -94,76 +94,17 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
     return geo;
   }, []);
 
-  const beachGeometry = useMemo(() => {
-    const width = 60;
-    const height = 60;
-    const segments = 128;
-    const geo = new THREE.PlaneGeometry(width, height, segments, segments);
-    const pos = geo.attributes.position;
-    
-    for (let i = 0; i < pos.count; i++) {
-      const x = pos.getX(i);
-      const y = pos.getY(i);
-      
-      const u = x / (width / 2); // [-1, 1]
-      const v = y / (height / 2); // [-1, 1]
-      
-      const d_south = Math.sqrt(Math.pow(u - 0.0, 2) + Math.pow(v + 0.3, 2)) / 0.65;
-      const d_north = Math.sqrt(Math.pow(u + 0.2, 2) + Math.pow(v - 0.5, 2)) / 0.4;
-      const d_mid = Math.sqrt(Math.pow(u + 0.1, 2) + Math.pow(v - 0.1, 2)) / 0.55;
-      
-      const D = Math.max(1 - d_south, 1 - d_north, 1 - d_mid);
-      
-      let beachWidth = 0.05; 
-      beachWidth += Math.max(0, u) * 0.15; // East coast
-      beachWidth += Math.max(0, -v) * 0.15; // South coast
-      
-      if (u < -0.05) {
-        const westFactor = Math.min(1, (-u - 0.05) * 4); 
-        beachWidth -= westFactor * 0.12; // Thinner on west
-      }
-      beachWidth = Math.max(0.005, beachWidth);
-      
-      const beachInnerEdge = 0.05; 
-      const beachOuterEdge = -beachWidth;
-      
-      let z = -4; 
-      
-      if (D >= beachInnerEdge) {
-        z = 0.2; // Buried under the main terrain
-      } else if (D > beachOuterEdge && D < beachInnerEdge) {
-        const t = (D - beachOuterEdge) / (beachInnerEdge - beachOuterEdge);
-        z = -0.05 + (t * 0.25); 
-        
-        const noise = (Math.sin(u * 120) * Math.cos(v * 120)) * 0.015;
-        z += noise * Math.min(1, t * 5); 
-      } else if (D <= beachOuterEdge && D > beachOuterEdge - 0.05) {
-        const t = (D - (beachOuterEdge - 0.05)) / 0.05; 
-        const smoothT = t * t * (3 - 2 * t);
-        z = -4 + (smoothT * 3.95); 
-      }
-      
-      pos.setZ(i, z);
-    }
-    
-    geo.computeVertexNormals();
-    return geo;
-  }, []);
-
   return (
     <group ref={group}>
       {/* Scaled Terrain */}
       <group scale={[2.2, 1.8, 2.2]}>
         <mesh geometry={terrainGeometry} rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow castShadow>
-          <meshStandardMaterial color="#795548" roughness={0.9} metalness={0.1} />
-        </mesh>
-        <mesh geometry={beachGeometry} rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow castShadow>
-          <meshStandardMaterial color="#eedc9a" roughness={0.9} metalness={0.0} />
+          <meshStandardMaterial color="#6d4c41" roughness={0.9} />
         </mesh>
       </group>
       
-      {/* Elements on the Island */}
-      {children}
+      {/* Elements on the Island (Hidden for now to focus on silhouette) */}
+      {/* {children} */}
     </group>
   );
 }

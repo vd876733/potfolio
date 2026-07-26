@@ -92,7 +92,7 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
           far={10}
         />
 
-        <Ocean isLight={isLight} />
+        {/* <Ocean isLight={isLight} /> */}
 
         <FloatingIsland isLight={isLight}>
           <Props isLight={isLight} />
