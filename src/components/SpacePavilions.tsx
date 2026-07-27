@@ -10,6 +10,8 @@ import {
   Spacewalker,
   ISSStation,
   SpaceWaypoint,
+  SupermassiveBlackHole,
+  BackgroundGalaxy,
 } from "./SpaceEnvironment";
 
 interface SpacePavilionsProps {
@@ -19,6 +21,10 @@ interface SpacePavilionsProps {
 export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) {
   return (
     <group>
+      {/* Supermassive Black Hole & Cosmic Spiral Galaxy Deep in Background */}
+      <SupermassiveBlackHole position={[280, -40, -550]} scale={1.3} />
+      <BackgroundGalaxy position={[-380, 160, -700]} scale={1.4} />
+
       {/* 1. Sun GLTF (Sun by Jarlan Perez) */}
       <SunGLTF />
 
@@ -49,22 +55,23 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
         initialAngle={2.1}
       />
 
-      {/* 4. Earth GLTF (Command Central / About Section) */}
+      {/* 4. Command Central / About Section */}
       <GLTFPlanet
-        modelPath="/space/Earth by Poly by Google - 1I5ip-3VOfv.glb"
+        modelPath="/space/Planet by Quaternius - IVnmauIgWX.glb"
         orbitRadius={26}
-        scale={3.2}
+        scale={2.2}
         speed={0.09}
         initialAngle={4.2}
+        atmosphereColor="#38bdf8"
       >
-        {/* Floating Astronaut near Earth */}
-        <Spacewalker position={[3.8, 1.8, 0]} />
+        {/* Floating Astronaut near Command Central */}
+        <Spacewalker position={[2.5, 1.4, 0]} />
 
         {/* Command Central Waypoint */}
         <SpaceWaypoint
           label="Command Central"
           color="#38BDF8"
-          offsetY={5.0}
+          offsetY={3.8}
           onClick={onSectionClick}
         />
       </GLTFPlanet>
@@ -76,6 +83,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
         scale={2.8}
         speed={0.07}
         initialAngle={1.2}
+        atmosphereColor="#f43f5e"
       >
         {/* ISS Station near Mars */}
         <ISSStation position={[3.2, 2.0, 0]} />
