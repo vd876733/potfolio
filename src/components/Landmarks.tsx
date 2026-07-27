@@ -1,8 +1,25 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
+
+export function GLBModel({ path, position = [0, 0, 0], scale = 1, rotation = [0, 0, 0] }: any) {
+  const { scene } = useGLTF(path);
+  const clone = useMemo(() => scene.clone(), [scene]);
+  
+  useMemo(() => {
+    clone.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+  }, [clone]);
+
+  return <primitive object={clone} position={position} scale={scale} rotation={rotation} />;
+}
 
 interface LandmarkProps {
   position: [number, number, number];
@@ -10,147 +27,25 @@ interface LandmarkProps {
 }
 
 export function Lighthouse({ position, isLight = false }: LandmarkProps) {
-  const beaconRef = useRef<THREE.Group>(null);
-  const lightColor = "#fef08a";
-
-  useFrame(({ clock }) => {
-    if (beaconRef.current) {
-      beaconRef.current.rotation.y = clock.elapsedTime * 2;
-    }
-  });
-
   return (
     <group position={position}>
-      {/* Base */}
-      <mesh position={[0, 0.5, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[1.2, 1.5, 1, 16]} />
-        <meshStandardMaterial color="#334155" />
-      </mesh>
-      {/* Tower */}
-      <mesh position={[0, 3.5, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.8, 1.2, 5, 16]} />
-        <meshStandardMaterial color="#f8fafc" />
-      </mesh>
-      {/* Stripes (Red) */}
-      <mesh position={[0, 2.5, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.95, 1.1, 1, 16]} />
-        <meshStandardMaterial color="#ef4444" />
-      </mesh>
-      <mesh position={[0, 4.5, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.82, 0.95, 1, 16]} />
-        <meshStandardMaterial color="#ef4444" />
-      </mesh>
-      {/* Top Deck */}
-      <mesh position={[0, 6, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[1.2, 0.8, 0.2, 16]} />
-        <meshStandardMaterial color="#334155" />
-      </mesh>
-      {/* Glass Room */}
-      <mesh position={[0, 6.5, 0]}>
-        <cylinderGeometry args={[0.7, 0.7, 0.8, 8]} />
-        <meshPhysicalMaterial color="#ffffff" transmission={0.9} opacity={1} transparent roughness={0.1} />
-      </mesh>
-      {/* Roof */}
-      <mesh position={[0, 7.2, 0]} castShadow receiveShadow>
-        <coneGeometry args={[1, 0.6, 16]} />
-        <meshStandardMaterial color="#ef4444" />
-      </mesh>
-
-      {/* Rotating Beacon */}
-      <group ref={beaconRef} position={[0, 6.5, 0]}>
-        <mesh position={[0, 0, 0.4]}>
-          <boxGeometry args={[0.4, 0.4, 0.2]} />
-          <meshStandardMaterial color={lightColor} emissive={lightColor} emissiveIntensity={isLight ? 0.5 : 2} toneMapped={false} />
-        </mesh>
-        {!isLight && <spotLight position={[0, 0, 0.2]} angle={0.4} penumbra={0.2} intensity={100} distance={50} color={lightColor} castShadow />}
-      </group>
+      <GLBModel path="/models/Lighthouse scene by Poly by Google - 1O6BWfUB6ta.glb" scale={0.015} position={[0, -2, 0]} />
     </group>
   );
 }
 
 export function Windmill({ position, isLight = false }: LandmarkProps) {
-  const bladesRef = useRef<THREE.Group>(null);
-
-  useFrame(({ clock }) => {
-    if (bladesRef.current) {
-      bladesRef.current.rotation.z = -clock.elapsedTime * 1.5;
-    }
-  });
-
   return (
     <group position={position}>
-      {/* Base */}
-      <mesh position={[0, 1.5, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[1, 1.5, 3, 8]} />
-        <meshStandardMaterial color="#d6d3d1" roughness={0.9} />
-      </mesh>
-      {/* Roof */}
-      <mesh position={[0, 3.5, 0]} castShadow receiveShadow>
-        <coneGeometry args={[1.2, 1, 8]} />
-        <meshStandardMaterial color="#78350f" roughness={0.8} />
-      </mesh>
-      {/* Rotor Hub */}
-      <mesh position={[0, 2.5, 1]} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.2, 0.2, 0.5, 8]} />
-        <meshStandardMaterial color="#44403c" />
-      </mesh>
-
-      {/* Blades */}
-      <group ref={bladesRef} position={[0, 2.5, 1.2]}>
-        {[0, 1, 2, 3].map((i) => (
-          <group key={i} rotation={[0, 0, (Math.PI / 2) * i]}>
-            <mesh position={[0, 1.2, 0]} castShadow>
-              <boxGeometry args={[0.3, 2, 0.05]} />
-              <meshStandardMaterial color="#fcd34d" roughness={0.6} />
-            </mesh>
-            {/* Blade arm */}
-            <mesh position={[0, 1, 0]} castShadow>
-              <boxGeometry args={[0.05, 2, 0.1]} />
-              <meshStandardMaterial color="#44403c" />
-            </mesh>
-          </group>
-        ))}
-      </group>
+      <GLBModel path="/models/Castle by Quaternius - y15yE6kWLY.glb" scale={0.8} />
     </group>
   );
 }
 
 export function DetailedHouse({ position, isLight = false, color = "#38bdf8" }: LandmarkProps & { color?: string }) {
-  const glowColor = "#fef08a";
   return (
     <group position={position}>
-      {/* Main Body */}
-      <mesh position={[0, 1, 0]} castShadow receiveShadow>
-        <boxGeometry args={[2.4, 2, 2.4]} />
-        <meshStandardMaterial color={color} roughness={0.7} />
-      </mesh>
-      {/* Roof */}
-      <mesh position={[0, 2.6, 0]} rotation={[0, Math.PI / 4, 0]} castShadow receiveShadow>
-        <coneGeometry args={[2.2, 1.2, 4]} />
-        <meshStandardMaterial color="#334155" roughness={0.8} />
-      </mesh>
-      {/* Chimney */}
-      <mesh position={[0.6, 2.8, -0.6]} castShadow receiveShadow>
-        <boxGeometry args={[0.4, 1.5, 0.4]} />
-        <meshStandardMaterial color="#7f1d1d" roughness={0.9} />
-      </mesh>
-      {/* Door */}
-      <mesh position={[0, 0.6, 1.21]}>
-        <boxGeometry args={[0.6, 1.2, 0.05]} />
-        <meshStandardMaterial color="#451a03" />
-      </mesh>
-      {/* Windows */}
-      {[-0.6, 0.6].map((x, i) => (
-        <mesh key={i} position={[x, 1.2, 1.21]}>
-          <boxGeometry args={[0.5, 0.5, 0.05]} />
-          <meshStandardMaterial 
-            color={isLight ? "#94a3b8" : glowColor} 
-            emissive={isLight ? "#000000" : glowColor} 
-            emissiveIntensity={isLight ? 0 : 1.5} 
-            toneMapped={false} 
-          />
-        </mesh>
-      ))}
+      <GLBModel path="/models/Fantasy House by Quaternius - BH2XHWUNmF.glb" scale={1.5} />
     </group>
   );
 }
@@ -171,10 +66,6 @@ export function Fountain({ position, isLight = false }: LandmarkProps) {
         <cylinderGeometry args={[2, 2, 1, 16]} />
         <meshStandardMaterial color="#cbd5e1" roughness={0.8} />
       </mesh>
-      <mesh position={[0, 0.6, 0]} receiveShadow>
-        <cylinderGeometry args={[1.8, 1.8, 1, 16]} />
-        <meshStandardMaterial color="#94a3b8" roughness={0.9} />
-      </mesh>
       <mesh ref={waterRef} position={[0, 1.1, 0]}>
         <cylinderGeometry args={[1.75, 1.75, 0.1, 16]} />
         <meshStandardMaterial color={waterColor} transparent opacity={0.8} />
@@ -183,53 +74,14 @@ export function Fountain({ position, isLight = false }: LandmarkProps) {
         <cylinderGeometry args={[0.4, 0.6, 2, 8]} />
         <meshStandardMaterial color="#cbd5e1" roughness={0.8} />
       </mesh>
-      <mesh position={[0, 2.5, 0]} castShadow receiveShadow>
-        <sphereGeometry args={[0.5, 8, 8]} />
-        <meshStandardMaterial color="#94a3b8" roughness={0.7} />
-      </mesh>
     </group>
   );
 }
 
 export function TownHall({ position, isLight = false }: LandmarkProps) {
-  const glowColor = "#fef08a";
   return (
     <group position={position}>
-      <mesh position={[0, 2, 0]} castShadow receiveShadow>
-        <boxGeometry args={[6, 4, 4]} />
-        <meshStandardMaterial color="#e2e8f0" roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 5, 0]} rotation={[0, Math.PI / 4, 0]} castShadow receiveShadow>
-        <coneGeometry args={[5, 2, 4]} />
-        <meshStandardMaterial color="#334155" roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 6, 0]} castShadow receiveShadow>
-        <boxGeometry args={[2, 4, 2]} />
-        <meshStandardMaterial color="#cbd5e1" roughness={0.8} />
-      </mesh>
-      <mesh position={[0, 8.5, 0]} rotation={[0, Math.PI / 4, 0]} castShadow receiveShadow>
-        <coneGeometry args={[1.8, 1.5, 4]} />
-        <meshStandardMaterial color="#334155" roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 6.5, 1.01]}>
-        <circleGeometry args={[0.6, 16]} />
-        <meshStandardMaterial color="#f8fafc" />
-      </mesh>
-      <mesh position={[0, 6.5, 1.02]}>
-        <boxGeometry args={[0.05, 0.4, 0.01]} />
-        <meshBasicMaterial color="#000000" />
-      </mesh>
-      {[-1.5, 1.5].map((x, i) => (
-        <mesh key={`win-${i}`} position={[x, 2, 2.01]}>
-          <boxGeometry args={[1, 1.5, 0.05]} />
-          <meshStandardMaterial 
-            color={isLight ? "#94a3b8" : glowColor} 
-            emissive={isLight ? "#000000" : glowColor} 
-            emissiveIntensity={isLight ? 0 : 1.5} 
-            toneMapped={false} 
-          />
-        </mesh>
-      ))}
+      <GLBModel path="/models/Fantasy Inn by Quaternius - x3ZcGn3jr4.glb" scale={1.5} />
     </group>
   );
 }
@@ -237,33 +89,7 @@ export function TownHall({ position, isLight = false }: LandmarkProps) {
 export function StoneArena({ position, isLight = false }: LandmarkProps) {
   return (
     <group position={position}>
-      <mesh position={[0, 0.5, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[5, 5.5, 1, 24]} />
-        <meshStandardMaterial color="#cbd5e1" roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 1.5, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[4, 4.5, 1, 24]} />
-        <meshStandardMaterial color="#94a3b8" roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 2.5, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[3, 3.5, 1, 24]} />
-        <meshStandardMaterial color="#64748b" roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 2.51, 0]} receiveShadow>
-        <cylinderGeometry args={[2.5, 2.5, 1, 24]} />
-        <meshStandardMaterial color="#1e293b" roughness={0.9} />
-      </mesh>
-      {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => {
-        const angle = (i / 8) * Math.PI * 2;
-        const x = Math.cos(angle) * 2.8;
-        const z = Math.sin(angle) * 2.8;
-        return (
-          <mesh key={`pillar-${i}`} position={[x, 4, z]} castShadow receiveShadow>
-            <cylinderGeometry args={[0.2, 0.2, 2, 8]} />
-            <meshStandardMaterial color="#f8fafc" roughness={0.8} />
-          </mesh>
-        );
-      })}
+      <GLBModel path="/models/Barracks by Quaternius - a1C1L8gJTX.glb" scale={1.2} />
     </group>
   );
 }
@@ -271,18 +97,7 @@ export function StoneArena({ position, isLight = false }: LandmarkProps) {
 export function StrawHut({ position, isLight = false }: LandmarkProps) {
   return (
     <group position={position}>
-      <mesh position={[0, 1, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[1.5, 1.5, 2, 8]} />
-        <meshStandardMaterial color="#d4d4d8" roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 2.5, 0]} castShadow receiveShadow>
-        <coneGeometry args={[1.8, 1.5, 8]} />
-        <meshStandardMaterial color="#fcd34d" roughness={1.0} />
-      </mesh>
-      <mesh position={[0, 0.6, 1.45]}>
-        <boxGeometry args={[0.6, 1.2, 0.1]} />
-        <meshStandardMaterial color="#451a03" />
-      </mesh>
+      <GLBModel path="/models/House by Quaternius - vZ1CLbWmSx.glb" scale={0.5} />
     </group>
   );
 }
@@ -290,11 +105,10 @@ export function StrawHut({ position, isLight = false }: LandmarkProps) {
 export function HouseCluster({ position, isLight = false }: LandmarkProps) {
   return (
     <group position={position}>
-      <DetailedHouse position={[-2, 0, 1]} isLight={isLight} color="#f472b6" />
-      <DetailedHouse position={[3, 0, 0]} isLight={isLight} color="#38bdf8" />
-      <DetailedHouse position={[0, 0, -3]} isLight={isLight} color="#facc15" />
-      <StrawHut position={[-3, 0, -2]} isLight={isLight} />
-      <StrawHut position={[2, 0, 2]} isLight={isLight} />
+      <DetailedHouse position={[-3, 0, 1]} isLight={isLight} />
+      <DetailedHouse position={[3, 0, 0]} isLight={isLight} />
+      <StrawHut position={[-3, 0, -3]} isLight={isLight} />
+      <StrawHut position={[3, 0, 3]} isLight={isLight} />
     </group>
   );
 }
@@ -320,16 +134,9 @@ export function Volcano({ position, isLight = false }: LandmarkProps) {
   });
 
   return (
-    <group position={position} scale={[1.8, 1.8, 1.8]}>
-      {/* Volcano Cone */}
-      <mesh position={[0, 4, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[2, 8, 8, 32]} />
-        <meshStandardMaterial color="#3f3f46" roughness={0.9} />
-      </mesh>
-      <mesh position={[0, 8.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[1.9, 16]} />
-        <meshStandardMaterial color="#ff3d00" emissive="#ff3d00" emissiveIntensity={2} toneMapped={false} />
-      </mesh>
+    <group position={position}>
+      <GLBModel path="/models/Mountain by Quaternius - XY4ej3Zg3I.glb" position={[0, -8, 0]} scale={2.5} />
+      
       {/* Smoke */}
       <group ref={smokeRef} position={[0, 8, 0]}>
         {particles.map((_, i) => (
@@ -344,17 +151,9 @@ export function Volcano({ position, isLight = false }: LandmarkProps) {
 }
 
 export function Whale({ position, isLight = false }: LandmarkProps) {
-  const spoutRef = useRef<THREE.Group>(null);
   const whaleRef = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
-    if (spoutRef.current) {
-      spoutRef.current.children.forEach((child, i) => {
-        const t = clock.elapsedTime * 2 + i * 0.2;
-        child.position.y = (t % 1) * 3;
-        child.scale.setScalar(Math.max(0.1, 1 - child.position.y / 3));
-      });
-    }
     if (whaleRef.current) {
       whaleRef.current.position.y = Math.sin(clock.elapsedTime * 1.5) * 0.2;
     }
@@ -363,29 +162,10 @@ export function Whale({ position, isLight = false }: LandmarkProps) {
   return (
     <group position={position}>
       <group ref={whaleRef}>
-        {/* Whale Body */}
         <mesh position={[0, 1, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
           <cylinderGeometry args={[1.5, 2, 6, 12]} />
           <meshStandardMaterial color="#0284c7" roughness={0.7} />
         </mesh>
-        <mesh position={[4, 1, 0]} castShadow>
-          <sphereGeometry args={[1.5, 12, 12]} />
-          <meshStandardMaterial color="#0284c7" roughness={0.7} />
-        </mesh>
-        {/* Tail */}
-        <mesh position={[-3, 1.5, 0]} rotation={[-Math.PI / 2, 0, -Math.PI / 6]} castShadow>
-          <coneGeometry args={[1.5, 3, 4]} />
-          <meshStandardMaterial color="#0284c7" roughness={0.7} />
-        </mesh>
-        {/* Spout */}
-        <group ref={spoutRef} position={[3, 2, 0]}>
-          {Array.from({ length: 10 }).map((_, i) => (
-            <mesh key={i}>
-              <sphereGeometry args={[0.3, 8, 8]} />
-              <meshStandardMaterial color="#bae6fd" transparent opacity={0.6} />
-            </mesh>
-          ))}
-        </group>
       </group>
     </group>
   );
@@ -403,54 +183,7 @@ export function PirateShip({ position, isLight = false }: LandmarkProps) {
 
   return (
     <group ref={shipRef} position={position}>
-      {/* Hull */}
-      <mesh position={[0, 1.5, 0]} castShadow>
-        <boxGeometry args={[4, 2, 8]} />
-        <meshStandardMaterial color="#4e3629" />
-      </mesh>
-      {/* Bow */}
-      <mesh position={[0, 1.5, 5]} rotation={[Math.PI / 2, 0, 0]} castShadow>
-        <coneGeometry args={[2, 4, 4]} />
-        <meshStandardMaterial color="#4e3629" />
-      </mesh>
-      {/* Mast */}
-      <mesh position={[0, 5, 0]} castShadow>
-        <cylinderGeometry args={[0.2, 0.2, 8]} />
-        <meshStandardMaterial color="#292524" />
-      </mesh>
-      {/* Sail */}
-      <mesh position={[0, 5, 0.2]} castShadow>
-        <planeGeometry args={[5, 5]} />
-        <meshStandardMaterial color="#000000" side={THREE.DoubleSide} />
-      </mesh>
-      {/* Skull Motif on Sail */}
-      <group position={[0, 5, 0.22]}>
-        <mesh position={[0, 0.5, 0]}>
-          <planeGeometry args={[1.5, 1.2]} />
-          <meshStandardMaterial color="#ffffff" side={THREE.DoubleSide} />
-        </mesh>
-        <mesh position={[-0.4, -0.4, 0]}>
-          <planeGeometry args={[0.5, 0.5]} />
-          <meshStandardMaterial color="#ffffff" side={THREE.DoubleSide} />
-        </mesh>
-        <mesh position={[0.4, -0.4, 0]}>
-          <planeGeometry args={[0.5, 0.5]} />
-          <meshStandardMaterial color="#ffffff" side={THREE.DoubleSide} />
-        </mesh>
-        <mesh position={[0, -0.2, 0]}>
-          <planeGeometry args={[0.8, 0.6]} />
-          <meshStandardMaterial color="#ffffff" side={THREE.DoubleSide} />
-        </mesh>
-        {/* Eyes (Black) */}
-        <mesh position={[-0.3, 0.5, 0.01]}>
-          <planeGeometry args={[0.3, 0.3]} />
-          <meshStandardMaterial color="#000000" side={THREE.DoubleSide} />
-        </mesh>
-        <mesh position={[0.3, 0.5, 0.01]}>
-          <planeGeometry args={[0.3, 0.3]} />
-          <meshStandardMaterial color="#000000" side={THREE.DoubleSide} />
-        </mesh>
-      </group>
+      <GLBModel path="/models/Ship by Quaternius - mEQj2wZ3GC.glb" position={[0, -0.5, 0]} scale={0.15} />
     </group>
   );
 }
@@ -458,54 +191,25 @@ export function PirateShip({ position, isLight = false }: LandmarkProps) {
 export function WoodenDock({ position, isLight = false }: LandmarkProps) {
   return (
     <group position={position}>
-      <mesh position={[0, 1.5, 0]} castShadow receiveShadow>
-        <boxGeometry args={[8, 0.2, 3]} />
-        <meshStandardMaterial color="#78350f" />
-      </mesh>
-      {[-3, 3].map((x) => (
-        [-1, 1].map((z) => (
-          <mesh key={`${x}-${z}`} position={[x, 0.75, z]} castShadow>
-            <cylinderGeometry args={[0.2, 0.2, 1.5]} />
-            <meshStandardMaterial color="#451a03" />
-          </mesh>
-        ))
-      ))}
+      <GLBModel path="/models/Dock Wide by Quaternius - XndOrGa7rN.glb" scale={1.5} rotation={[0, Math.PI / 2, 0]} />
     </group>
   );
 }
 
 export function TreasureChest({ position, isLight = false }: LandmarkProps) {
-  const glowColor = "#facc15"; // Golden glow
-  
   return (
     <group position={position}>
-      {/* Base */}
       <mesh position={[0, 0.5, 0]} castShadow receiveShadow>
-        <boxGeometry args={[2, 1, 1.5]} />
-        <meshStandardMaterial color="#78350f" roughness={0.9} />
+        <boxGeometry args={[1.5, 1, 1]} />
+        <meshStandardMaterial color="#8b5a2b" roughness={0.8} />
       </mesh>
-      
-      {/* Golden trim / lock */}
-      <mesh position={[0, 0.5, 0.76]}>
-        <boxGeometry args={[0.4, 0.4, 0.1]} />
-        <meshStandardMaterial color="#fbbf24" metalness={0.8} roughness={0.2} />
+      <mesh position={[0, 1.25, 0]} rotation={[0, 0, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.5, 0.5, 1.5, 16, 1, false, 0, Math.PI]} rotation={[0, 0, Math.PI / 2]} />
+        <meshStandardMaterial color="#a0522d" roughness={0.8} />
       </mesh>
-
-      {/* Open Lid */}
-      <mesh position={[0, 1.3, -0.6]} rotation={[-Math.PI / 4, 0, Math.PI / 2]} castShadow>
-        <cylinderGeometry args={[1, 1, 2, 16, 1, false, 0, Math.PI]} />
-        <meshStandardMaterial color="#78350f" roughness={0.9} />
-      </mesh>
-
-      {/* Glowing Treasure Inside */}
-      <mesh position={[0, 1, 0]}>
-        <boxGeometry args={[1.8, 0.2, 1.3]} />
-        <meshStandardMaterial 
-          color={glowColor} 
-          emissive={glowColor} 
-          emissiveIntensity={2} 
-          toneMapped={false} 
-        />
+      <mesh position={[0, 0.8, 0.51]}>
+        <boxGeometry args={[0.2, 0.4, 0.1]} />
+        <meshStandardMaterial color="#ffd700" />
       </mesh>
     </group>
   );
@@ -514,19 +218,83 @@ export function TreasureChest({ position, isLight = false }: LandmarkProps) {
 export function WoodenBarrel({ position, isLight = false }: LandmarkProps) {
   return (
     <group position={position}>
-      <mesh position={[0, 1, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.8, 0.8, 2, 12]} />
-        <meshStandardMaterial color="#451a03" roughness={0.9} />
+      <mesh position={[0, 0.6, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.5, 0.4, 1.2, 16]} />
+        <meshStandardMaterial color="#a0522d" roughness={0.9} />
       </mesh>
-      {/* Metal bands */}
-      <mesh position={[0, 1.5, 0]}>
-        <cylinderGeometry args={[0.82, 0.82, 0.1, 12]} />
-        <meshStandardMaterial color="#94a3b8" metalness={0.8} roughness={0.4} />
-      </mesh>
-      <mesh position={[0, 0.5, 0]}>
-        <cylinderGeometry args={[0.82, 0.82, 0.1, 12]} />
-        <meshStandardMaterial color="#94a3b8" metalness={0.8} roughness={0.4} />
-      </mesh>
+      {[-0.4, 0.4].map((y, i) => (
+        <mesh key={i} position={[0, 0.6 + y, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.51, 0.51, 0.1, 16]} />
+          <meshStandardMaterial color="#000000" roughness={0.6} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+export function Airplane({ position, isLight = false }: LandmarkProps) {
+  const airplaneRef = useRef<THREE.Group>(null);
+  
+  useFrame(({ clock }) => {
+    if (airplaneRef.current) {
+      airplaneRef.current.position.y = Math.sin(clock.elapsedTime * 2) * 0.5;
+      airplaneRef.current.rotation.x = Math.sin(clock.elapsedTime) * 0.05;
+      airplaneRef.current.rotation.z = Math.cos(clock.elapsedTime * 1.5) * 0.1;
+    }
+  });
+
+  return (
+    <group ref={airplaneRef} position={position}>
+      <GLBModel path="/models/Airplane by Poly by Google - 8VysVKMXN2J.glb" scale={0.05} rotation={[0, -Math.PI / 2, 0]} />
+    </group>
+  );
+}
+
+export function Airship({ position, isLight = false }: LandmarkProps) {
+  const airshipRef = useRef<THREE.Group>(null);
+  
+  useFrame(({ clock }) => {
+    if (airshipRef.current) {
+      airshipRef.current.position.y = Math.sin(clock.elapsedTime * 0.8) * 1;
+      airshipRef.current.rotation.y = clock.elapsedTime * 0.05;
+    }
+  });
+
+  return (
+    <group ref={airshipRef} position={position}>
+      <GLBModel path="/models/Airship by Poly by Google - cr7RPZ4RfGM.glb" scale={0.08} />
+    </group>
+  );
+}
+
+export function FantasyStable({ position, isLight = false }: LandmarkProps) {
+  return (
+    <group position={position}>
+      <GLBModel path="/models/Fantasy Stable by Quaternius - qhNQSOGGbi.glb" scale={1.2} />
+    </group>
+  );
+}
+
+export function OldBridge({ position, isLight = false }: LandmarkProps) {
+  return (
+    <group position={position}>
+      <GLBModel path="/models/Old Bridge by Lintufriikki - c6XnoUTQRsy.glb" scale={0.5} />
+    </group>
+  );
+}
+
+export function BeachUmbrella({ position, isLight = false }: LandmarkProps) {
+  return (
+    <group position={position}>
+      <GLBModel path="/models/beach_umbrella.glb" scale={1.5} />
+    </group>
+  );
+}
+
+export function GrassPatch({ position, isLight = false }: LandmarkProps) {
+  return (
+    <group position={position}>
+      <GLBModel path="/models/Grass by Quaternius - vUJjrRsFp4.glb" scale={2} />
     </group>
   );
 }
