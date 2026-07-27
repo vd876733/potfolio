@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useGLTF, Instances, Instance } from "@react-three/drei";
 import * as THREE from "three";
-import { Whale, PirateShip, WoodenDock, Airplane, Airship, FantasyStable, OldBridge, BeachUmbrella, GrassPatch } from "./Landmarks";
+import { Whale, PirateShip, WoodenDock, Airplane, Airship, FantasyStable, OldBridge, BeachUmbrella, GrassPatch, Lighthouse, TreasureChest, WoodenBarrel } from "./Landmarks";
 
 function GLBModel({ path, position = [0, 0, 0], scale = 1, rotation = [0, 0, 0] }: { path: string; position?: any; scale?: any; rotation?: any }) {
   const gltf = useGLTF(path);
@@ -103,15 +103,15 @@ export default function Props({ isLight = false }: PropsProps) {
 
 
   return (
-    <group position={[0, -3.6, 0]}>
-      {/* Pine Trees */}
+    <group position={[0, 0, 0]}>
+      {/* Pine Trees on upper hills */}
       <group>
         {pineTrees.map((props, i) => (
           <GLBModel key={`pine-${i}`} path="/models/Pine by Quaternius - Zt62gceKXZ.glb" position={props.position} scale={props.scale * 0.5} />
         ))}
       </group>
 
-      {/* Palm Trees */}
+      {/* Palm Trees along beaches */}
       <group>
         {palmTrees.map((props, i) => (
           <GLBModel key={`palm-${i}`} path="/models/Big Tree by 3Donimus - dNWh762PN-6.glb" position={props.position} scale={props.scale * 0.5} />
@@ -121,11 +121,11 @@ export default function Props({ isLight = false }: PropsProps) {
       {/* Inland Rocks */}
       <group>
         {inlandRocks.map((props, i) => (
-          <GLBModel key={`irock-${i}`} path="/models/Rock by Quaternius - JmFMh7ztL9.glb" position={props.position} scale={props.scale * 2} rotation={props.rotation} />
+          <GLBModel key={`irock-${i}`} path="/models/Rock by Quaternius - JmFMh7ztL9.glb" position={props.position} scale={props.scale * 1.5} rotation={props.rotation} />
         ))}
       </group>
 
-      {/* Diverse Ocean Rocks */}
+      {/* Diverse Ocean Rocks around island */}
       {oceanRocks.map((props, i) => (
         <mesh key={`ocean-rock-${i}`} position={props.position} scale={props.scale} rotation={props.rotation} castShadow receiveShadow>
           {props.type === 0 && <dodecahedronGeometry args={[1.5]} />}
@@ -136,14 +136,14 @@ export default function Props({ isLight = false }: PropsProps) {
       ))}
 
       {/* West Cliff Rocks - Tall gray rock pillars hugging the steep west cliffside */}
-      <group position={[-55, -2, 0]}>
+      <group position={[-28, 2, 0]}>
         <Instances limit={20} castShadow receiveShadow>
           <cylinderGeometry args={[0.5, 1.5, 1, 6]} />
           <meshStandardMaterial color="#616161" roughness={0.9} />
           {Array.from({ length: 8 }).map((_, i) => {
-            const x = Math.sin(i * 1.5) * 5 + Math.random() * 2;
-            const z = Math.cos(i * 1.2) * 15 + Math.random() * 2;
-            const scaleY = 15 + Math.random() * 10;
+            const x = Math.sin(i * 1.5) * 3 + Math.random() * 1.5;
+            const z = Math.cos(i * 1.2) * 10 + Math.random() * 1.5;
+            const scaleY = 10 + Math.random() * 8;
             const rotY = Math.random() * Math.PI;
             return <Instance key={`west-cliff-rock-${i}`} position={[x, scaleY / 2 - 2, z]} scale={[1 + Math.random(), scaleY, 1 + Math.random()]} rotation={[0, rotY, 0]} />;
           })}
@@ -155,34 +155,48 @@ export default function Props({ isLight = false }: PropsProps) {
         <Instances limit={20} castShadow receiveShadow>
           <cylinderGeometry args={[0.1, 1.8, 8, 5]} />
           <meshStandardMaterial color={isLight ? "#94a3b8" : "#475569"} roughness={0.95} />
-          {/* Lighthouse area: ~[-50, -4, -50] */}
+          {/* Lighthouse area: ~[-35, -1, -30] */}
           {Array.from({ length: 3 }).map((_, i) => (
-            <Instance key={`sea-rock-nw-${i}`} position={[-48 - Math.random() * 8, -2, -50 - Math.random() * 8]} rotation={[(Math.random() - 0.5) * 0.4, Math.random() * Math.PI, (Math.random() - 0.5) * 0.4]} scale={0.8 + Math.random() * 0.5} />
+            <Instance key={`sea-rock-nw-${i}`} position={[-35 - Math.random() * 5, -1, -28 - Math.random() * 5]} rotation={[(Math.random() - 0.5) * 0.4, Math.random() * Math.PI, (Math.random() - 0.5) * 0.4]} scale={0.8 + Math.random() * 0.5} />
           ))}
-          {/* East coast area: ~[55, -4, 10] */}
+          {/* East coast area: ~[36, -1, 10] */}
           {Array.from({ length: 3 }).map((_, i) => (
-            <Instance key={`sea-rock-e-${i}`} position={[55 + Math.random() * 10, -2, 5 + Math.random() * 15]} rotation={[(Math.random() - 0.5) * 0.4, Math.random() * Math.PI, (Math.random() - 0.5) * 0.4]} scale={0.8 + Math.random() * 0.5} />
+            <Instance key={`sea-rock-e-${i}`} position={[36 + Math.random() * 5, -1, 5 + Math.random() * 10]} rotation={[(Math.random() - 0.5) * 0.4, Math.random() * Math.PI, (Math.random() - 0.5) * 0.4]} scale={0.8 + Math.random() * 0.5} />
           ))}
         </Instances>
       </group>
 
-      {/* Tropical Island Additions */}
-      <Whale position={[-66, -3.6, 66]} isLight={isLight} />
-      <WoodenDock position={[70.4, -3.6, 0]} isLight={isLight} />
-      <PirateShip position={[70.4, -4.5, 8.8]} isLight={isLight} />
+      {/* 1. Lighthouse on North-West Hill */}
+      <Lighthouse position={[-25, 16.1, -22]} isLight={isLight} />
 
-      {/* Central Village / Town Square */}
-      <group position={[0, 10.85, 0]}>
-        <GLBModel path="/models/Fantasy Inn by Quaternius - x3ZcGn3jr4.glb" position={[-3, 0, -4]} scale={1.5} rotation={[0, Math.PI / 4, 0]} />
-        <GLBModel path="/models/Fantasy House by Quaternius - BH2XHWUNmF.glb" position={[5, 0, 1]} scale={1.2} rotation={[0, -Math.PI / 3, 0]} />
-        <GLBModel path="/models/Fantasy House by Quaternius - BH2XHWUNmF.glb" position={[-1, 0, 6]} scale={1.2} rotation={[0, Math.PI, 0]} />
+      {/* 2. Treasure Corner on North-East Hill */}
+      <group position={[24, 13.6, -18]}>
+        <TreasureChest position={[0, 0, 0]} isLight={isLight} />
+        <WoodenBarrel position={[-2, 0, 1]} isLight={isLight} />
+        <WoodenBarrel position={[-1, 0, 2]} isLight={isLight} />
       </group>
 
-      {/* Roadside Houses (Along the S-Curve) */}
-      <group position={[-15, 6, 25]}>
+      {/* 3. Tropical Island Water & Dock Additions */}
+      <Whale position={[-34, -0.5, 30]} isLight={isLight} />
+      <WoodenDock position={[32, 0.2, 16]} isLight={isLight} />
+      <PirateShip position={[35, 0, 18]} isLight={isLight} />
+
+      {/* 4. Central Village / Town Square inside Roundabout */}
+      <group position={[0, 10.6, -6]}>
+        <GLBModel path="/models/Fantasy Inn by Quaternius - x3ZcGn3jr4.glb" position={[-2, 0, -2]} scale={1.2} rotation={[0, Math.PI / 4, 0]} />
+        <GLBModel path="/models/Fantasy House by Quaternius - BH2XHWUNmF.glb" position={[3, 0, 1]} scale={1.0} rotation={[0, -Math.PI / 3, 0]} />
+      </group>
+
+      {/* 5. Roadside Houses (Along the S-Curve) */}
+      <group position={[-10, 8.2, 12]}>
         <GLBModel path="/models/House by Quaternius - vZ1CLbWmSx.glb" position={[0, 0, 0]} scale={0.5} rotation={[0, Math.PI / 4, 0]} />
-        <GLBModel path="/models/Fantasy House by Quaternius - BH2XHWUNmF.glb" position={[8, -2, -10]} scale={1.2} rotation={[0, -Math.PI / 6, 0]} />
-        <GLBModel path="/models/House by Quaternius - vZ1CLbWmSx.glb" position={[-5, 0, 15]} scale={0.5} rotation={[0, Math.PI / 2, 0]} />
+      </group>
+      <group position={[2, 5.5, 22]}>
+        <GLBModel path="/models/Fantasy House by Quaternius - BH2XHWUNmF.glb" position={[3, 0, 0]} scale={1.0} rotation={[0, -Math.PI / 6, 0]} />
+        <GLBModel path="/models/House by Quaternius - vZ1CLbWmSx.glb" position={[-4, 0, 2]} scale={0.5} rotation={[0, Math.PI / 2, 0]} />
+      </group>
+      <group position={[14, 3.2, 32]}>
+        <GLBModel path="/models/Fantasy House by Quaternius - BH2XHWUNmF.glb" position={[-3, 0, -2]} scale={1.0} rotation={[0, Math.PI / 3, 0]} />
       </group>
 
       {/* Grass Patches */}
@@ -192,20 +206,20 @@ export default function Props({ isLight = false }: PropsProps) {
         ))}
       </group>
 
-      {/* New Landmark Models */}
-      <Airplane position={[0, 25, 0]} isLight={isLight} />
-      <Airship position={[20, 35, -20]} isLight={isLight} />
-      <FantasyStable position={[-5, 10.85, 8]} isLight={isLight} />
-      <OldBridge position={[10, 4, 20]} isLight={isLight} />
+      {/* Airborne Vehicles & Bridges */}
+      <Airplane position={[0, 26, 0]} isLight={isLight} />
+      <Airship position={[15, 32, -15]} isLight={isLight} />
+      <FantasyStable position={[-4, 10.6, 2]} isLight={isLight} />
+      <OldBridge position={[8, 3.5, 18]} isLight={isLight} />
       
-      {/* Beach Umbrellas */}
-      <BeachUmbrella position={[11, 0.18, 44]} isLight={isLight} />
-      <BeachUmbrella position={[-17.6, 0.18, 41.8]} isLight={isLight} />
-      <BeachUmbrella position={[26.4, 0.18, 35.2]} isLight={isLight} />
+      {/* Beach Umbrellas on South Beach */}
+      <BeachUmbrella position={[6, 0.4, 40]} isLight={isLight} />
+      <BeachUmbrella position={[-8, 0.4, 38]} isLight={isLight} />
+      <BeachUmbrella position={[14, 0.4, 36]} isLight={isLight} />
 
-      {/* Boats */}
-      <GLBModel path="/models/ship.glb" position={[55, -4.5, 26.4]} scale={0.2} />
-      <GLBModel path="/models/ship.glb" position={[-61.6, -4.5, -11]} scale={0.16} />
+      {/* Boats in sea */}
+      <GLBModel path="/models/ship.glb" position={[28, -0.5, 24]} scale={0.15} />
+      <GLBModel path="/models/ship.glb" position={[-32, -0.5, -8]} scale={0.14} />
 
     </group>
   );

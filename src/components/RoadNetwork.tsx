@@ -9,30 +9,30 @@ export interface RoadNetworkProps {
   isLight?: boolean;
 }
 
-const PLATEAU_Y = 10.85;
+const PLATEAU_Y = 10.6;
 
 // 1. Roundabout (upper central plateau)
 const roundaboutCurve = new THREE.CatmullRomCurve3([
-  new THREE.Vector3(0, PLATEAU_Y, 8),
-  new THREE.Vector3(8, PLATEAU_Y, 0),
-  new THREE.Vector3(0, PLATEAU_Y, -8),
-  new THREE.Vector3(-8, PLATEAU_Y, 0),
+  new THREE.Vector3(0, PLATEAU_Y, 2),
+  new THREE.Vector3(10, PLATEAU_Y, -6),
+  new THREE.Vector3(0, PLATEAU_Y, -14),
+  new THREE.Vector3(-10, PLATEAU_Y, -6),
 ], true, 'catmullrom', 0.5);
 
 // 2. S-Curve Main Road (Roundabout down to South Beach)
 const mainRoadCurve = new THREE.CatmullRomCurve3([
-  new THREE.Vector3(0, PLATEAU_Y, 8),
-  new THREE.Vector3(-12, 8.1, 18),
-  new THREE.Vector3(0, 6.3, 28),
-  new THREE.Vector3(12, 3.2, 38),
-  new THREE.Vector3(10, 0.2, 48),
+  new THREE.Vector3(0, PLATEAU_Y, 2),
+  new THREE.Vector3(-10, 8.2, 12),
+  new THREE.Vector3(2, 5.5, 22),
+  new THREE.Vector3(14, 3.2, 32),
+  new THREE.Vector3(8, 0.4, 42),
 ], false, 'catmullrom', 0.5);
 
 // 3. Side Loop (Fork to west rock ruins)
 const sideRoadCurve = new THREE.CatmullRomCurve3([
-  new THREE.Vector3(-12, 8.1, 18),
-  new THREE.Vector3(-22, 5.5, 14),
-  new THREE.Vector3(-28, 3.6, 9),
+  new THREE.Vector3(-10, 8.2, 12),
+  new THREE.Vector3(-18, 5.8, 8),
+  new THREE.Vector3(-24, 3.6, 4),
 ], false, 'catmullrom', 0.5);
 
 function StreetLamp({ position, isLight }: { position: [number, number, number], isLight: boolean }) {

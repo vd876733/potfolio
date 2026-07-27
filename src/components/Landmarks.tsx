@@ -212,7 +212,7 @@ export function PirateShip({ position, isLight = false }: LandmarkProps) {
 export function WoodenDock({ position, isLight = false }: LandmarkProps) {
   return (
     <group position={position}>
-      <GLBModel path="/models/Dock Wide by Quaternius - XndOrGa7rN.glb" scale={1.5} rotation={[0, Math.PI / 2, 0]} />
+      <GLBModel path="/models/Dock Wide by Quaternius - XndOrGa7rN.glb" scale={0.3} rotation={[0, Math.PI / 2, 0]} />
     </group>
   );
 }
@@ -283,7 +283,7 @@ export function Airship({ position, isLight = false }: LandmarkProps) {
 
   return (
     <group ref={airshipRef} position={position}>
-      <GLBModel path="/models/Airship by Poly by Google - cr7RPZ4RfGM.glb" scale={0.08} />
+      <GLBModel path="/models/Airship by Poly by Google - cr7RPZ4RfGM.glb" scale={0.02} />
     </group>
   );
 }
