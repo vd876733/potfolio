@@ -3,8 +3,8 @@
     "firstName": "Varad",
     "lastName": "Deshmukh",
     "title": "Software Engineer & Creative Developer",
-    "location": "Pune, Maharashtra",
-    "bio": "Information Technology undergraduate with strong programming skills in Java, Python, C++, JavaScript, and SQL, along with experience in developing full-stack applications using Spring Boot, React, and PostgreSQL. Hands-on experience with AI and Machine Learning technologies, including BERT, SciBERT, OpenCV, Hugging Face, and FastAPI for building intelligent applications. Solved 450+ Data Structures & Algorithms problems across LeetCode, HackerRank, and CodeChef, demonstrating strong analytical and problem-solving skills. Possess a solid foundation in Data Structures & Algorithms, DBMS, Operating Systems, and Computer Networks. Passionate about Artificial Intelligence, data-driven innovation, and developing technology solutions that contribute to sustainability and real-world impact.",
+    "location": "San Francisco, CA",
+    "bio": "I am a passionate software engineer specializing in building exceptional digital experiences. Currently, I am focused on creating accessible, human-centered products and exploring the intersection of web development and 3D graphics using React Three Fiber.",
     "social": {
       "github": "https://github.com/vd876733",
       "linkedin": "https://www.linkedin.com/in/varad-deshmukh-31173a374/",
@@ -43,7 +43,12 @@
     {
       "id": "expense-tracker-pro",
       "title": "Expense Tracker",
-      "stack": ["React", "Spring Boot", "Java", "Tailwind CSS"],
+      "stack": [
+        "React",
+        "Spring Boot",
+        "Java",
+        "Tailwind CSS"
+      ],
       "description": "A comprehensive full-stack expense tracking application built with Spring Boot and React. Enables users to securely log daily expenses, monitor budgets, and visualize financial trends with an intuitive UI.",
       "liveUrl": "#",
       "githubUrl": "https://github.com/vd876733/Expense_Tracker-Spring-boot-And-React-"
@@ -51,7 +56,11 @@
     {
       "id": "nextjs-3d-portfolio",
       "title": "Next.js 3D Portfolio",
-      "stack": ["Next.js", "Three.js", "Tailwind CSS"],
+      "stack": [
+        "Next.js",
+        "Three.js",
+        "Tailwind CSS"
+      ],
       "description": "An immersive 3D architectural portfolio leveraging React Three Fiber and Framer Motion for interactive physics and beautiful post-processing bloom effects.",
       "liveUrl": "#",
       "githubUrl": "#"
@@ -59,7 +68,11 @@
     {
       "id": "spring-boot-redis-ratelimiter",
       "title": "Spring Boot Redis Rate Limiter",
-      "stack": ["Java", "Spring Boot", "Redis"],
+      "stack": [
+        "Java",
+        "Spring Boot",
+        "Redis"
+      ],
       "description": "A rate limiting implementation using the sliding window algorithm with Spring Boot and Redis.",
       "liveUrl": "#",
       "githubUrl": "https://github.com/vd876733/spring-boot-redis-ratelimiter"
@@ -67,7 +80,9 @@
     {
       "id": "visual-indoor-positioning-system",
       "title": "Visual Indoor Positioning System",
-      "stack": ["Java"],
+      "stack": [
+        "Java"
+      ],
       "description": "An indoor positioning system leveraging visual data for accurate location tracking inside buildings.",
       "liveUrl": "#",
       "githubUrl": "https://github.com/vd876733/visual-indoor-positioning-system"
@@ -75,7 +90,9 @@
     {
       "id": "nexusflow-ingestion-engine",
       "title": "NexusFlow Ingestion Engine",
-      "stack": ["Python"],
+      "stack": [
+        "Python"
+      ],
       "description": "A robust data ingestion engine built in Python to handle high-throughput data processing workflows.",
       "liveUrl": "#",
       "githubUrl": "https://github.com/vd876733/NexusFlow-Ingestion-Engine"
@@ -83,7 +100,10 @@
     {
       "id": "nlp-code-analyzer",
       "title": "NLP Code Analyzer",
-      "stack": ["Python", "NLP"],
+      "stack": [
+        "Python",
+        "NLP"
+      ],
       "description": "A Natural Language Processing tool designed to analyze and extract insights from source code repositories.",
       "liveUrl": "#",
       "githubUrl": "https://github.com/vd876733/NLP-Code-Analyzer"
@@ -91,7 +111,11 @@
     {
       "id": "rubic-cube",
       "title": "Rubik's Cube Simulator",
-      "stack": ["TypeScript", "HTML", "CSS"],
+      "stack": [
+        "TypeScript",
+        "HTML",
+        "CSS"
+      ],
       "description": "An interactive 3D Rubik's Cube simulation built with TypeScript.",
       "liveUrl": "#",
       "githubUrl": "https://github.com/vd876733/rubic_cube"
@@ -99,17 +123,41 @@
     {
       "id": "asl-fingerspelling-model",
       "title": "ASL Fingerspelling Model",
-      "stack": ["HTML", "Machine Learning"],
+      "stack": [
+        "HTML",
+        "Machine Learning"
+      ],
       "description": "A machine learning model for translating American Sign Language (ASL) fingerspelling in real-time.",
       "liveUrl": "#",
       "githubUrl": "https://github.com/vd876733/ASL-fingerspelling-model"
     }
   ],
   "skills": {
-    "Frontend": ["React", "Next.js", "Three.js", "Tailwind CSS", "Framer Motion"],
-    "Backend": ["Node.js", "Spring Boot", "PostgreSQL", "MongoDB"],
-    "AI/ML": ["TensorFlow", "PyTorch", "OpenAI API", "Python"],
-    "DevOps": ["Docker", "Kubernetes", "AWS", "CI/CD"]
+    "Frontend": [
+      "React",
+      "Next.js",
+      "Three.js",
+      "Tailwind CSS",
+      "Framer Motion"
+    ],
+    "Backend": [
+      "Node.js",
+      "Spring Boot",
+      "PostgreSQL",
+      "MongoDB"
+    ],
+    "AI/ML": [
+      "TensorFlow",
+      "PyTorch",
+      "OpenAI API",
+      "Python"
+    ],
+    "DevOps": [
+      "Docker",
+      "Kubernetes",
+      "AWS",
+      "CI/CD"
+    ]
   },
   "certificates": [
     {
