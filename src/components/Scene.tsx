@@ -44,38 +44,38 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
       <Canvas
         shadows
         gl={{ antialias: true, preserveDrawingBuffer: true }}
-        camera={{ position: [35, 25, 50], fov: 45, near: 0.1, far: 1000 }}
+        camera={{ position: [55, 40, 85], fov: 48, near: 0.1, far: 1500 }}
         dpr={isMobile ? [1, 1.5] : [1, 2]}
       >
         {/* Deep Space Background & Fog */}
         <color attach="background" args={[bgColor]} />
-        <fog attach="fog" args={[bgColor, 80, 400]} />
+        <fog attach="fog" args={[bgColor, 120, 600]} />
 
         {/* Dense Twinkling Stars */}
         <Stars
-          radius={150}
-          depth={60}
-          count={7000}
-          factor={6}
+          radius={220}
+          depth={80}
+          count={9000}
+          factor={7}
           saturation={0}
           fade
           speed={1.5}
         />
 
         {/* Space Lighting */}
-        <ambientLight intensity={1.5} color="#e0f2fe" />
-        <hemisphereLight intensity={0.8} color="#38bdf8" groundColor="#0f172a" />
+        <ambientLight intensity={1.8} color="#e0f2fe" />
+        <hemisphereLight intensity={1.0} color="#38bdf8" groundColor="#0f172a" />
 
         <directionalLight
-          position={[25, 40, 20]}
-          intensity={2.5}
+          position={[40, 60, 30]}
+          intensity={3.0}
           color="#fbbf24"
           castShadow
           shadow-mapSize={isMobile ? [1024, 1024] : [2048, 2048]}
           shadow-bias={-0.0001}
         />
 
-        <pointLight position={[0, 0, 0]} intensity={3} color="#38bdf8" distance={60} />
+        <pointLight position={[0, 0, 0]} intensity={5} color="#38bdf8" distance={100} />
 
         {/* Space Theme 3D Scene */}
         <SpacePavilions onSectionClick={handleSectionClick} />
@@ -85,10 +85,10 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
           ref={controlsRef}
           enableDamping={true}
           dampingFactor={0.05}
-          maxPolarAngle={Math.PI / 1.5}
-          minPolarAngle={Math.PI / 6}
+          maxPolarAngle={Math.PI / 1.4}
+          minPolarAngle={Math.PI / 8}
           target={target}
-          maxDistance={120}
+          maxDistance={220}
           minDistance={10}
         />
 

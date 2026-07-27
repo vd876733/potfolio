@@ -54,10 +54,15 @@ export default function Home() {
 
   const renderModalContent = () => {
     switch (activeSection) {
+      case "Command Central":
       case "Town Plaza": return <TownPlazaModal />;
+      case "Cyber Arena":
       case "Arena Complex": return <ArenaModal />;
+      case "Starship Hangar":
       case "Project Workshops": return <WorkshopModal />;
+      case "Quantum Forge":
       case "Knowledge Forge": return <ForgeModal />;
+      case "Starlight Gallery":
       case "Creative Atelier": return <AtelierModal />;
       default: return null;
     }

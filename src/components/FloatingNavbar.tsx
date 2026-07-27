@@ -12,11 +12,11 @@ interface FloatingNavbarProps {
 }
 
 const navItems = [
-  { id: "Town Plaza", label: "About" },
-  { id: "Arena Complex", label: "Stats" },
-  { id: "Project Workshops", label: "Projects" },
-  { id: "Knowledge Forge", label: "Skills" },
-  { id: "Creative Atelier", label: "Gallery" },
+  { id: "Command Central", label: "About" },
+  { id: "Cyber Arena", label: "Stats" },
+  { id: "Starship Hangar", label: "Projects" },
+  { id: "Quantum Forge", label: "Skills" },
+  { id: "Starlight Gallery", label: "Gallery" },
 ];
 
 export default function FloatingNavbar({
