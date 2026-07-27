@@ -19,23 +19,23 @@ const FOOD_COUNT = 3;
 // ---- Theme Colors -----------------------------------------------------------
 const CLR = {
   dark: {
-    bg:        "#05050f",
-    grid:      "rgba(255,255,255,0.02)",
-    gridLine:  "rgba(255,226,0,0.04)",
-    snake:     "#ffe200",
-    snakeGlow: "#ffe200",
+    bg:        "#050811", // Deep Space Navy
+    grid:      "rgba(255,255,255,0.01)",
+    gridLine:  "rgba(255,255,255,0.03)", // rgba(255, 255, 255, 0.03) board grid background
+    snake:     "#00f0ff", // Neon Cyan
+    snakeGlow: "#00f0ff",
     snakeHead: "#ffffff",
-    food:      "#ffaa00",
-    foodGlow:  "#ffaa00",
-    trail:     "rgba(255,226,0,0.18)",
-    burst:     "rgba(255,170,0,0.85)",
-    hudText:   "#ffe200",
-    hudSub:    "rgba(255,226,0,0.45)",
-    hudBg:     "rgba(0,0,0,0.65)",
-    hudBorder: "rgba(255,226,0,0.15)",
-    hudCorner: "rgba(255,226,0,0.4)",
-    divider:   "rgba(255,226,0,0.12)",
-    bodyGrad: (t: number, alpha: number) => `rgba(${Math.floor(200 + 55 * t)},${Math.floor(160 + 80 * t)},${Math.floor(50 * t)},${alpha.toFixed(2)})`
+    food:      "#ff0055", // Neon Pink
+    foodGlow:  "#ff0055",
+    trail:     "rgba(0,240,255,0.18)",
+    burst:     "rgba(255,0,85,0.85)",
+    hudText:   "#00f0ff",
+    hudSub:    "rgba(0,240,255,0.45)",
+    hudBg:     "rgba(5,8,17,0.75)",
+    hudBorder: "rgba(255,255,255,0.08)", // 1px solid rgba(255, 255, 255, 0.08)
+    hudCorner: "rgba(0,240,255,0.4)",
+    divider:   "rgba(255,255,255,0.08)",
+    bodyGrad: (t: number, alpha: number) => `rgba(0,${Math.floor(180 + 75 * t)},${Math.floor(200 + 55 * t)},${alpha.toFixed(2)})`
   },
   light: {
     bg:        "#fdfbf7", // Warm Soft Cream

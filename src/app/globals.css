@@ -3,10 +3,10 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-obsidian: #0B0C0E;
-  --color-charcoal: #1C1D21;
+  --color-obsidian: #0e0c15;
+  --color-charcoal: #161322;
   --color-matte-silver: #A0A0A0;
-  --color-neon-accent: #38BDF8;
+  --color-neon-accent: #a78bfa;
   --font-inter: var(--font-inter), sans-serif;
   --font-space-grotesk: var(--font-space-grotesk), sans-serif;
 }

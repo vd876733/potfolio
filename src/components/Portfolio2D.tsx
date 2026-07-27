@@ -18,7 +18,7 @@ export default function Portfolio2D() {
   }, []);
 
   const isLight = mounted && theme === "light";
-  const gridColor = isLight ? "#1e3a8a" : "#ffe200";
+  const gridColor = isLight ? "#1e3a8a" : "#a78bfa"; // Softer Lavender Purple in dark mode
 
   return (
     <div className="relative w-full h-full bg-[#fdfbf7] dark:bg-obsidian text-slate-900 dark:text-white overflow-hidden transition-colors duration-300">
@@ -48,19 +48,19 @@ export default function Portfolio2D() {
             <TownPlazaModal />
           </section>
 
-          <section id="Cyber Arena" className="w-full bg-[#faf6ee] dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-800 flex flex-col gap-6 transition-colors duration-300">
+          <section id="Cyber Arena" className="w-full bg-[#faf6ee] dark:bg-charcoal text-slate-800 dark:text-[#e2e8f0] p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-purple-500/5 flex flex-col gap-6 transition-colors duration-300">
             <ArenaModal />
           </section>
 
-          <section id="Starship Hangar" className="w-full bg-[#faf6ee] dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-800 flex flex-col gap-6 transition-colors duration-300">
+          <section id="Starship Hangar" className="w-full bg-[#faf6ee] dark:bg-charcoal text-slate-800 dark:text-[#e2e8f0] p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-purple-500/5 flex flex-col gap-6 transition-colors duration-300">
             <WorkshopModal />
           </section>
 
-          <section id="Quantum Forge" className="w-full bg-[#faf6ee] dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-800 flex flex-col gap-6 transition-colors duration-300">
+          <section id="Quantum Forge" className="w-full bg-[#faf6ee] dark:bg-charcoal text-slate-800 dark:text-[#e2e8f0] p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-purple-500/5 flex flex-col gap-6 transition-colors duration-300">
             <ForgeModal />
           </section>
 
-          <section id="Starlight Gallery" className="w-full bg-[#faf6ee] dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-800 flex flex-col gap-6 transition-colors duration-300">
+          <section id="Starlight Gallery" className="w-full bg-[#faf6ee] dark:bg-charcoal text-slate-800 dark:text-[#e2e8f0] p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-purple-500/5 flex flex-col gap-6 transition-colors duration-300">
             <AtelierModal />
           </section>
         </div>
