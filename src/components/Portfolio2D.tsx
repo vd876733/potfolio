@@ -21,7 +21,7 @@ export default function Portfolio2D() {
   const gridColor = isLight ? "#1e3a8a" : "#ffe200";
 
   return (
-    <div className="relative w-full h-full bg-slate-50 dark:bg-obsidian text-slate-900 dark:text-white overflow-hidden">
+    <div className="relative w-full h-full bg-[#fdfbf7] dark:bg-obsidian text-slate-900 dark:text-white overflow-hidden transition-colors duration-300">
       {/* Interactive Cursor Grid Background */}
       <div className="absolute inset-0 pointer-events-none z-0 opacity-40 dark:opacity-60">
         <CursorGrid
@@ -48,19 +48,19 @@ export default function Portfolio2D() {
             <TownPlazaModal />
           </section>
 
-          <section id="Cyber Arena" className="w-full bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col gap-6 transition-colors duration-300">
+          <section id="Cyber Arena" className="w-full bg-[#faf6ee] dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-800 flex flex-col gap-6 transition-colors duration-300">
             <ArenaModal />
           </section>
 
-          <section id="Starship Hangar" className="w-full bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col gap-6 transition-colors duration-300">
+          <section id="Starship Hangar" className="w-full bg-[#faf6ee] dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-800 flex flex-col gap-6 transition-colors duration-300">
             <WorkshopModal />
           </section>
 
-          <section id="Quantum Forge" className="w-full bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col gap-6 transition-colors duration-300">
+          <section id="Quantum Forge" className="w-full bg-[#faf6ee] dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-800 flex flex-col gap-6 transition-colors duration-300">
             <ForgeModal />
           </section>
 
-          <section id="Starlight Gallery" className="w-full bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col gap-6 transition-colors duration-300">
+          <section id="Starlight Gallery" className="w-full bg-[#faf6ee] dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200/60 dark:border-slate-800 flex flex-col gap-6 transition-colors duration-300">
             <AtelierModal />
           </section>
         </div>
