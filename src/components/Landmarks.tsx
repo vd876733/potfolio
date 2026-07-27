@@ -5,12 +5,13 @@ import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
-export function GLBModel({ path, position = [0, 0, 0], scale = 1, rotation = [0, 0, 0] }: any) {
-  const { scene } = useGLTF(path);
+export function GLBModel({ path, position = [0, 0, 0], scale = 1, rotation = [0, 0, 0] }: { path: string; position?: any; scale?: any; rotation?: any }) {
+  const gltf = useGLTF(path);
+  const scene = Array.isArray(gltf) ? gltf[0].scene : gltf.scene;
   const clone = useMemo(() => scene.clone(), [scene]);
   
   useMemo(() => {
-    clone.traverse((child) => {
+    clone.traverse((child: THREE.Object3D) => {
       if ((child as THREE.Mesh).isMesh) {
         child.castShadow = true;
         child.receiveShadow = true;
@@ -223,8 +224,8 @@ export function TreasureChest({ position, isLight = false }: LandmarkProps) {
         <boxGeometry args={[1.5, 1, 1]} />
         <meshStandardMaterial color="#8b5a2b" roughness={0.8} />
       </mesh>
-      <mesh position={[0, 1.25, 0]} rotation={[0, 0, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.5, 0.5, 1.5, 16, 1, false, 0, Math.PI]} rotation={[0, 0, Math.PI / 2]} />
+      <mesh position={[0, 1.25, 0]} rotation={[0, 0, Math.PI / 2]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.5, 0.5, 1.5, 16, 1, false, 0, Math.PI]} />
         <meshStandardMaterial color="#a0522d" roughness={0.8} />
       </mesh>
       <mesh position={[0, 0.8, 0.51]}>

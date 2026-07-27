@@ -5,12 +5,13 @@ import { useGLTF, Instances, Instance } from "@react-three/drei";
 import * as THREE from "three";
 import { Whale, PirateShip, WoodenDock, Airplane, Airship, FantasyStable, OldBridge, BeachUmbrella, GrassPatch } from "./Landmarks";
 
-function GLBModel({ path, position = [0, 0, 0], scale = 1, rotation = [0, 0, 0] }: any) {
-  const { scene } = useGLTF(path);
+function GLBModel({ path, position = [0, 0, 0], scale = 1, rotation = [0, 0, 0] }: { path: string; position?: any; scale?: any; rotation?: any }) {
+  const gltf = useGLTF(path);
+  const scene = Array.isArray(gltf) ? gltf[0].scene : gltf.scene;
   const clone = useMemo(() => scene.clone(), [scene]);
   
   useMemo(() => {
-    clone.traverse((child) => {
+    clone.traverse((child: THREE.Object3D) => {
       if ((child as THREE.Mesh).isMesh) {
         child.castShadow = true;
         child.receiveShadow = true;
