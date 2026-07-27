@@ -44,22 +44,31 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
       <Canvas
         shadows
         gl={{ antialias: true, preserveDrawingBuffer: true, alpha: true }}
-        camera={{ position: [55, 40, 85], fov: 48, near: 0.1, far: 2500 }}
+        camera={{ position: [55, 40, 85], fov: 48, near: 0.1, far: 3500 }}
         dpr={isMobile ? [1, 1.5] : [1, 2]}
       >
         {/* Deep Space Background & Fog */}
         <color attach="background" args={[bgColor]} />
-        <fog attach="fog" args={[bgColor, 300, 2200]} />
+        <fog attach="fog" args={[bgColor, 500, 3000]} />
 
-        {/* Dense Twinkling Stars */}
+        {/* Massive High-Volume Deep Space Starfields */}
         <Stars
-          radius={220}
-          depth={80}
-          count={9000}
-          factor={7}
-          saturation={0}
+          radius={600}
+          depth={450}
+          count={25000}
+          factor={9}
+          saturation={0.5}
           fade
-          speed={1.5}
+          speed={1.8}
+        />
+        <Stars
+          radius={1500}
+          depth={800}
+          count={20000}
+          factor={7}
+          saturation={0.2}
+          fade
+          speed={1.0}
         />
 
         {/* Space Lighting */}

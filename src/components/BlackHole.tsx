@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useLayoutEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -10,199 +10,216 @@ interface BlackHoleProps {
 }
 
 export function BlackHole({
-  position = [0, 15, -180],
-  scale = 1.5,
+  position = [90, -10, -180],
+  scale = 0.38,
 }: BlackHoleProps) {
-  const accretionDiskRef = useRef<THREE.Group>(null!);
+  const diskRef = useRef<THREE.Group>(null!);
+  const rocksRef = useRef<THREE.InstancedMesh>(null!);
   const lensTopRef = useRef<THREE.Group>(null!);
   const lensBottomRef = useRef<THREE.Group>(null!);
-  const particlesRef = useRef<THREE.Points>(null!);
 
-  // Swirling matter particle system (3,000 accretion dust particles)
-  const particleCount = 3000;
-  const [positions, colors] = useMemo(() => {
-    const posArr = new Float32Array(particleCount * 3);
-    const colArr = new Float32Array(particleCount * 3);
+  // Swirling Rocky Accretion Ring (3,500 very tiny yellow-orange space rocks)
+  const rockCount = 3500;
+  const rockData = useMemo(() => {
+    const dummy = new THREE.Object3D();
+    const matrices: THREE.Matrix4[] = [];
+    const colors: THREE.Color[] = [];
 
-    const colorWhite = new THREE.Color("#ffffff");
-    const colorGold = new THREE.Color("#ffd700");
-    const colorOrange = new THREE.Color("#ff6b00");
-    const colorRed = new THREE.Color("#d00000");
+    const colorWhiteGold = new THREE.Color("#fff5b3");
+    const colorYellow = new THREE.Color("#ffd700");
+    const colorOrange = new THREE.Color("#ff8c00");
+    const colorHotOrange = new THREE.Color("#ff4500");
+    const colorDeepRed = new THREE.Color("#c9184a");
 
-    for (let i = 0; i < particleCount; i++) {
-      const r = 26 + Math.pow(Math.random(), 1.6) * 110;
+    for (let i = 0; i < rockCount; i++) {
+      // Orbital radius from 41 to 215
+      const r = 41 + Math.pow(Math.random(), 1.5) * 174;
       const angle = Math.random() * Math.PI * 2;
-      const height = (Math.random() - 0.5) * (1.5 + (r / 110) * 6);
+      // Very thin disk vertical dispersion
+      const height = (Math.random() - 0.5) * (1.2 + (r / 215) * 5);
 
-      posArr[i * 3] = Math.cos(angle) * r;
-      posArr[i * 3 + 1] = height;
-      posArr[i * 3 + 2] = Math.sin(angle) * r;
+      const x = Math.cos(angle) * r;
+      const z = Math.sin(angle) * r;
 
-      const normR = (r - 26) / 110;
+      // Very tiny rock scale
+      const rockScale = 0.12 + Math.random() * 0.38;
+
+      dummy.position.set(x, height, z);
+      dummy.rotation.set(
+        Math.random() * Math.PI,
+        Math.random() * Math.PI,
+        Math.random() * Math.PI
+      );
+      dummy.scale.set(rockScale, rockScale * (0.8 + Math.random() * 0.5), rockScale);
+      dummy.updateMatrix();
+
+      const normR = (r - 41) / 174;
       let c: THREE.Color;
-      if (normR < 0.15) {
-        c = colorWhite.clone().lerp(colorGold, normR / 0.15);
-      } else if (normR < 0.5) {
-        c = colorGold.clone().lerp(colorOrange, (normR - 0.15) / 0.35);
+      if (normR < 0.12) {
+        c = colorWhiteGold.clone().lerp(colorYellow, normR / 0.12);
+      } else if (normR < 0.45) {
+        c = colorYellow.clone().lerp(colorOrange, (normR - 0.12) / 0.33);
+      } else if (normR < 0.75) {
+        c = colorOrange.clone().lerp(colorHotOrange, (normR - 0.45) / 0.3);
       } else {
-        c = colorOrange.clone().lerp(colorRed, (normR - 0.5) / 0.5);
+        c = colorHotOrange.clone().lerp(colorDeepRed, (normR - 0.75) / 0.25);
       }
 
-      colArr[i * 3] = c.r;
-      colArr[i * 3 + 1] = c.g;
-      colArr[i * 3 + 2] = c.b;
+      matrices.push(dummy.matrix.clone());
+      colors.push(c);
     }
-    return [posArr, colArr];
-  }, [particleCount]);
+    return { matrices, colors };
+  }, [rockCount]);
 
-  useFrame((state, delta) => {
-    const t = state.clock.getElapsedTime();
-    if (accretionDiskRef.current) {
-      accretionDiskRef.current.rotation.z = t * 0.08;
+  useLayoutEffect(() => {
+    if (!rocksRef.current) return;
+    rockData.matrices.forEach((mat, i) => {
+      rocksRef.current.setMatrixAt(i, mat);
+      rocksRef.current.setColorAt(i, rockData.colors[i]);
+    });
+    rocksRef.current.instanceMatrix.needsUpdate = true;
+    if (rocksRef.current.instanceColor) {
+      rocksRef.current.instanceColor.needsUpdate = true;
+    }
+  }, [rockData]);
+
+  useFrame((_, delta) => {
+    // Swirling motion of accretion disk & tiny rocky debris
+    if (diskRef.current) {
+      diskRef.current.rotation.z += delta * 0.08;
+    }
+    if (rocksRef.current) {
+      rocksRef.current.rotation.y += delta * 0.06;
     }
     if (lensTopRef.current) {
-      lensTopRef.current.rotation.z = -t * 0.04;
+      lensTopRef.current.rotation.z -= delta * 0.04;
     }
     if (lensBottomRef.current) {
-      lensBottomRef.current.rotation.z = t * 0.04;
-    }
-    if (particlesRef.current) {
-      particlesRef.current.rotation.y += delta * 0.05;
+      lensBottomRef.current.rotation.z += delta * 0.04;
     }
   });
 
   return (
-    <group position={position} scale={scale} rotation={[0.18, -0.25, 0.05]}>
-      {/* 1. Event Horizon (Core): Solid Pitch-Black Sphere */}
-      <mesh renderOrder={1}>
-        <sphereGeometry args={[25, 64, 64]} />
-        <meshBasicMaterial color="#000000" />
+    <group position={position} scale={scale} rotation={[0.18, -0.25, 0.05]} renderOrder={-5}>
+      {/* 1. Event Horizon (Void): Non-reflective pitch-black singularity core */}
+      <mesh renderOrder={-5}>
+        <sphereGeometry args={[40, 64, 64]} />
+        <meshBasicMaterial color="#000000" depthWrite={true} />
       </mesh>
 
-      {/* Intense White Photon Sphere Rim */}
-      <mesh rotation={[Math.PI / 2.15, 0, 0]} renderOrder={2}>
-        <ringGeometry args={[25.1, 26.8, 128]} />
+      {/* 2. Photon Ring: Thin glowing white/gold edge */}
+      <mesh rotation={[Math.PI / 2.15, 0, 0]} renderOrder={-5}>
+        <ringGeometry args={[40.1, 42.5, 128]} />
         <meshBasicMaterial
           color="#ffffff"
           transparent
           opacity={0.95}
           side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
 
-      {/* 2. Accretion Disk (Horizontal Glowing Rings with Fiery Gradient) */}
-      <group ref={accretionDiskRef} rotation={[Math.PI / 2.15, 0, 0]}>
-        {/* Inner Core Brightness (White/Gold) */}
-        <mesh position={[0, 0, 0]}>
-          <ringGeometry args={[26.5, 55, 128]} />
+      {/* 3. Instanced Very Tiny Yellow-Orange Space Rocks Accretion Ring */}
+      <instancedMesh
+        ref={rocksRef}
+        args={[undefined, undefined, rockCount]}
+        renderOrder={-5}
+        rotation={[Math.PI / 2.15, 0, 0]}
+      >
+        <dodecahedronGeometry args={[0.35, 1]} />
+        <meshStandardMaterial
+          roughness={0.5}
+          metalness={0.2}
+          emissive="#ff5500"
+          emissiveIntensity={0.8}
+        />
+      </instancedMesh>
+
+      {/* 4. Glowing Plasma Base Accretion Disk */}
+      <group ref={diskRef} rotation={[Math.PI / 2.15, 0, 0]}>
+        {/* Hot Core Brightness */}
+        <mesh position={[0, 0, 0]} renderOrder={-5}>
+          <ringGeometry args={[42.5, 85, 128]} />
           <meshBasicMaterial
             color="#ffffff"
             transparent
-            opacity={0.9}
+            opacity={0.85}
             side={THREE.DoubleSide}
             blending={THREE.AdditiveBlending}
+            depthWrite={false}
           />
         </mesh>
-        {/* Inner Golden Yellow Ring */}
-        <mesh position={[0, 0, 0.02]}>
-          <ringGeometry args={[52, 90, 128]} />
+
+        {/* Vibrant Golden Yellow Ring */}
+        <mesh position={[0, 0, 0.02]} renderOrder={-5}>
+          <ringGeometry args={[82, 145, 128]} />
           <meshBasicMaterial
             color="#ffd700"
             transparent
-            opacity={0.75}
+            opacity={0.7}
             side={THREE.DoubleSide}
             blending={THREE.AdditiveBlending}
+            depthWrite={false}
           />
         </mesh>
-        {/* Fiery Orange Main Disk */}
-        <mesh position={[0, 0, 0.05]}>
-          <ringGeometry args={[88, 135, 128]} />
+
+        {/* Fiery Deep Orange Outer Glow */}
+        <mesh position={[0, 0, 0.05]} renderOrder={-5}>
+          <ringGeometry args={[140, 210, 128]} />
           <meshBasicMaterial
-            color="#ff6b00"
+            color="#ff4500"
             transparent
-            opacity={0.55}
+            opacity={0.5}
             side={THREE.DoubleSide}
             blending={THREE.AdditiveBlending}
-          />
-        </mesh>
-        {/* Outer Deep Red Accretion Glow */}
-        <mesh position={[0, 0, 0.08]}>
-          <ringGeometry args={[132, 175, 128]} />
-          <meshBasicMaterial
-            color="#b30000"
-            transparent
-            opacity={0.3}
-            side={THREE.DoubleSide}
-            blending={THREE.AdditiveBlending}
+            depthWrite={false}
           />
         </mesh>
       </group>
 
-      {/* 3. Gravitational Lensing Effect (Halo Arches Wrapping Core) */}
-      {/* Top Lens Arch (Light bent over black hole core) */}
+      {/* 5. Gravitational Lensing Halos (Upper & Lower Warped Vertical Arches) */}
       <group ref={lensTopRef} rotation={[0, 0, Math.PI / 16]}>
-        <mesh rotation={[-Math.PI / 4.5, 0, 0]}>
-          <ringGeometry args={[26, 95, 128]} />
+        <mesh rotation={[-Math.PI / 4.2, 0, 0]} renderOrder={-5}>
+          <ringGeometry args={[41, 145, 128]} />
           <meshBasicMaterial
             color="#ffd700"
             transparent
             opacity={0.65}
             side={THREE.DoubleSide}
             blending={THREE.AdditiveBlending}
-          />
-        </mesh>
-        <mesh rotation={[-Math.PI / 4.5, 0, 0]} position={[0, 0, -0.05]}>
-          <ringGeometry args={[92, 140, 128]} />
-          <meshBasicMaterial
-            color="#ff6b00"
-            transparent
-            opacity={0.45}
-            side={THREE.DoubleSide}
-            blending={THREE.AdditiveBlending}
+            depthWrite={false}
           />
         </mesh>
       </group>
 
-      {/* Bottom Lens Arch (Light bent under black hole core) */}
       <group ref={lensBottomRef} rotation={[0, 0, -Math.PI / 16]}>
-        <mesh rotation={[Math.PI / 4.5, 0, 0]}>
-          <ringGeometry args={[26, 95, 128]} />
+        <mesh rotation={[Math.PI / 4.2, 0, 0]} renderOrder={-5}>
+          <ringGeometry args={[41, 145, 128]} />
           <meshBasicMaterial
-            color="#ff6b00"
+            color="#ff4500"
             transparent
             opacity={0.55}
             side={THREE.DoubleSide}
             blending={THREE.AdditiveBlending}
+            depthWrite={false}
           />
         </mesh>
       </group>
 
-      {/* 4. Swirling Matter Particle System */}
-      <points ref={particlesRef}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-          <bufferAttribute attach="attributes-color" args={[colors, 3]} />
-        </bufferGeometry>
-        <pointsMaterial
-          size={1.6}
-          vertexColors
-          transparent
-          opacity={0.8}
-          blending={THREE.AdditiveBlending}
-        />
-      </points>
-
-      {/* Backside Corona Aura Glow */}
-      <mesh>
-        <sphereGeometry args={[40, 32, 32]} />
+      {/* 6. Soft Backside Corona Aura Glow */}
+      <mesh renderOrder={-5}>
+        <sphereGeometry args={[65, 32, 32]} />
         <meshBasicMaterial
-          color="#ff6b00"
+          color="#ff4500"
           transparent
           opacity={0.15}
           side={THREE.BackSide}
           blending={THREE.AdditiveBlending}
+          depthWrite={false}
         />
       </mesh>
+
+      <pointLight color="#ff8c00" intensity={18} distance={500} decay={1} />
     </group>
   );
 }

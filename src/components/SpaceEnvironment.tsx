@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useLayoutEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, Float, Html } from "@react-three/drei";
 import * as THREE from "three";
@@ -513,75 +513,81 @@ export function SpaceWaypoint({
   );
 }
 
-// 11. Supermassive Black Hole (Interstellar Gargantua Style - Epic Cinematic Scale)
+// 11. Supermassive Black Hole (Custom Styled Gargantua - Matching Reference Image)
 export function SupermassiveBlackHole({
-  position = [260, 90, -520],
-  scale = 2.2,
+  position = [650, 110, -550],
+  scale = 2.0,
 }: {
   position?: [number, number, number];
   scale?: number;
 }) {
   const mainGroupRef = useRef<THREE.Group>(null!);
   const accretionDiskRef = useRef<THREE.Group>(null!);
-  const lensTopRef = useRef<THREE.Group>(null!);
-  const lensBottomRef = useRef<THREE.Group>(null!);
-  const particlesRef = useRef<THREE.Points>(null!);
+  const rocksRef = useRef<THREE.InstancedMesh>(null!);
 
-  // Swirling plasma dust particles (4,000 fine particles)
-  const particleCount = 4000;
-  const [positions, colors] = useMemo(() => {
-    const posArr = new Float32Array(particleCount * 3);
-    const colArr = new Float32Array(particleCount * 3);
+  // Outer Red-Orange Square/Rock Particles (2,000 instanced rocks around outer rim)
+  const rockCount = 2000;
+  const rockData = useMemo(() => {
+    const dummy = new THREE.Object3D();
+    const matrices: THREE.Matrix4[] = [];
+    const colors: THREE.Color[] = [];
 
-    const colorHotCore = new THREE.Color("#ffffff");
-    const colorInnerGold = new THREE.Color("#ffe066");
-    const colorMidAmber = new THREE.Color("#ff8800");
-    const colorOuterRed = new THREE.Color("#c92a2a");
+    const colorOrange = new THREE.Color("#ff6600");
+    const colorRed = new THREE.Color("#ff2200");
+    const colorDarkRed = new THREE.Color("#cc0000");
 
-    for (let i = 0; i < particleCount; i++) {
-      const r = 36 + Math.pow(Math.random(), 1.6) * 140;
+    for (let i = 0; i < rockCount; i++) {
+      // Outer rim radius from 135 to 220
+      const r = 135 + Math.pow(Math.random(), 1.2) * 85;
       const angle = Math.random() * Math.PI * 2;
-      const height = (Math.random() - 0.5) * (2 + (r / 140) * 8);
+      const height = (Math.random() - 0.5) * (1.5 + (r / 220) * 4);
 
-      posArr[i * 3] = Math.cos(angle) * r;
-      posArr[i * 3 + 1] = height;
-      posArr[i * 3 + 2] = Math.sin(angle) * r;
+      const x = Math.cos(angle) * r;
+      const z = Math.sin(angle) * r;
 
-      const normR = (r - 36) / 140;
-      let c: THREE.Color;
-      if (normR < 0.12) {
-        c = colorHotCore.clone().lerp(colorInnerGold, normR / 0.12);
-      } else if (normR < 0.45) {
-        c = colorInnerGold.clone().lerp(colorMidAmber, (normR - 0.12) / 0.33);
-      } else {
-        c = colorMidAmber.clone().lerp(colorOuterRed, (normR - 0.45) / 0.55);
-      }
+      const rockScale = 0.8 + Math.random() * 1.8;
 
-      colArr[i * 3] = c.r;
-      colArr[i * 3 + 1] = c.g;
-      colArr[i * 3 + 2] = c.b;
+      dummy.position.set(x, height, z);
+      dummy.rotation.set(
+        Math.random() * Math.PI,
+        Math.random() * Math.PI,
+        Math.random() * Math.PI
+      );
+      dummy.scale.set(rockScale, rockScale, rockScale);
+      dummy.updateMatrix();
+
+      const normR = (r - 135) / 85;
+      const c = colorOrange.clone().lerp(normR > 0.5 ? colorDarkRed : colorRed, normR);
+
+      matrices.push(dummy.matrix.clone());
+      colors.push(c);
     }
-    return [posArr, colArr];
-  }, [particleCount]);
+    return { matrices, colors };
+  }, [rockCount]);
 
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime();
+  useLayoutEffect(() => {
+    if (!rocksRef.current) return;
+    rockData.matrices.forEach((mat, i) => {
+      rocksRef.current.setMatrixAt(i, mat);
+      rocksRef.current.setColorAt(i, rockData.colors[i]);
+    });
+    rocksRef.current.instanceMatrix.needsUpdate = true;
+    if (rocksRef.current.instanceColor) {
+      rocksRef.current.instanceColor.needsUpdate = true;
+    }
+  }, [rockData]);
+
+  useFrame((_, delta) => {
     if (accretionDiskRef.current) {
-      accretionDiskRef.current.rotation.z = t * 0.05;
+      accretionDiskRef.current.rotation.z += delta * 0.04;
     }
-    if (lensTopRef.current) {
-      lensTopRef.current.rotation.z = -t * 0.03;
-    }
-    if (lensBottomRef.current) {
-      lensBottomRef.current.rotation.z = t * 0.03;
-    }
-    if (particlesRef.current) {
-      particlesRef.current.rotation.y = t * 0.04;
+    if (rocksRef.current) {
+      rocksRef.current.rotation.y += delta * 0.05;
     }
   });
 
   return (
-    <group position={position} scale={scale} rotation={[0.15, -0.35, 0.05]}>
+    <group position={position} scale={scale} rotation={[Math.PI / 2.7, 0, -0.25]}>
       <group ref={mainGroupRef}>
         {/* 1. Pitch Black Central Event Horizon Sphere */}
         <mesh renderOrder={1}>
@@ -589,53 +595,47 @@ export function SupermassiveBlackHole({
           <meshBasicMaterial color="#000000" />
         </mesh>
 
-        {/* 2. Thin Fiery Photon Ring (Event Horizon Edge) */}
-        <mesh rotation={[Math.PI / 2.1, 0, 0]} renderOrder={2}>
-          <ringGeometry args={[35.1, 37.5, 128]} />
-          <meshBasicMaterial
-            color="#ffffff"
-            transparent
-            opacity={0.95}
-            side={THREE.DoubleSide}
-          />
+        {/* 2. Horizontal Light Band Crossing Front of Sphere */}
+        <mesh position={[0, 0, 0]} rotation={[0, 0, 0.05]} renderOrder={3}>
+          <torusGeometry args={[36.5, 2.2, 16, 100]} />
+          <meshBasicMaterial color="#ffea78" transparent opacity={0.6} />
+        </mesh>
+        <mesh position={[0, 0, 0]} rotation={[0, 0, 0.05]} renderOrder={3}>
+          <torusGeometry args={[37, 4.5, 16, 100]} />
+          <meshBasicMaterial color="#ffaa00" transparent opacity={0.35} blending={THREE.AdditiveBlending} />
         </mesh>
 
-        {/* 3. Outer Poly GLTF Model (Scale tuned so it doesn't overpower) */}
-        <SpaceModel
-          path="/space/Black hole by Poly by Google - bUEMVxbw9Zr.glb"
-          scale={500}
-          normalize={true}
-        />
-
-        {/* 4. Main Horizontal Accretion Disk */}
+        {/* 3. Main Accretion Disk */}
         <group ref={accretionDiskRef} rotation={[Math.PI / 2.15, 0, 0]}>
-          {/* Inner Hot White/Gold Ring */}
+          {/* Softened Inner Ring */}
           <mesh position={[0, 0, 0]}>
-            <ringGeometry args={[37, 75, 128]} />
+            <ringGeometry args={[35.5, 62, 128]} />
             <meshBasicMaterial
-              color="#ffea78"
+              color="#fff9d6"
               transparent
-              opacity={0.85}
+              opacity={0.65}
               side={THREE.DoubleSide}
               blending={THREE.AdditiveBlending}
             />
           </mesh>
-          {/* Mid Amber Disk */}
-          <mesh position={[0, 0, 0.05]}>
-            <ringGeometry args={[72, 125, 128]} />
+
+          {/* Softened Main Yellow Disk */}
+          <mesh position={[0, 0, 0.02]}>
+            <ringGeometry args={[58, 165, 128]} />
             <meshBasicMaterial
-              color="#ff7700"
+              color="#ffd700"
               transparent
               opacity={0.55}
               side={THREE.DoubleSide}
               blending={THREE.AdditiveBlending}
             />
           </mesh>
-          {/* Outer Crimson Halo */}
-          <mesh position={[0, 0, 0.1]}>
-            <ringGeometry args={[120, 175, 128]} />
+
+          {/* Outer Soft Yellow-Orange Transition Ring */}
+          <mesh position={[0, 0, 0.05]}>
+            <ringGeometry args={[145, 205, 128]} />
             <meshBasicMaterial
-              color="#aa1100"
+              color="#ff8c00"
               transparent
               opacity={0.3}
               side={THREE.DoubleSide}
@@ -644,69 +644,18 @@ export function SupermassiveBlackHole({
           </mesh>
         </group>
 
-        {/* 5. Interstellar Gravitational Lensing Halos (Light Bending Around Event Horizon) */}
-        {/* Top Arch Lensing (Bent Over Black Hole) */}
-        <group ref={lensTopRef} rotation={[0, 0, Math.PI / 12]}>
-          <mesh rotation={[-Math.PI / 4.2, 0, 0]}>
-            <ringGeometry args={[36.5, 115, 128]} />
-            <meshBasicMaterial
-              color="#ff9900"
-              transparent
-              opacity={0.65}
-              side={THREE.DoubleSide}
-              blending={THREE.AdditiveBlending}
-            />
-          </mesh>
-        </group>
+        {/* 4. Outer Red/Orange Square/Rock Particles Belt */}
+        <instancedMesh
+          ref={rocksRef}
+          args={[undefined, undefined, rockCount]}
+          rotation={[Math.PI / 2.15, 0, 0]}
+        >
+          <boxGeometry args={[1.4, 1.4, 1.4]} />
+          <meshBasicMaterial transparent opacity={0.55} blending={THREE.AdditiveBlending} />
+        </instancedMesh>
 
-        {/* Bottom Arch Lensing (Bent Under Black Hole) */}
-        <group ref={lensBottomRef} rotation={[0, 0, -Math.PI / 12]}>
-          <mesh rotation={[Math.PI / 4.2, 0, 0]}>
-            <ringGeometry args={[36.5, 115, 128]} />
-            <meshBasicMaterial
-              color="#ff6600"
-              transparent
-              opacity={0.55}
-              side={THREE.DoubleSide}
-              blending={THREE.AdditiveBlending}
-            />
-          </mesh>
-        </group>
-
-        {/* 6. Fine Swirling Accretion Dust Particles */}
-        <points ref={particlesRef}>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              args={[positions, 3]}
-            />
-            <bufferAttribute
-              attach="attributes-color"
-              args={[colors, 3]}
-            />
-          </bufferGeometry>
-          <pointsMaterial
-            size={1.8}
-            vertexColors
-            transparent
-            opacity={0.75}
-            blending={THREE.AdditiveBlending}
-          />
-        </points>
-
-        {/* 7. Deep Space Ambient Corona Aura */}
-        <mesh>
-          <sphereGeometry args={[55, 32, 32]} />
-          <meshBasicMaterial
-            color="#ff7700"
-            transparent
-            opacity={0.15}
-            side={THREE.BackSide}
-            blending={THREE.AdditiveBlending}
-          />
-        </mesh>
-
-        <pointLight color="#ff9933" intensity={12} distance={500} decay={1} />
+        {/* Deep Space Soft Ambient Point Light */}
+        <pointLight color="#ffcc00" intensity={6} distance={500} decay={1} />
       </group>
     </group>
   );
@@ -714,8 +663,8 @@ export function SupermassiveBlackHole({
 
 // 12. Giant Background Spiral Galaxy
 export function BackgroundGalaxy({
-  position = [-350, 140, -650],
-  scale = 1,
+  position = [-650, 120, -600],
+  scale = 1.5,
 }: {
   position?: [number, number, number];
   scale?: number;
