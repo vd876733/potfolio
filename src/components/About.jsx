@@ -46,7 +46,7 @@ export default function About() {
   ];
 
   return (
-    <div className="w-full bg-white dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 transition-colors duration-300 flex flex-col gap-6">
+    <div className="w-full bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 transition-colors duration-300 flex flex-col gap-6">
       {/* Profile Avatar & Bio Layout */}
       <div className="flex flex-col sm:flex-row items-center sm:items-stretch gap-6 sm:gap-8">
         {/* Big Vertical Rectangle Image Avatar */}
