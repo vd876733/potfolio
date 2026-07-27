@@ -3,13 +3,9 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Sky, ContactShadows, Stars } from "@react-three/drei";
+import { OrbitControls, Stars } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
-import FloatingIsland from "./FloatingIsland";
-import Pavilions from "./Pavilions";
-import RoadNetwork from "./RoadNetwork";
-import Props from "./Props";
-import Ocean from "./Ocean";
+import SpacePavilions from "./SpacePavilions";
 
 interface SceneProps {
   onSectionClick: (section: string) => void;
@@ -28,6 +24,7 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
   }, []);
 
   const isLight = mounted && theme === "light";
+  const bgColor = isLight ? "#0f172a" : "#030712";
 
   const handleSectionClick = (section: string, position?: [number, number, number]) => {
     setSelectedSection(section);
@@ -43,58 +40,64 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
   };
 
   return (
-    <div className="w-full h-full absolute inset-0 z-0">
+    <div className="w-full h-full absolute inset-0 z-0 bg-[#030712]">
       <Canvas
         shadows
-        camera={{ position: [30, 35, 45], fov: 45, near: 0.1, far: 1000 }}
+        gl={{ antialias: true, preserveDrawingBuffer: true }}
+        camera={{ position: [35, 25, 50], fov: 45, near: 0.1, far: 1000 }}
         dpr={isMobile ? [1, 1.5] : [1, 2]}
       >
-        <color attach="background" args={[isLight ? "#1a82b8" : "#002255"]} />
-        <fog attach="fog" args={[isLight ? "#1a82b8" : "#002255", 50, 300]} />
-        {!isLight && (
-          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-        )}
-        <ambientLight intensity={1.2} color="#e0f7fa" />
-        <hemisphereLight intensity={0.6} color="#ffffff" groundColor="#00a8ff" />
+        {/* Deep Space Background & Fog */}
+        <color attach="background" args={[bgColor]} />
+        <fog attach="fog" args={[bgColor, 80, 400]} />
+
+        {/* Dense Twinkling Stars */}
+        <Stars
+          radius={150}
+          depth={60}
+          count={7000}
+          factor={6}
+          saturation={0}
+          fade
+          speed={1.5}
+        />
+
+        {/* Space Lighting */}
+        <ambientLight intensity={1.5} color="#e0f2fe" />
+        <hemisphereLight intensity={0.8} color="#38bdf8" groundColor="#0f172a" />
 
         <directionalLight
-          position={[15, 25, 10]}
-          intensity={isLight ? 2.2 : 0.5}
-          color={isLight ? "#fff4e0" : "#93c5fd"}
+          position={[25, 40, 20]}
+          intensity={2.5}
+          color="#fbbf24"
           castShadow
           shadow-mapSize={isMobile ? [1024, 1024] : [2048, 2048]}
-          shadow-camera-left={-80}
-          shadow-camera-right={80}
-          shadow-camera-top={80}
-          shadow-camera-bottom={-80}
-          shadow-camera-near={0.1}
-          shadow-camera-far={200}
           shadow-bias={-0.0001}
         />
 
-        <Ocean isLight={isLight} />
+        <pointLight position={[0, 0, 0]} intensity={3} color="#38bdf8" distance={60} />
 
-        <FloatingIsland isLight={isLight}>
-          <Props isLight={isLight} />
-          <RoadNetwork isLight={isLight} />
+        {/* Space Theme 3D Scene */}
+        <SpacePavilions onSectionClick={handleSectionClick} />
 
-          {/* The 5 Portfolio Sections */}
-          <Pavilions onSectionClick={handleSectionClick} isLight={isLight} />
-        </FloatingIsland>
-
+        {/* Orbit Controls for 360 Space Exploration */}
         <OrbitControls
           ref={controlsRef}
           enableDamping={true}
-          maxPolarAngle={Math.PI / 2.2}
-          minPolarAngle={0}
+          dampingFactor={0.05}
+          maxPolarAngle={Math.PI / 1.5}
+          minPolarAngle={Math.PI / 6}
           target={target}
+          maxDistance={120}
+          minDistance={10}
         />
 
-        <EffectComposer>
+        {/* Postprocessing Bloom Effect for Glowing Space Lights */}
+        <EffectComposer multisampling={0}>
           <Bloom
-            luminanceThreshold={1}
+            luminanceThreshold={0.8}
             mipmapBlur
-            intensity={isMobile ? 0.75 : 1.5}
+            intensity={isMobile ? 0.8 : 1.6}
           />
         </EffectComposer>
       </Canvas>
