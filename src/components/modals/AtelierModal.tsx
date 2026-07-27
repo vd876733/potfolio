@@ -24,9 +24,9 @@ export default function AtelierModal() {
             onClick={() => setSelectedImage(sketch.img)}
             className="cursor-pointer overflow-hidden rounded-xl border border-slate-200 dark:border-white/5 aspect-square"
           >
-            <motion.img 
-              src={sketch.img} 
-              alt="Sketch" 
+            <motion.img
+              src={sketch.img}
+              alt="Sketch"
               className="object-cover w-full h-full"
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
