@@ -513,30 +513,200 @@ export function SpaceWaypoint({
   );
 }
 
-// 11. Supermassive Black Hole (Looming in Deep Space - Massive Scale)
+// 11. Supermassive Black Hole (Interstellar Gargantua Style - Epic Cinematic Scale)
 export function SupermassiveBlackHole({
-  position = [180, -20, -420],
-  scale = 1,
+  position = [260, 90, -520],
+  scale = 2.2,
 }: {
   position?: [number, number, number];
   scale?: number;
 }) {
-  const blackHoleRef = useRef<THREE.Group>(null!);
+  const mainGroupRef = useRef<THREE.Group>(null!);
+  const accretionDiskRef = useRef<THREE.Group>(null!);
+  const lensTopRef = useRef<THREE.Group>(null!);
+  const lensBottomRef = useRef<THREE.Group>(null!);
+  const particlesRef = useRef<THREE.Points>(null!);
 
-  useFrame((_, delta) => {
-    if (blackHoleRef.current) {
-      blackHoleRef.current.rotation.y += delta * 0.04;
+  // Swirling plasma dust particles (4,000 fine particles)
+  const particleCount = 4000;
+  const [positions, colors] = useMemo(() => {
+    const posArr = new Float32Array(particleCount * 3);
+    const colArr = new Float32Array(particleCount * 3);
+
+    const colorHotCore = new THREE.Color("#ffffff");
+    const colorInnerGold = new THREE.Color("#ffe066");
+    const colorMidAmber = new THREE.Color("#ff8800");
+    const colorOuterRed = new THREE.Color("#c92a2a");
+
+    for (let i = 0; i < particleCount; i++) {
+      const r = 36 + Math.pow(Math.random(), 1.6) * 140;
+      const angle = Math.random() * Math.PI * 2;
+      const height = (Math.random() - 0.5) * (2 + (r / 140) * 8);
+
+      posArr[i * 3] = Math.cos(angle) * r;
+      posArr[i * 3 + 1] = height;
+      posArr[i * 3 + 2] = Math.sin(angle) * r;
+
+      const normR = (r - 36) / 140;
+      let c: THREE.Color;
+      if (normR < 0.12) {
+        c = colorHotCore.clone().lerp(colorInnerGold, normR / 0.12);
+      } else if (normR < 0.45) {
+        c = colorInnerGold.clone().lerp(colorMidAmber, (normR - 0.12) / 0.33);
+      } else {
+        c = colorMidAmber.clone().lerp(colorOuterRed, (normR - 0.45) / 0.55);
+      }
+
+      colArr[i * 3] = c.r;
+      colArr[i * 3 + 1] = c.g;
+      colArr[i * 3 + 2] = c.b;
+    }
+    return [posArr, colArr];
+  }, [particleCount]);
+
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    if (accretionDiskRef.current) {
+      accretionDiskRef.current.rotation.z = t * 0.05;
+    }
+    if (lensTopRef.current) {
+      lensTopRef.current.rotation.z = -t * 0.03;
+    }
+    if (lensBottomRef.current) {
+      lensBottomRef.current.rotation.z = t * 0.03;
+    }
+    if (particlesRef.current) {
+      particlesRef.current.rotation.y = t * 0.04;
     }
   });
 
   return (
-    <group position={position} scale={scale}>
-      <group ref={blackHoleRef}>
+    <group position={position} scale={scale} rotation={[0.15, -0.35, 0.05]}>
+      <group ref={mainGroupRef}>
+        {/* 1. Pitch Black Central Event Horizon Sphere */}
+        <mesh renderOrder={1}>
+          <sphereGeometry args={[35, 64, 64]} />
+          <meshBasicMaterial color="#000000" />
+        </mesh>
+
+        {/* 2. Thin Fiery Photon Ring (Event Horizon Edge) */}
+        <mesh rotation={[Math.PI / 2.1, 0, 0]} renderOrder={2}>
+          <ringGeometry args={[35.1, 37.5, 128]} />
+          <meshBasicMaterial
+            color="#ffffff"
+            transparent
+            opacity={0.95}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+
+        {/* 3. Outer Poly GLTF Model (Scale tuned so it doesn't overpower) */}
         <SpaceModel
           path="/space/Black hole by Poly by Google - bUEMVxbw9Zr.glb"
-          scale={800}
+          scale={500}
           normalize={true}
         />
+
+        {/* 4. Main Horizontal Accretion Disk */}
+        <group ref={accretionDiskRef} rotation={[Math.PI / 2.15, 0, 0]}>
+          {/* Inner Hot White/Gold Ring */}
+          <mesh position={[0, 0, 0]}>
+            <ringGeometry args={[37, 75, 128]} />
+            <meshBasicMaterial
+              color="#ffea78"
+              transparent
+              opacity={0.85}
+              side={THREE.DoubleSide}
+              blending={THREE.AdditiveBlending}
+            />
+          </mesh>
+          {/* Mid Amber Disk */}
+          <mesh position={[0, 0, 0.05]}>
+            <ringGeometry args={[72, 125, 128]} />
+            <meshBasicMaterial
+              color="#ff7700"
+              transparent
+              opacity={0.55}
+              side={THREE.DoubleSide}
+              blending={THREE.AdditiveBlending}
+            />
+          </mesh>
+          {/* Outer Crimson Halo */}
+          <mesh position={[0, 0, 0.1]}>
+            <ringGeometry args={[120, 175, 128]} />
+            <meshBasicMaterial
+              color="#aa1100"
+              transparent
+              opacity={0.3}
+              side={THREE.DoubleSide}
+              blending={THREE.AdditiveBlending}
+            />
+          </mesh>
+        </group>
+
+        {/* 5. Interstellar Gravitational Lensing Halos (Light Bending Around Event Horizon) */}
+        {/* Top Arch Lensing (Bent Over Black Hole) */}
+        <group ref={lensTopRef} rotation={[0, 0, Math.PI / 12]}>
+          <mesh rotation={[-Math.PI / 4.2, 0, 0]}>
+            <ringGeometry args={[36.5, 115, 128]} />
+            <meshBasicMaterial
+              color="#ff9900"
+              transparent
+              opacity={0.65}
+              side={THREE.DoubleSide}
+              blending={THREE.AdditiveBlending}
+            />
+          </mesh>
+        </group>
+
+        {/* Bottom Arch Lensing (Bent Under Black Hole) */}
+        <group ref={lensBottomRef} rotation={[0, 0, -Math.PI / 12]}>
+          <mesh rotation={[Math.PI / 4.2, 0, 0]}>
+            <ringGeometry args={[36.5, 115, 128]} />
+            <meshBasicMaterial
+              color="#ff6600"
+              transparent
+              opacity={0.55}
+              side={THREE.DoubleSide}
+              blending={THREE.AdditiveBlending}
+            />
+          </mesh>
+        </group>
+
+        {/* 6. Fine Swirling Accretion Dust Particles */}
+        <points ref={particlesRef}>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              args={[positions, 3]}
+            />
+            <bufferAttribute
+              attach="attributes-color"
+              args={[colors, 3]}
+            />
+          </bufferGeometry>
+          <pointsMaterial
+            size={1.8}
+            vertexColors
+            transparent
+            opacity={0.75}
+            blending={THREE.AdditiveBlending}
+          />
+        </points>
+
+        {/* 7. Deep Space Ambient Corona Aura */}
+        <mesh>
+          <sphereGeometry args={[55, 32, 32]} />
+          <meshBasicMaterial
+            color="#ff7700"
+            transparent
+            opacity={0.15}
+            side={THREE.BackSide}
+            blending={THREE.AdditiveBlending}
+          />
+        </mesh>
+
+        <pointLight color="#ff9933" intensity={12} distance={500} decay={1} />
       </group>
     </group>
   );

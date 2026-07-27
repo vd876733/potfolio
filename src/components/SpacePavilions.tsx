@@ -22,7 +22,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
   return (
     <group>
       {/* Supermassive Black Hole & Cosmic Spiral Galaxy Deep in Background */}
-      <SupermassiveBlackHole position={[180, -20, -420]} scale={1.2} />
+      <SupermassiveBlackHole position={[260, 90, -520]} scale={2.2} />
       <BackgroundGalaxy position={[-380, 160, -700]} scale={1.4} />
 
       {/* 1. Sun GLTF (Sun by Jarlan Perez) */}
