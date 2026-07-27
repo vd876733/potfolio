@@ -21,9 +21,11 @@ interface SpacePavilionsProps {
 export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) {
   return (
     <group>
-      {/* Supermassive Black Hole & Cosmic Spiral Galaxy Deep in Background */}
-      <SupermassiveBlackHole position={[280, -40, -550]} scale={1.3} />
-      <BackgroundGalaxy position={[-380, 160, -700]} scale={1.4} />
+      {/* Deep Universe Background Elements (Pushed Far Away to Z = -650) */}
+      <group renderOrder={-10}>
+        <BackgroundGalaxy position={[-350, 90, -650]} scale={0.75} />
+        <SupermassiveBlackHole position={[350, -90, -650]} scale={0.4} />
+      </group>
 
       {/* 1. Sun GLTF (Sun by Jarlan Perez) */}
       <SunGLTF />

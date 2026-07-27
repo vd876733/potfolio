@@ -4,6 +4,7 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, Float, Html } from "@react-three/drei";
 import * as THREE from "three";
+import BlackHole from "./BlackHole";
 
 // Safe GLTF Loader helper with shadow support
 function SpaceModel({
@@ -513,162 +514,27 @@ export function SpaceWaypoint({
   );
 }
 
-// 11. Supermassive Black Hole (Looming in Deep Space)
+// 11. Interstellar Supermassive Black Hole Component
 export function SupermassiveBlackHole({
-  position = [220, -50, -500],
-  scale = 1,
+  position = [350, -90, -650],
+  scale = 0.4,
 }: {
   position?: [number, number, number];
   scale?: number;
 }) {
-  const diskRef = useRef<THREE.Group>(null!);
-  const jetRef = useRef<THREE.Group>(null!);
-
-  // Swirling accretion disk particles
-  const particleCount = 4500;
-  const [positions, colors] = useMemo(() => {
-    const posArr = new Float32Array(particleCount * 3);
-    const colArr = new Float32Array(particleCount * 3);
-    const colorInner = new THREE.Color("#ffaa00"); // Fiery Amber
-    const colorMid = new THREE.Color("#ff3300");   // Deep Red/Orange
-    const colorOuter = new THREE.Color("#8b5cf6"); // Violet
-
-    for (let i = 0; i < particleCount; i++) {
-      const radius = 75 + Math.random() * 190;
-      const angle = Math.random() * Math.PI * 2;
-      const spreadY = (Math.random() - 0.5) * (radius * 0.08);
-
-      posArr[i * 3] = Math.cos(angle) * radius;
-      posArr[i * 3 + 1] = spreadY;
-      posArr[i * 3 + 2] = Math.sin(angle) * radius;
-
-      const normR = (radius - 75) / 190;
-      const c =
-        normR < 0.4
-          ? colorInner.clone().lerp(colorMid, normR / 0.4)
-          : colorMid.clone().lerp(colorOuter, (normR - 0.4) / 0.6);
-      colArr[i * 3] = c.r;
-      colArr[i * 3 + 1] = c.g;
-      colArr[i * 3 + 2] = c.b;
-    }
-    return [posArr, colArr];
-  }, [particleCount]);
-
-  useFrame((_, delta) => {
-    if (diskRef.current) {
-      diskRef.current.rotation.y += delta * 0.12;
-    }
-    if (jetRef.current) {
-      jetRef.current.rotation.y -= delta * 0.2;
-    }
-  });
-
   return (
-    <group position={position} scale={scale}>
-      {/* Event Horizon (Absolute Void Black Hole) */}
-      <mesh>
-        <sphereGeometry args={[70, 64, 64]} />
-        <meshBasicMaterial color="#000000" />
-      </mesh>
-
-      {/* Photon Ring Glow Halo */}
-      <mesh>
-        <sphereGeometry args={[73.5, 64, 64]} />
-        <meshBasicMaterial
-          color="#ff7700"
-          transparent
-          opacity={0.65}
-          side={THREE.BackSide}
-        />
-      </mesh>
-
-      {/* Outer Gravitational Lensing Atmosphere Ring */}
-      <mesh>
-        <sphereGeometry args={[84, 64, 64]} />
-        <meshBasicMaterial
-          color="#38bdf8"
-          transparent
-          opacity={0.18}
-          side={THREE.BackSide}
-        />
-      </mesh>
-
-      {/* Swirling Accretion Disk */}
-      <group ref={diskRef} rotation={[Math.PI / 4, 0, Math.PI / 6]}>
-        {/* Solid Swirling Gradient Ring */}
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[72, 240, 128]} />
-          <meshBasicMaterial
-            color="#ff5500"
-            transparent
-            opacity={0.4}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <ringGeometry args={[70, 120, 128]} />
-          <meshBasicMaterial
-            color="#ffaa00"
-            transparent
-            opacity={0.75}
-            side={THREE.DoubleSide}
-          />
-        </mesh>
-
-        {/* Accretion Particle Swarm */}
-        <points>
-          <bufferGeometry>
-            <bufferAttribute
-              attach="attributes-position"
-              args={[positions, 3]}
-            />
-            <bufferAttribute
-              attach="attributes-color"
-              args={[colors, 3]}
-            />
-          </bufferGeometry>
-          <pointsMaterial
-            size={3.2}
-            vertexColors
-            transparent
-            opacity={0.85}
-            blending={THREE.AdditiveBlending}
-          />
-        </points>
-      </group>
-
-      {/* Relativistic Energy Jets (Polar Beams) */}
-      <group ref={jetRef}>
-        <mesh position={[0, 220, 0]}>
-          <cylinderGeometry args={[2, 45, 300, 32, 1, true]} />
-          <meshBasicMaterial
-            color="#a855f7"
-            transparent
-            opacity={0.35}
-            side={THREE.DoubleSide}
-            blending={THREE.AdditiveBlending}
-          />
-        </mesh>
-        <mesh position={[0, -220, 0]} rotation={[Math.PI, 0, 0]}>
-          <cylinderGeometry args={[2, 45, 300, 32, 1, true]} />
-          <meshBasicMaterial
-            color="#a855f7"
-            transparent
-            opacity={0.35}
-            side={THREE.DoubleSide}
-            blending={THREE.AdditiveBlending}
-          />
-        </mesh>
-      </group>
+    <group renderOrder={-10}>
+      <BlackHole position={position} scale={scale} />
     </group>
   );
 }
 
+export { BlackHole };
+
 // 12. Giant Background Spiral Galaxy
 export function BackgroundGalaxy({
-  position = [-350, 140, -650],
-  scale = 1,
+  position = [-350, 90, -650],
+  scale = 0.75,
 }: {
   position?: [number, number, number];
   scale?: number;
@@ -722,11 +588,11 @@ export function BackgroundGalaxy({
   });
 
   return (
-    <group position={position} scale={scale} rotation={[Math.PI / 3, -Math.PI / 6, 0]}>
+    <group position={position} scale={scale} rotation={[Math.PI / 3, -Math.PI / 6, 0]} renderOrder={-10}>
       {/* Galactic Core Brightness */}
       <mesh>
         <sphereGeometry args={[25, 32, 32]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.8} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.8} depthWrite={false} depthTest={true} />
       </mesh>
       <mesh>
         <sphereGeometry args={[55, 32, 32]} />
@@ -735,6 +601,8 @@ export function BackgroundGalaxy({
           transparent
           opacity={0.3}
           side={THREE.BackSide}
+          depthWrite={false}
+          depthTest={true}
         />
       </mesh>
 
@@ -757,6 +625,8 @@ export function BackgroundGalaxy({
             transparent
             opacity={0.8}
             blending={THREE.AdditiveBlending}
+            depthWrite={false}
+            depthTest={true}
           />
         </points>
       </group>
@@ -766,6 +636,7 @@ export function BackgroundGalaxy({
 
 // Preload GLTF Space Models
 useGLTF.preload("/space/Sun by Jarlan Perez - 3XZEucM6wC7.glb");
+useGLTF.preload("/space/Black hole by Poly by Google - bUEMVxbw9Zr.glb");
 useGLTF.preload("/space/Mars by Jarlan Perez - 8sNKYRTUFAe.glb");
 useGLTF.preload("/space/Saturn by Jarlan Perez - b-y9HDTsu7q.glb");
 useGLTF.preload("/space/Neptune by Poly by Google - fxLCXXDYUwC.glb");
