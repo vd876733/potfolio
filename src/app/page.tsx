@@ -15,14 +15,12 @@ import TopNav from "@/components/TopNav";
 import Portfolio2D from "@/components/Portfolio2D";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
+import LoadingOverlay from "@/components/LoadingOverlay";
+
 // Dynamically import the Scene to avoid SSR issues with Three.js
 const Scene = dynamic(() => import("@/components/Scene"), {
   ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 flex items-center justify-center bg-obsidian z-0">
-      <Loader2 className="w-8 h-8 text-white/50 animate-spin" />
-    </div>
-  ),
+  loading: () => <LoadingOverlay isLoading={true} caption="Loading 3D World..." />,
 });
 
 export default function Home() {
@@ -30,6 +28,7 @@ export default function Home() {
   const [viewMode, setViewMode] = useState<"3D" | "2D">("3D");
   const isMobile = useIsMobile();
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Determine the initial layout depending on the screen size
@@ -40,6 +39,14 @@ export default function Home() {
       setIsInitialized(true);
     }
   }, [isInitialized]);
+
+  useEffect(() => {
+    // Simulate initial loading completion or bridge with 3D loader events
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleNavClick = (section: string) => {
     if (viewMode === "3D") {
@@ -75,6 +82,9 @@ export default function Home() {
 
   return (
     <main className="relative w-full h-screen overflow-hidden bg-slate-50 dark:bg-obsidian transition-colors duration-300">
+      {/* Full-screen Loading Overlay with ldrs Grid spinner */}
+      <LoadingOverlay isLoading={isLoading} caption="Loading 3D World..." />
+
       <TopNav
         onNavClick={handleNavClick}
         viewMode={viewMode}

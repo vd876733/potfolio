@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
@@ -43,7 +43,7 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
     <div className="w-full h-full absolute inset-0 z-0 bg-[#030712]">
       <Canvas
         shadows
-        gl={{ antialias: true, preserveDrawingBuffer: true }}
+        gl={{ antialias: true, preserveDrawingBuffer: true, alpha: true }}
         camera={{ position: [55, 40, 85], fov: 48, near: 0.1, far: 1500 }}
         dpr={isMobile ? [1, 1.5] : [1, 2]}
       >
@@ -78,7 +78,9 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
         <pointLight position={[0, 0, 0]} intensity={5} color="#38bdf8" distance={100} />
 
         {/* Space Theme 3D Scene */}
-        <SpacePavilions onSectionClick={handleSectionClick} />
+        <Suspense fallback={null}>
+          <SpacePavilions onSectionClick={handleSectionClick} />
+        </Suspense>
 
         {/* Orbit Controls for 360 Space Exploration */}
         <OrbitControls
