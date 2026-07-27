@@ -4,7 +4,6 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, Float, Html } from "@react-three/drei";
 import * as THREE from "three";
-import BlackHole from "./BlackHole";
 
 // Safe GLTF Loader helper with shadow support
 function SpaceModel({
@@ -514,27 +513,39 @@ export function SpaceWaypoint({
   );
 }
 
-// 11. Interstellar Supermassive Black Hole Component
+// 11. Supermassive Black Hole (Looming in Deep Space - Massive Scale)
 export function SupermassiveBlackHole({
-  position = [350, -90, -650],
-  scale = 0.4,
+  position = [180, -20, -420],
+  scale = 1,
 }: {
   position?: [number, number, number];
   scale?: number;
 }) {
+  const blackHoleRef = useRef<THREE.Group>(null!);
+
+  useFrame((_, delta) => {
+    if (blackHoleRef.current) {
+      blackHoleRef.current.rotation.y += delta * 0.04;
+    }
+  });
+
   return (
-    <group renderOrder={-10}>
-      <BlackHole position={position} scale={scale} />
+    <group position={position} scale={scale}>
+      <group ref={blackHoleRef}>
+        <SpaceModel
+          path="/space/Black hole by Poly by Google - bUEMVxbw9Zr.glb"
+          scale={800}
+          normalize={true}
+        />
+      </group>
     </group>
   );
 }
 
-export { BlackHole };
-
 // 12. Giant Background Spiral Galaxy
 export function BackgroundGalaxy({
-  position = [-350, 90, -650],
-  scale = 0.75,
+  position = [-350, 140, -650],
+  scale = 1,
 }: {
   position?: [number, number, number];
   scale?: number;
@@ -588,11 +599,11 @@ export function BackgroundGalaxy({
   });
 
   return (
-    <group position={position} scale={scale} rotation={[Math.PI / 3, -Math.PI / 6, 0]} renderOrder={-10}>
+    <group position={position} scale={scale} rotation={[Math.PI / 3, -Math.PI / 6, 0]}>
       {/* Galactic Core Brightness */}
       <mesh>
         <sphereGeometry args={[25, 32, 32]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.8} depthWrite={false} depthTest={true} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.8} />
       </mesh>
       <mesh>
         <sphereGeometry args={[55, 32, 32]} />
@@ -601,8 +612,6 @@ export function BackgroundGalaxy({
           transparent
           opacity={0.3}
           side={THREE.BackSide}
-          depthWrite={false}
-          depthTest={true}
         />
       </mesh>
 
@@ -625,8 +634,6 @@ export function BackgroundGalaxy({
             transparent
             opacity={0.8}
             blending={THREE.AdditiveBlending}
-            depthWrite={false}
-            depthTest={true}
           />
         </points>
       </group>
