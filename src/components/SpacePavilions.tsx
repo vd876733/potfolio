@@ -37,7 +37,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
       {/* High Orbit Flying Spaceships (FLYING HIGH ABOVE THE PLANETS) */}
       <HighOrbitSpaceships />
 
-      {/* 2. Mercury */}
+      {/* 1. Mercury (1st planet from Sun) */}
       <GLTFPlanet
         modelPath="/space/Planet by Quaternius - IVnmauIgWX.glb"
         orbitRadius={12}
@@ -46,7 +46,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
         initialAngle={0.5}
       />
 
-      {/* 3. Venus */}
+      {/* 2. Venus (2nd planet from Sun) */}
       <GLTFPlanet
         modelPath="/space/Planet by Quaternius - IVnmauIgWX.glb"
         orbitRadius={18}
@@ -55,7 +55,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
         initialAngle={2.1}
       />
 
-      {/* 4. Command Central / About Section */}
+      {/* 3. Command Central / About Section */}
       <GLTFPlanet
         modelPath="/space/Planet by Quaternius - IVnmauIgWX.glb"
         orbitRadius={26}
@@ -76,7 +76,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
         />
       </GLTFPlanet>
 
-      {/* 5. Mars GLTF (Cyber Arena Section) */}
+      {/* 4. Mars GLTF (Cyber Arena Section) */}
       <GLTFPlanet
         modelPath="/space/Mars by Jarlan Perez - 8sNKYRTUFAe.glb"
         orbitRadius={34}
@@ -97,7 +97,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
         />
       </GLTFPlanet>
 
-      {/* 6. Jupiter Gas Giant with Bands & Red Spot (Starship Hangar Section) */}
+      {/* 5. Jupiter Gas Giant with Bands & Red Spot (Starship Hangar Section) */}
       <JupiterPlanet
         orbitRadius={48}
         size={5.2}
@@ -113,7 +113,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
         />
       </JupiterPlanet>
 
-      {/* 7. Saturn GLTF (Quantum Forge Section) */}
+      {/* 6. Saturn GLTF (Quantum Forge Section) */}
       <GLTFPlanet
         modelPath="/space/Saturn by Jarlan Perez - b-y9HDTsu7q.glb"
         orbitRadius={64}
@@ -130,7 +130,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
         />
       </GLTFPlanet>
 
-      {/* 8. Uranus */}
+      {/* 7. Uranus */}
       <GLTFPlanet
         modelPath="/space/Planet by Quaternius - IVnmauIgWX.glb"
         orbitRadius={78}
@@ -139,7 +139,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
         initialAngle={2.8}
       />
 
-      {/* 9. Neptune GLTF (Starlight Gallery Section) */}
+      {/* 8. Neptune GLTF (Starlight Gallery Section) */}
       <GLTFPlanet
         modelPath="/space/Neptune by Poly by Google - fxLCXXDYUwC.glb"
         orbitRadius={92}

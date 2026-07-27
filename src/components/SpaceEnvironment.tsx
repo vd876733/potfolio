@@ -11,16 +11,34 @@ function SpaceModel({
   position = [0, 0, 0],
   scale = 1,
   rotation = [0, 0, 0],
+  normalize = false,
 }: {
   path: string;
   position?: [number, number, number];
   scale?: number | [number, number, number];
   rotation?: [number, number, number];
+  normalize?: boolean;
 }) {
   const gltf = useGLTF(path);
   const sceneObj = Array.isArray(gltf) ? gltf[0].scene : gltf.scene;
   const clone = useMemo(() => {
     const cl = sceneObj.clone();
+
+    if (normalize) {
+      const box = new THREE.Box3().setFromObject(cl);
+      const center = new THREE.Vector3();
+      const size = new THREE.Vector3();
+      box.getCenter(center);
+      box.getSize(size);
+
+      const maxDim = Math.max(size.x, size.y, size.z);
+      if (maxDim > 0) {
+        const normScale = 2.0 / maxDim;
+        cl.scale.set(normScale, normScale, normScale);
+        cl.position.sub(center.multiplyScalar(normScale));
+      }
+    }
+
     cl.traverse((child: THREE.Object3D) => {
       if ((child as THREE.Mesh).isMesh) {
         child.castShadow = true;
@@ -28,7 +46,7 @@ function SpaceModel({
       }
     });
     return cl;
-  }, [sceneObj]);
+  }, [sceneObj, normalize]);
 
   return (
     <primitive
@@ -319,7 +337,7 @@ export function GLTFPlanet({
       <group ref={orbitGroupRef}>
         <group ref={planetRef}>
           {modelPath ? (
-            <SpaceModel path={modelPath} scale={scale} />
+            <SpaceModel path={modelPath} scale={scale} normalize={true} />
           ) : (
             <mesh castShadow receiveShadow>
               <sphereGeometry args={[scale, 48, 48]} />
