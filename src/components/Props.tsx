@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Instances, Instance } from "@react-three/drei";
 import * as THREE from "three";
 import { Whale, PirateShip, WoodenDock, Airplane, Airship, FantasyStable, OldBridge, BeachUmbrella, GrassPatch } from "./Landmarks";
 
@@ -124,26 +124,15 @@ export default function Props({ isLight = false }: PropsProps) {
         ))}
       </group>
 
-<<<<<<< HEAD
-      {/* Ocean Rocks */}
-      <group>
-        {oceanRocks.map((props, i) => (
-          <GLBModel key={`orock-${i}`} path="/models/Rock by Quaternius - JmFMh7ztL9.glb" position={props.position} scale={props.scale * 3} rotation={props.rotation} />
-=======
       {/* Diverse Ocean Rocks */}
       {oceanRocks.map((props, i) => (
         <mesh key={`ocean-rock-${i}`} position={props.position} scale={props.scale} rotation={props.rotation} castShadow receiveShadow>
           {props.type === 0 && <dodecahedronGeometry args={[1.5]} />}
           {props.type === 1 && <icosahedronGeometry args={[1.5, 0]} />}
           {props.type === 2 && <octahedronGeometry args={[1.5, 0]} />}
-          <meshStandardMaterial color={oceanRockColor} roughness={1.0} />
+          <meshStandardMaterial color={isLight ? "#94a3b8" : "#475569"} roughness={1.0} />
         </mesh>
       ))}
-
-      {/* Beach Kits */}
-      <BeachKit position={[11, 0.18, 44]} isLight={isLight} />
-      <BeachKit position={[-17.6, 0.18, 41.8]} isLight={isLight} rotation={[0, -Math.PI / 6, 0]} />
-      <BeachKit position={[26.4, 0.18, 35.2]} isLight={isLight} rotation={[0, Math.PI / 4, 0]} />
 
       {/* West Cliff Rocks - Tall gray rock pillars hugging the steep west cliffside */}
       <group position={[-55, -2, 0]}>
@@ -164,7 +153,7 @@ export default function Props({ isLight = false }: PropsProps) {
       <group>
         <Instances limit={20} castShadow receiveShadow>
           <cylinderGeometry args={[0.1, 1.8, 8, 5]} />
-          <meshStandardMaterial color={rockColor} roughness={0.95} />
+          <meshStandardMaterial color={isLight ? "#94a3b8" : "#475569"} roughness={0.95} />
           {/* Lighthouse area: ~[-50, -4, -50] */}
           {Array.from({ length: 3 }).map((_, i) => (
             <Instance key={`sea-rock-nw-${i}`} position={[-48 - Math.random() * 8, -2, -50 - Math.random() * 8]} rotation={[(Math.random() - 0.5) * 0.4, Math.random() * Math.PI, (Math.random() - 0.5) * 0.4]} scale={0.8 + Math.random() * 0.5} />
@@ -180,42 +169,6 @@ export default function Props({ isLight = false }: PropsProps) {
       <Whale position={[-66, -3.6, 66]} isLight={isLight} />
       <WoodenDock position={[70.4, -3.6, 0]} isLight={isLight} />
       <PirateShip position={[70.4, -4.5, 8.8]} isLight={isLight} />
-
-      {/* Boats */}
-      <BobbingBoat position={[55, -4.5, 26.4]} />
-      <BobbingBoat position={[-61.6, -4.5, -11]} scale={0.8} />
-    </group>
-  );
-}
-function PalmTree({ position, scale = 1, leafColor }: { position: [number, number, number]; scale: number; leafColor: string }) {
-  return (
-    <group position={position} scale={scale}>
-      {/* Curved Trunk */}
-      <mesh position={[0, 1.5, 0]} rotation={[0, 0, 0.2]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.15, 0.25, 3, 8]} />
-        <meshStandardMaterial color="#78350f" roughness={0.9} />
-      </mesh>
-      {/* Fronds */}
-      <group position={[0.3, 3, 0]}>
-        {[0, 1, 2, 3, 4].map((i) => (
-          <group key={i} rotation={[0, (Math.PI * 2 / 5) * i, -0.4]} position={[0, 0, 0]}>
-            <mesh rotation={[0, 0, -Math.PI / 2]} castShadow>
-              <coneGeometry args={[0.5, 2.5, 3]} />
-              <meshStandardMaterial color={leafColor} roughness={0.7} />
-            </mesh>
-          </group>
->>>>>>> e44fe917a82361e8c23dd776bf57783df098e3ff
-        ))}
-      </group>
-
-      {/* Wooden Docks */}
-      <WoodenDock position={[40, 4.1, 15]} isLight={isLight} />
-      
-      {/* Whale */}
-      <Whale position={[-35, 4, 30]} isLight={isLight} />
-      
-      {/* Pirate Ship */}
-      <PirateShip position={[48, 4, 15]} isLight={isLight} />
 
       {/* Central Village / Town Square */}
       <group position={[0, 10.85, 0]}>
@@ -243,8 +196,15 @@ function PalmTree({ position, scale = 1, leafColor }: { position: [number, numbe
       <Airship position={[20, 35, -20]} isLight={isLight} />
       <FantasyStable position={[-5, 10.85, 8]} isLight={isLight} />
       <OldBridge position={[10, 4, 20]} isLight={isLight} />
-      <BeachUmbrella position={[35, 4, 25]} isLight={isLight} />
-      <BeachUmbrella position={[32, 4, 22]} isLight={isLight} />
+      
+      {/* Beach Umbrellas */}
+      <BeachUmbrella position={[11, 0.18, 44]} isLight={isLight} />
+      <BeachUmbrella position={[-17.6, 0.18, 41.8]} isLight={isLight} />
+      <BeachUmbrella position={[26.4, 0.18, 35.2]} isLight={isLight} />
+
+      {/* Boats */}
+      <GLBModel path="/models/ship.glb" position={[55, -4.5, 26.4]} scale={0.2} />
+      <GLBModel path="/models/ship.glb" position={[-61.6, -4.5, -11]} scale={0.16} />
 
     </group>
   );

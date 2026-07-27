@@ -94,13 +94,6 @@ export function StoneArena({ position, isLight = false }: LandmarkProps) {
   );
 }
 
-export function StrawHut({ position, isLight = false }: LandmarkProps) {
-  return (
-    <group position={position}>
-      <GLBModel path="/models/House by Quaternius - vZ1CLbWmSx.glb" scale={0.5} />
-    </group>
-  );
-}
 
 export function StrawHut({ position, isLight = false }: LandmarkProps) {
   return (
@@ -124,18 +117,11 @@ export function StrawHut({ position, isLight = false }: LandmarkProps) {
 export function HouseCluster({ position, isLight = false }: LandmarkProps) {
   return (
     <group position={position}>
-<<<<<<< HEAD
-      <DetailedHouse position={[-3, 0, 1]} isLight={isLight} />
-      <DetailedHouse position={[3, 0, 0]} isLight={isLight} />
-      <StrawHut position={[-3, 0, -3]} isLight={isLight} />
-      <StrawHut position={[3, 0, 3]} isLight={isLight} />
-=======
       <DetailedHouse position={[-2, 0, 1]} isLight={isLight} color="#f472b6" />
       <DetailedHouse position={[3, 0, 0]} isLight={isLight} color="#38bdf8" />
       <DetailedHouse position={[0, 0, -3]} isLight={isLight} color="#facc15" />
       <StrawHut position={[-3, 0, -2]} isLight={isLight} />
       <StrawHut position={[2, 0, 2]} isLight={isLight} />
->>>>>>> e44fe917a82361e8c23dd776bf57783df098e3ff
     </group>
   );
 }
@@ -161,11 +147,6 @@ export function Volcano({ position, isLight = false }: LandmarkProps) {
   });
 
   return (
-<<<<<<< HEAD
-    <group position={position}>
-      <GLBModel path="/models/Mountain by Quaternius - XY4ej3Zg3I.glb" position={[0, -8, 0]} scale={2.5} />
-      
-=======
     <group position={position} scale={[1.8, 1.8, 1.8]}>
       {/* Volcano Cone */}
       <mesh position={[0, 4, 0]} castShadow receiveShadow>
@@ -176,7 +157,6 @@ export function Volcano({ position, isLight = false }: LandmarkProps) {
         <circleGeometry args={[1.9, 16]} />
         <meshStandardMaterial color="#ff3d00" emissive="#ff3d00" emissiveIntensity={2} toneMapped={false} />
       </mesh>
->>>>>>> e44fe917a82361e8c23dd776bf57783df098e3ff
       {/* Smoke */}
       <group ref={smokeRef} position={[0, 8, 0]}>
         {particles.map((_, i) => (
