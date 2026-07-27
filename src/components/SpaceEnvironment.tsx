@@ -528,100 +528,90 @@ export function SupermassiveBlackHole({
   const diskGroupRef  = useRef<THREE.Group>(null!);
   const perpGroupRef  = useRef<THREE.Group>(null!);
 
-  // ── Layer 1: Dense inner glow zone — 1500 tiny bright white-yellow particles
+  // ── Layer 1: Dense inner glow zone — 1500 bright yellow particles
   const innerCount = 1500;
   const innerData = useMemo(() => {
     const dummy = new THREE.Object3D();
     const matrices: THREE.Matrix4[] = [];
     const colors: THREE.Color[] = [];
-    const white  = new THREE.Color("#ffffff");
-    const yellow = new THREE.Color("#ffe566");
+    const yellow = new THREE.Color("#ffff00");
     for (let i = 0; i < innerCount; i++) {
-      const r = 38 + Math.pow(Math.random(), 0.6) * 40;  // radius 38–78
+      const r = 38 + Math.pow(Math.random(), 0.6) * 17;
       const angle = Math.random() * Math.PI * 2;
-      const h = (Math.random() - 0.5) * 1.5;
+      const h = (Math.random() - 0.5) * 1.0;
       dummy.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
       dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-      const s = 0.3 + Math.random() * 0.6;
+      const s = 0.3 + Math.random() * 0.5;
       dummy.scale.set(s, s, s);
       dummy.updateMatrix();
       matrices.push(dummy.matrix.clone());
-      const t = (r - 38) / 40;
-      colors.push(white.clone().lerp(yellow, t));
+      colors.push(yellow.clone());
     }
     return { matrices, colors };
   }, [innerCount]);
 
-  // ── Layer 2: Mid accretion disk — 2500 yellow-orange particles
+  // ── Layer 2: Mid accretion disk — 2500 pure yellow particles
   const midCount = 2500;
   const midData = useMemo(() => {
     const dummy = new THREE.Object3D();
     const matrices: THREE.Matrix4[] = [];
     const colors: THREE.Color[] = [];
-    const yellow = new THREE.Color("#ffcc00");
-    const orange = new THREE.Color("#ff7700");
+    const yellow = new THREE.Color("#ffff00");
     for (let i = 0; i < midCount; i++) {
-      const r = 75 + Math.pow(Math.random(), 0.75) * 100;  // radius 75–175
+      const r = 56 + Math.pow(Math.random(), 0.75) * 54;
       const angle = Math.random() * Math.PI * 2;
-      const h = (Math.random() - 0.5) * 2.5;
+      const h = (Math.random() - 0.5) * 1.8;
+      dummy.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
+      dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+      const s = 0.4 + Math.random() * 0.8;
+      dummy.scale.set(s, s, s);
+      dummy.updateMatrix();
+      matrices.push(dummy.matrix.clone());
+      colors.push(yellow.clone());
+    }
+    return { matrices, colors };
+  }, [midCount]);
+
+  // ── Layer 3: Outer ring — 2000 pure yellow particles (tighter radius)
+  const outerCount = 2000;
+  const outerData = useMemo(() => {
+    const dummy = new THREE.Object3D();
+    const matrices: THREE.Matrix4[] = [];
+    const colors: THREE.Color[] = [];
+    const yellow = new THREE.Color("#ffff00");
+    for (let i = 0; i < outerCount; i++) {
+      const r = 110 + Math.pow(Math.random(), 1.0) * 60;
+      const angle = Math.random() * Math.PI * 2;
+      const h = (Math.random() - 0.5) * (2.5 + (r - 110) / 25);
       dummy.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
       dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
       const s = 0.5 + Math.random() * 1.0;
       dummy.scale.set(s, s, s);
       dummy.updateMatrix();
       matrices.push(dummy.matrix.clone());
-      const t = (r - 75) / 100;
-      colors.push(yellow.clone().lerp(orange, t));
-    }
-    return { matrices, colors };
-  }, [midCount]);
-
-  // ── Layer 3: Outer sparse cloud — 2000 orange-red particles spreading far
-  const outerCount = 2000;
-  const outerData = useMemo(() => {
-    const dummy = new THREE.Object3D();
-    const matrices: THREE.Matrix4[] = [];
-    const colors: THREE.Color[] = [];
-    const orange  = new THREE.Color("#ff5500");
-    const darkRed = new THREE.Color("#aa1100");
-    for (let i = 0; i < outerCount; i++) {
-      const r = 170 + Math.pow(Math.random(), 1.1) * 130;  // radius 170–300
-      const angle = Math.random() * Math.PI * 2;
-      // Outer particles get more vertical scatter giving the cloud look
-      const h = (Math.random() - 0.5) * (4 + (r - 170) / 20);
-      dummy.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
-      dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-      const s = 0.7 + Math.random() * 1.4;
-      dummy.scale.set(s, s, s);
-      dummy.updateMatrix();
-      matrices.push(dummy.matrix.clone());
-      const t = (r - 170) / 130;
-      colors.push(orange.clone().lerp(darkRed, t));
+      colors.push(yellow.clone());
     }
     return { matrices, colors };
   }, [outerCount]);
 
-  // ── Small perpendicular ring — 900 yellow-orange rocks standing vertical
+  // ── Small perpendicular ring — 900 pure yellow rocks standing vertical
   const perpCount = 900;
   const perpData = useMemo(() => {
     const dummy = new THREE.Object3D();
     const matrices: THREE.Matrix4[] = [];
     const colors: THREE.Color[] = [];
-    const yellow = new THREE.Color("#ffe566");
-    const orange = new THREE.Color("#ff9900");
+    const yellow = new THREE.Color("#ffff00");
     for (let i = 0; i < perpCount; i++) {
-      const r = 40 + Math.pow(Math.random(), 0.8) * 45; // radius 40–85
+      const r = 38 + Math.pow(Math.random(), 0.8) * 27;
       const angle = Math.random() * Math.PI * 2;
-      const h = (Math.random() - 0.5) * 3;
-      // In XY plane — parent group will rotate it 90° to be perpendicular
+      const h = (Math.random() - 0.5) * 2.5;
       dummy.position.set(Math.cos(angle) * r, Math.sin(angle) * r, h);
       dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
-      const s = 0.35 + Math.random() * 0.65;
+      const s = 0.3 + Math.random() * 0.6;
       dummy.scale.set(s, s, s);
       dummy.updateMatrix();
       matrices.push(dummy.matrix.clone());
-      const t = (r - 40) / 45;
-      colors.push(yellow.clone().lerp(orange, t));
+      colors.push(yellow.clone());
     }
     return { matrices, colors };
   }, [perpCount]);
