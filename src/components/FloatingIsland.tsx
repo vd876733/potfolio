@@ -25,7 +25,7 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
     <group ref={group}>
       {/* Organic Terrain Base & Elevation Geometry */}
       <group position={[0, 0, 0]}>
-        
+
         {/* 1. LEVEL 0: Deep Rock Underside & Organic Golden Beaches */}
         {/* Deep Rock Underside Skirt */}
         <mesh position={[0, -2.5, 0]} receiveShadow castShadow>
@@ -48,7 +48,7 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
           <cylinderGeometry args={[16, 18, 0.5, 32]} />
           <meshStandardMaterial color="#fef08a" roughness={0.9} />
         </mesh>
-        
+
         {/* 2. LEVEL 1: Cliff Faces & Main Village Green Ground */}
         {/* Perimeter Rocky Cliff Skirt (Light Tan/Gray Cliff Wall) */}
         <mesh position={[0, 1.0, 2]} receiveShadow castShadow>
@@ -164,7 +164,7 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
         </group>
 
       </group>
-      
+
       {/* Elements & Props on the Island */}
       <group position={[0, 0, 0]}>
         {children}

@@ -43,9 +43,9 @@ export default function TopNav({ onNavClick, viewMode, toggleViewMode }: TopNavP
               {link.label}
             </button>
           ))}
-          
+
           <div className="h-6 w-px bg-slate-200 dark:bg-white/10 hidden sm:block mx-2" />
-          
+
           <button
             onClick={toggleViewMode}
             className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-300 dark:border-white/10 rounded-lg transition-colors text-slate-900 dark:text-white text-xs sm:text-sm font-inter font-medium"
@@ -53,7 +53,7 @@ export default function TopNav({ onNavClick, viewMode, toggleViewMode }: TopNavP
             <Monitor className="w-4 h-4 text-neon-accent" />
             {viewMode === "3D" ? "2D Mode" : "3D Map"}
           </button>
-          
+
           <ThemeToggle />
         </div>
       </nav>

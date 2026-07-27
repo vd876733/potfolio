@@ -22,7 +22,7 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
   const controlsRef = useRef<any>(null);
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [target, setTarget] = useState<[number, number, number]>([0, 0, 0]);
-  
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -53,10 +53,10 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
         <fog attach="fog" args={[isLight ? "#1a82b8" : "#002255", 50, 300]} />
         {!isLight && (
           <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-        )}        
+        )}
         <ambientLight intensity={1.2} color="#e0f7fa" />
         <hemisphereLight intensity={0.6} color="#ffffff" groundColor="#00a8ff" />
-        
+
         <directionalLight
           position={[15, 25, 10]}
           intensity={isLight ? 2.2 : 0.5}

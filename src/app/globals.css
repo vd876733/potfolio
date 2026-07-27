@@ -12,14 +12,16 @@
 }
 
 @layer base {
-  html, body {
+
+  html,
+  body {
     margin: 0;
     padding: 0;
     width: 100vw;
     height: 100vh;
     overflow: hidden;
   }
-  
+
   .dark {
     /* Optional: override colors here for dark mode if needed, though default is dark */
   }

@@ -15,7 +15,7 @@ export default function WorkshopModal() {
         {projects.map((project) => (
           <div key={project.id} className="p-6 bg-slate-50 dark:bg-black/20 rounded-xl border border-slate-200 dark:border-white/5 flex flex-col gap-4">
             <h3 className="text-xl font-space-grotesk font-bold text-slate-900 dark:text-white">{project.title}</h3>
-            
+
             <div className="flex flex-wrap gap-2">
               {project.stack.map((tech) => (
                 <span key={tech} className="px-3 py-1 bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white/80 text-xs font-inter rounded-full">

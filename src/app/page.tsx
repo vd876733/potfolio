@@ -35,7 +35,7 @@ export default function Home() {
     // Determine the initial layout depending on the screen size
     if (!isInitialized) {
       if (window.innerWidth < 768) {
-         setViewMode("2D");
+        setViewMode("2D");
       }
       setIsInitialized(true);
     }
@@ -70,13 +70,13 @@ export default function Home() {
 
   return (
     <main className="relative w-full h-screen overflow-hidden bg-slate-50 dark:bg-obsidian transition-colors duration-300">
-      <TopNav 
-        onNavClick={handleNavClick} 
-        viewMode={viewMode} 
+      <TopNav
+        onNavClick={handleNavClick}
+        viewMode={viewMode}
         toggleViewMode={() => {
           setViewMode(prev => prev === "3D" ? "2D" : "3D");
           setActiveSection(null); // Clear active modal if switching modes
-        }} 
+        }}
       />
 
       {viewMode === "3D" ? (
