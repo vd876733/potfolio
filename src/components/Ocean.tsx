@@ -10,6 +10,7 @@ interface OceanProps {
 
 export default function Ocean({ isLight = false }: OceanProps) {
   const materialRef = useRef<THREE.MeshStandardMaterial>(null);
+<<<<<<< HEAD
 
   const uniforms = useMemo(
     () => ({
@@ -97,6 +98,17 @@ export default function Ocean({ isLight = false }: OceanProps) {
         roughness={0.1}
         metalness={0.1}
         onBeforeCompile={onBeforeCompile}
+=======
+
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]} receiveShadow>
+      <planeGeometry args={[4000, 4000, 1, 1]} />
+      <meshStandardMaterial
+        color={isLight ? "#00a8ff" : "#0088cc"}
+        transparent={false}
+        roughness={0.1}
+        metalness={0.1}
+>>>>>>> e44fe917a82361e8c23dd776bf57783df098e3ff
       />
     </mesh>
   );

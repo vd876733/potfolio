@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -11,11 +11,14 @@ interface FloatingIslandProps {
 
 export default function FloatingIsland({ isLight = false, children }: FloatingIslandProps) {
   const group = useRef<THREE.Group>(null);
+<<<<<<< HEAD
   
   const grassColor = isLight ? "#4ade80" : "#22c55e";
   const darkGrassColor = isLight ? "#22c55e" : "#16a34a";
   const sandColor = isLight ? "#fef08a" : "#eedc9a";
   const rockColor = isLight ? "#94a3b8" : "#64748b";
+=======
+>>>>>>> e44fe917a82361e8c23dd776bf57783df098e3ff
 
   useFrame(({ clock }) => {
     if (group.current) {
@@ -28,6 +31,7 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
 
   return (
     <group ref={group}>
+<<<<<<< HEAD
       {/* 1. Sandy Shore Base (South & Perimeter) */}
       <mesh position={[0, -0.5, 5]} castShadow receiveShadow>
         <cylinderGeometry args={[65, 50, 2, 64]} />
@@ -98,6 +102,56 @@ export default function FloatingIsland({ isLight = false, children }: FloatingIs
       <group position={[0, 0, 0]}>
         {children}
       </group>
+=======
+      {/* Scaled Terrain */}
+      <group scale={[2.2, 1.8, 2.2]}>
+        
+        {/* Base Landmass - Main South Body */}
+        <mesh position={[0, 0.5, 2]} receiveShadow castShadow>
+          <cylinderGeometry args={[12, 11, 1.5, 64]} />
+          <meshStandardMaterial color="#6d4c41" roughness={0.9} />
+        </mesh>
+        {/* Beach for South Body */}
+        <mesh position={[0, -0.27, 2]} receiveShadow castShadow>
+          <cylinderGeometry args={[12.5, 12.5, 0.4, 64]} />
+          <meshStandardMaterial color="#eedc9a" roughness={0.9} />
+        </mesh>
+        
+        {/* Base Landmass - North Extension */}
+        <mesh position={[2, 0.5, -6]} receiveShadow castShadow>
+          <cylinderGeometry args={[8, 7, 1.5, 64]} />
+          <meshStandardMaterial color="#6d4c41" roughness={0.9} />
+        </mesh>
+        {/* Beach for North Extension */}
+        <mesh position={[2, -0.27, -6]} receiveShadow castShadow>
+          <cylinderGeometry args={[8.5, 8.5, 0.4, 64]} />
+          <meshStandardMaterial color="#eedc9a" roughness={0.9} />
+        </mesh>
+        
+        {/* Central Plateau (Town Square Roundabout) */}
+        <mesh position={[-2, 1.75, -2]} receiveShadow castShadow>
+          <cylinderGeometry args={[6, 7, 1.5, 32]} />
+          <meshStandardMaterial color="#6d4c41" roughness={0.9} />
+        </mesh>
+        
+        {/* Volcano Peak (Top North) */}
+        <mesh position={[0, 4.0, -8]} receiveShadow castShadow>
+          {/* Tapered cylinder: top radius, bottom radius, height, radial segments */}
+          <cylinderGeometry args={[1.5, 5, 6, 32]} />
+          <meshStandardMaterial color="#6d4c41" roughness={0.9} />
+        </mesh>
+        
+        {/* Hollow Crater circle (dark inside) */}
+        <mesh position={[0, 7.01, -8]} rotation={[-Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[1.2, 32]} />
+          <meshBasicMaterial color="#3e2723" />
+        </mesh>
+        
+      </group>
+      
+      {/* Elements on the Island (Hidden for now to focus on silhouette) */}
+      {/* {children} */}
+>>>>>>> e44fe917a82361e8c23dd776bf57783df098e3ff
     </group>
   );
 }

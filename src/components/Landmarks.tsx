@@ -102,13 +102,40 @@ export function StrawHut({ position, isLight = false }: LandmarkProps) {
   );
 }
 
+export function StrawHut({ position, isLight = false }: LandmarkProps) {
+  return (
+    <group position={position}>
+      <mesh position={[0, 1, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[1.5, 1.5, 2, 8]} />
+        <meshStandardMaterial color="#d4d4d8" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, 2.5, 0]} castShadow receiveShadow>
+        <coneGeometry args={[1.8, 1.5, 8]} />
+        <meshStandardMaterial color="#fcd34d" roughness={1.0} />
+      </mesh>
+      <mesh position={[0, 0.6, 1.45]}>
+        <boxGeometry args={[0.6, 1.2, 0.1]} />
+        <meshStandardMaterial color="#451a03" />
+      </mesh>
+    </group>
+  );
+}
+
 export function HouseCluster({ position, isLight = false }: LandmarkProps) {
   return (
     <group position={position}>
+<<<<<<< HEAD
       <DetailedHouse position={[-3, 0, 1]} isLight={isLight} />
       <DetailedHouse position={[3, 0, 0]} isLight={isLight} />
       <StrawHut position={[-3, 0, -3]} isLight={isLight} />
       <StrawHut position={[3, 0, 3]} isLight={isLight} />
+=======
+      <DetailedHouse position={[-2, 0, 1]} isLight={isLight} color="#f472b6" />
+      <DetailedHouse position={[3, 0, 0]} isLight={isLight} color="#38bdf8" />
+      <DetailedHouse position={[0, 0, -3]} isLight={isLight} color="#facc15" />
+      <StrawHut position={[-3, 0, -2]} isLight={isLight} />
+      <StrawHut position={[2, 0, 2]} isLight={isLight} />
+>>>>>>> e44fe917a82361e8c23dd776bf57783df098e3ff
     </group>
   );
 }
@@ -134,9 +161,22 @@ export function Volcano({ position, isLight = false }: LandmarkProps) {
   });
 
   return (
+<<<<<<< HEAD
     <group position={position}>
       <GLBModel path="/models/Mountain by Quaternius - XY4ej3Zg3I.glb" position={[0, -8, 0]} scale={2.5} />
       
+=======
+    <group position={position} scale={[1.8, 1.8, 1.8]}>
+      {/* Volcano Cone */}
+      <mesh position={[0, 4, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[2, 8, 8, 32]} />
+        <meshStandardMaterial color="#3f3f46" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, 8.01, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[1.9, 16]} />
+        <meshStandardMaterial color="#ff3d00" emissive="#ff3d00" emissiveIntensity={2} toneMapped={false} />
+      </mesh>
+>>>>>>> e44fe917a82361e8c23dd776bf57783df098e3ff
       {/* Smoke */}
       <group ref={smokeRef} position={[0, 8, 0]}>
         {particles.map((_, i) => (

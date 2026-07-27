@@ -48,8 +48,15 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
         camera={{ position: [30, 35, 45], fov: 45, near: 0.1, far: 1000 }}
         dpr={isMobile ? [1, 1.5] : [1, 2]}
       >
+<<<<<<< HEAD
         <color attach="background" args={["#00b4d8"]} />
         <fog attach="fog" args={["#00b4d8", 50, 300]} />
+=======
+        <color attach="background" args={[isLight ? "#1a82b8" : "#002255"]} />
+        {!isLight && (
+          <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+        )}
+>>>>>>> e44fe917a82361e8c23dd776bf57783df098e3ff
         
         <ambientLight intensity={1.2} color="#e0f7fa" />
         <hemisphereLight intensity={0.6} color="#ffffff" groundColor="#00a8ff" />
@@ -59,7 +66,13 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
           intensity={2.5}
           color="#fff8e1"
           castShadow
+<<<<<<< HEAD
           shadow-mapSize={[2048, 2048]}
+=======
+          intensity={isLight ? 2.2 : 0.5}
+          color={isLight ? "#fff4e0" : "#93c5fd"}
+          shadow-mapSize={isMobile ? [1024, 1024] : [2048, 2048]}
+>>>>>>> e44fe917a82361e8c23dd776bf57783df098e3ff
           shadow-camera-left={-80}
           shadow-camera-right={80}
           shadow-camera-top={80}
@@ -69,11 +82,15 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
           shadow-bias={-0.0001}
         />
 
+<<<<<<< HEAD
         {/* Flat Ocean Plane */}
         <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} receiveShadow>
           <planeGeometry args={[4000, 4000, 1, 1]} />
           <meshStandardMaterial color="#0088cc" roughness={0.2} metalness={0.1} />
         </mesh>
+=======
+        <Ocean isLight={isLight} />
+>>>>>>> e44fe917a82361e8c23dd776bf57783df098e3ff
 
         <FloatingIsland isLight={isLight}>
           <Props isLight={isLight} />
