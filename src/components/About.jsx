@@ -23,7 +23,7 @@ export default function About() {
   }, []);
 
   const isLight = mounted && theme === "light";
-  const pixelColor = isLight ? "#2563eb" : "#a78bfa";
+  const pixelColor = isLight ? "#93c5fd" : "#d8b4fe";
 
   const socialLinks = [
     {
@@ -74,12 +74,12 @@ export default function About() {
             }
             secondContent={
               <img
-                src="/profile_alt.png"
+                src="/profile-photo.png"
                 alt="Alternative profile artwork"
                 className="w-full h-full object-cover object-center"
               />
             }
-            gridSize={12}
+            gridSize={30}
             pixelColor={pixelColor}
             once={false}
             aspectRatio="133.33%"
