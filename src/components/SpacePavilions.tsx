@@ -1,5 +1,6 @@
 "use client";
 
+import { Html } from "@react-three/drei";
 import {
   SunGLTF,
   GLTFPlanet,
@@ -13,6 +14,7 @@ import {
   SupermassiveBlackHole,
   BackgroundGalaxy,
 } from "./SpaceEnvironment";
+import Orb from "./Orb";
 
 interface SpacePavilionsProps {
   onSectionClick: (section: string, position?: [number, number, number]) => void;
@@ -24,6 +26,25 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
       {/* 2x Supermassive Black Hole & Cosmic Spiral Galaxy Deep in Background */}
       <SupermassiveBlackHole position={[650, 110, -550]} scale={2.0} />
       <BackgroundGalaxy position={[-650, 120, -600]} scale={1.5} />
+
+      {/* Cosmic Orb — floating galaxy orb above the solar system */}
+      <Html position={[0, 38, -55]} center transform occlude={false} style={{ pointerEvents: "none" }}>
+        <Orb
+          size={220}
+          archetype="spiral"
+          background="#00000000"
+          palette={{
+            anchor: "#4433ff",
+            colorA: "#22ddff",
+            colorB: "#8833ff",
+            colorC: "#ff44aa",
+          }}
+          speed={45}
+          spin={49}
+          lens
+          lensAmount={100}
+        />
+      </Html>
 
       {/* 1. Sun GLTF (Sun by Jarlan Perez) */}
       <SunGLTF />
