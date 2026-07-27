@@ -1,4 +1,5 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { MapPin, FileDown } from "lucide-react";
 import {
   SiGithub,
@@ -9,10 +10,20 @@ import {
 import { FaLinkedin as SiLinkedin } from "react-icons/fa";
 import portfolioData from "@/data/portfolio.json";
 import VariableProximity from "./VariableProximity";
+import PixelTransition from "./PixelTransition";
 
 export default function About() {
   const { personal, codingStats } = portfolioData;
   const containerRef = useRef(null);
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isLight = mounted && theme === "light";
+  const pixelColor = isLight ? "#93c5fd" : "#d8b4fe";
 
   const socialLinks = [
     {
@@ -52,11 +63,27 @@ export default function About() {
       {/* Profile Avatar & Bio Layout */}
       <div className="flex flex-col sm:flex-row items-center sm:items-stretch gap-6 sm:gap-8">
         {/* Big Vertical Rectangle Image Avatar */}
-        <div className="relative shrink-0 w-full sm:w-48 md:w-56 aspect-[3/4] rounded-2xl overflow-hidden shadow-md border-2 border-sky-100 dark:border-sky-900/50">
-          <img
-            src="/profile-photo.jpg"
-            alt={`${personal.firstName} ${personal.lastName}`}
-            className="w-full h-full object-cover object-center"
+        <div className="relative shrink-0 w-full sm:w-48 md:w-56 aspect-[3/4] rounded-2xl overflow-hidden shadow-md border border-slate-200/60 dark:border-purple-500/5 bg-[#faf6ee] dark:bg-charcoal">
+          <PixelTransition
+            firstContent={
+              <img
+                src="/profile-photo.jpg"
+                alt={`${personal.firstName} ${personal.lastName}`}
+                className="w-full h-full object-cover object-center"
+              />
+            }
+            secondContent={
+              <img
+                src="/profile-photo.png"
+                alt="Alternative profile artwork"
+                className="w-full h-full object-cover object-center"
+              />
+            }
+            gridSize={30}
+            pixelColor={pixelColor}
+            once={false}
+            aspectRatio="133.33%"
+            className="w-full h-full"
           />
         </div>
 
