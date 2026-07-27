@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { MapPin, FileDown } from "lucide-react";
 import {
   SiGithub,
@@ -8,9 +8,11 @@ import {
 } from "react-icons/si";
 import { FaLinkedin as SiLinkedin } from "react-icons/fa";
 import portfolioData from "@/data/portfolio.json";
+import VariableProximity from "./VariableProximity";
 
 export default function About() {
   const { personal, codingStats } = portfolioData;
+  const containerRef = useRef(null);
 
   const socialLinks = [
     {
@@ -75,10 +77,21 @@ export default function About() {
             </div>
           </div>
 
-          {/* Bio Text */}
-          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mt-2 sm:mt-0">
-            {personal.bio}
-          </p>
+          {/* Interactive Variable Proximity Bio */}
+          <div ref={containerRef} className="w-full text-center sm:text-left mt-2 sm:mt-0 select-none overflow-hidden">
+            <VariableProximity
+              label={personal.bio}
+              fromFontVariationSettings="'wght' 300, 'opsz' 12"
+              toFontVariationSettings="'wght' 900, 'opsz' 40"
+              containerRef={containerRef}
+              radius={120}
+              falloff="linear"
+              className="text-slate-700 dark:text-slate-200 leading-relaxed text-center sm:text-left block font-inter"
+              style={{
+                fontSize: "clamp(0.875rem, 1.25vw, 1.1rem)",
+              }}
+            />
+          </div>
         </div>
       </div>
 

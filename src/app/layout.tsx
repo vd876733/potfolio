@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk, Roboto_Flex } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
@@ -10,6 +10,11 @@ const inter = Inter({
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
+  subsets: ["latin"],
+});
+
+const robotoFlex = Roboto_Flex({
+  variable: "--font-roboto-flex",
   subsets: ["latin"],
 });
 
@@ -26,7 +31,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${robotoFlex.variable} antialiased`}
       suppressHydrationWarning
     >
       <body className="bg-slate-50 text-slate-900 dark:bg-obsidian dark:text-slate-100 transition-colors duration-300">
