@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useLayoutEffect } from "react";
+import { useMemo, useRef, useLayoutEffect, MutableRefObject } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, Float, Html } from "@react-three/drei";
 import * as THREE from "three";
@@ -513,7 +513,7 @@ export function SpaceWaypoint({
   );
 }
 
-// 11. Supermassive Black Hole (Custom Styled Gargantua - Matching Reference Image)
+// 11. Supermassive Black Hole — Gargantua style matching reference image
 export function SupermassiveBlackHole({
   position = [650, 110, -550],
   scale = 2.0,
@@ -521,142 +521,185 @@ export function SupermassiveBlackHole({
   position?: [number, number, number];
   scale?: number;
 }) {
-  const mainGroupRef = useRef<THREE.Group>(null!);
-  const accretionDiskRef = useRef<THREE.Group>(null!);
-  const rocksRef = useRef<THREE.InstancedMesh>(null!);
+  const innerDiskRef  = useRef<THREE.InstancedMesh>(null!);
+  const midDiskRef    = useRef<THREE.InstancedMesh>(null!);
+  const outerDiskRef  = useRef<THREE.InstancedMesh>(null!);
+  const perpRingRef   = useRef<THREE.InstancedMesh>(null!);
+  const diskGroupRef  = useRef<THREE.Group>(null!);
+  const perpGroupRef  = useRef<THREE.Group>(null!);
 
-  // Outer Red-Orange Square/Rock Particles (2,000 instanced rocks around outer rim)
-  const rockCount = 2000;
-  const rockData = useMemo(() => {
+  // ── Layer 1: Dense inner glow zone — 1500 tiny bright white-yellow particles
+  const innerCount = 1500;
+  const innerData = useMemo(() => {
     const dummy = new THREE.Object3D();
     const matrices: THREE.Matrix4[] = [];
     const colors: THREE.Color[] = [];
-
-    const colorOrange = new THREE.Color("#ff6600");
-    const colorRed = new THREE.Color("#ff2200");
-    const colorDarkRed = new THREE.Color("#cc0000");
-
-    for (let i = 0; i < rockCount; i++) {
-      // Outer rim radius from 135 to 220
-      const r = 135 + Math.pow(Math.random(), 1.2) * 85;
+    const white  = new THREE.Color("#ffffff");
+    const yellow = new THREE.Color("#ffe566");
+    for (let i = 0; i < innerCount; i++) {
+      const r = 38 + Math.pow(Math.random(), 0.6) * 40;  // radius 38–78
       const angle = Math.random() * Math.PI * 2;
-      const height = (Math.random() - 0.5) * (1.5 + (r / 220) * 4);
-
-      const x = Math.cos(angle) * r;
-      const z = Math.sin(angle) * r;
-
-      const rockScale = 0.8 + Math.random() * 1.8;
-
-      dummy.position.set(x, height, z);
-      dummy.rotation.set(
-        Math.random() * Math.PI,
-        Math.random() * Math.PI,
-        Math.random() * Math.PI
-      );
-      dummy.scale.set(rockScale, rockScale, rockScale);
+      const h = (Math.random() - 0.5) * 1.5;
+      dummy.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
+      dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+      const s = 0.3 + Math.random() * 0.6;
+      dummy.scale.set(s, s, s);
       dummy.updateMatrix();
-
-      const normR = (r - 135) / 85;
-      const c = colorOrange.clone().lerp(normR > 0.5 ? colorDarkRed : colorRed, normR);
-
       matrices.push(dummy.matrix.clone());
-      colors.push(c);
+      const t = (r - 38) / 40;
+      colors.push(white.clone().lerp(yellow, t));
     }
     return { matrices, colors };
-  }, [rockCount]);
+  }, [innerCount]);
 
-  useLayoutEffect(() => {
-    if (!rocksRef.current) return;
-    rockData.matrices.forEach((mat, i) => {
-      rocksRef.current.setMatrixAt(i, mat);
-      rocksRef.current.setColorAt(i, rockData.colors[i]);
+  // ── Layer 2: Mid accretion disk — 2500 yellow-orange particles
+  const midCount = 2500;
+  const midData = useMemo(() => {
+    const dummy = new THREE.Object3D();
+    const matrices: THREE.Matrix4[] = [];
+    const colors: THREE.Color[] = [];
+    const yellow = new THREE.Color("#ffcc00");
+    const orange = new THREE.Color("#ff7700");
+    for (let i = 0; i < midCount; i++) {
+      const r = 75 + Math.pow(Math.random(), 0.75) * 100;  // radius 75–175
+      const angle = Math.random() * Math.PI * 2;
+      const h = (Math.random() - 0.5) * 2.5;
+      dummy.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
+      dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+      const s = 0.5 + Math.random() * 1.0;
+      dummy.scale.set(s, s, s);
+      dummy.updateMatrix();
+      matrices.push(dummy.matrix.clone());
+      const t = (r - 75) / 100;
+      colors.push(yellow.clone().lerp(orange, t));
+    }
+    return { matrices, colors };
+  }, [midCount]);
+
+  // ── Layer 3: Outer sparse cloud — 2000 orange-red particles spreading far
+  const outerCount = 2000;
+  const outerData = useMemo(() => {
+    const dummy = new THREE.Object3D();
+    const matrices: THREE.Matrix4[] = [];
+    const colors: THREE.Color[] = [];
+    const orange  = new THREE.Color("#ff5500");
+    const darkRed = new THREE.Color("#aa1100");
+    for (let i = 0; i < outerCount; i++) {
+      const r = 170 + Math.pow(Math.random(), 1.1) * 130;  // radius 170–300
+      const angle = Math.random() * Math.PI * 2;
+      // Outer particles get more vertical scatter giving the cloud look
+      const h = (Math.random() - 0.5) * (4 + (r - 170) / 20);
+      dummy.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
+      dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+      const s = 0.7 + Math.random() * 1.4;
+      dummy.scale.set(s, s, s);
+      dummy.updateMatrix();
+      matrices.push(dummy.matrix.clone());
+      const t = (r - 170) / 130;
+      colors.push(orange.clone().lerp(darkRed, t));
+    }
+    return { matrices, colors };
+  }, [outerCount]);
+
+  // ── Small perpendicular ring — 900 yellow-orange rocks standing vertical
+  const perpCount = 900;
+  const perpData = useMemo(() => {
+    const dummy = new THREE.Object3D();
+    const matrices: THREE.Matrix4[] = [];
+    const colors: THREE.Color[] = [];
+    const yellow = new THREE.Color("#ffe566");
+    const orange = new THREE.Color("#ff9900");
+    for (let i = 0; i < perpCount; i++) {
+      const r = 40 + Math.pow(Math.random(), 0.8) * 45; // radius 40–85
+      const angle = Math.random() * Math.PI * 2;
+      const h = (Math.random() - 0.5) * 3;
+      // In XY plane — parent group will rotate it 90° to be perpendicular
+      dummy.position.set(Math.cos(angle) * r, Math.sin(angle) * r, h);
+      dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+      const s = 0.35 + Math.random() * 0.65;
+      dummy.scale.set(s, s, s);
+      dummy.updateMatrix();
+      matrices.push(dummy.matrix.clone());
+      const t = (r - 40) / 45;
+      colors.push(yellow.clone().lerp(orange, t));
+    }
+    return { matrices, colors };
+  }, [perpCount]);
+
+  // Upload all instance data to GPU
+  const uploadToMesh = (
+    meshRef: MutableRefObject<THREE.InstancedMesh>,
+    data: { matrices: THREE.Matrix4[]; colors: THREE.Color[] }
+  ) => {
+    if (!meshRef.current) return;
+    data.matrices.forEach((mat, i) => {
+      meshRef.current.setMatrixAt(i, mat);
+      meshRef.current.setColorAt(i, data.colors[i]);
     });
-    rocksRef.current.instanceMatrix.needsUpdate = true;
-    if (rocksRef.current.instanceColor) {
-      rocksRef.current.instanceColor.needsUpdate = true;
-    }
-  }, [rockData]);
+    meshRef.current.instanceMatrix.needsUpdate = true;
+    if (meshRef.current.instanceColor) meshRef.current.instanceColor.needsUpdate = true;
+  };
 
+  useLayoutEffect(() => uploadToMesh(innerDiskRef,  innerData),  [innerData]);
+  useLayoutEffect(() => uploadToMesh(midDiskRef,    midData),    [midData]);
+  useLayoutEffect(() => uploadToMesh(outerDiskRef,  outerData),  [outerData]);
+  useLayoutEffect(() => uploadToMesh(perpRingRef,   perpData),   [perpData]);
+
+  // Slow orbital rotation
   useFrame((_, delta) => {
-    if (accretionDiskRef.current) {
-      accretionDiskRef.current.rotation.z += delta * 0.04;
-    }
-    if (rocksRef.current) {
-      rocksRef.current.rotation.y += delta * 0.05;
-    }
+    if (diskGroupRef.current) diskGroupRef.current.rotation.y += delta * 0.04;
+    if (perpGroupRef.current) perpGroupRef.current.rotation.z -= delta * 0.06;
   });
 
   return (
-    <group position={position} scale={scale} rotation={[Math.PI / 2.7, 0, -0.25]}>
-      <group ref={mainGroupRef}>
-        {/* 1. Pitch Black Central Event Horizon Sphere */}
-        <mesh renderOrder={1}>
-          <sphereGeometry args={[35, 64, 64]} />
-          <meshBasicMaterial color="#000000" />
-        </mesh>
+    <group position={position} scale={scale}>
+      {/* Pitch-black event horizon sphere */}
+      <mesh renderOrder={2}>
+        <sphereGeometry args={[35, 64, 64]} />
+        <meshBasicMaterial color="#000000" depthWrite />
+      </mesh>
 
-        {/* 2. Horizontal Light Band Crossing Front of Sphere */}
-        <mesh position={[0, 0, 0]} rotation={[0, 0, 0.05]} renderOrder={3}>
-          <torusGeometry args={[36.5, 2.2, 16, 100]} />
-          <meshBasicMaterial color="#ffea78" transparent opacity={0.6} />
-        </mesh>
-        <mesh position={[0, 0, 0]} rotation={[0, 0, 0.05]} renderOrder={3}>
-          <torusGeometry args={[37, 4.5, 16, 100]} />
-          <meshBasicMaterial color="#ffaa00" transparent opacity={0.35} blending={THREE.AdditiveBlending} />
-        </mesh>
+      {/* Horizontal crossing light band — Saturn-like torus over the equator */}
+      <mesh rotation={[0, 0, 0.05]} renderOrder={3}>
+        <torusGeometry args={[37, 2.5, 16, 120]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.7} />
+      </mesh>
+      <mesh rotation={[0, 0, 0.05]} renderOrder={3}>
+        <torusGeometry args={[37.5, 5, 16, 120]} />
+        <meshBasicMaterial color="#ffe566" transparent opacity={0.4} blending={THREE.AdditiveBlending} />
+      </mesh>
 
-        {/* 3. Main Accretion Disk */}
-        <group ref={accretionDiskRef} rotation={[Math.PI / 2.15, 0, 0]}>
-          {/* Softened Inner Ring */}
-          <mesh position={[0, 0, 0]}>
-            <ringGeometry args={[35.5, 62, 128]} />
-            <meshBasicMaterial
-              color="#fff9d6"
-              transparent
-              opacity={0.65}
-              side={THREE.DoubleSide}
-              blending={THREE.AdditiveBlending}
-            />
-          </mesh>
-
-          {/* Softened Main Yellow Disk */}
-          <mesh position={[0, 0, 0.02]}>
-            <ringGeometry args={[58, 165, 128]} />
-            <meshBasicMaterial
-              color="#ffd700"
-              transparent
-              opacity={0.55}
-              side={THREE.DoubleSide}
-              blending={THREE.AdditiveBlending}
-            />
-          </mesh>
-
-          {/* Outer Soft Yellow-Orange Transition Ring */}
-          <mesh position={[0, 0, 0.05]}>
-            <ringGeometry args={[145, 205, 128]} />
-            <meshBasicMaterial
-              color="#ff8c00"
-              transparent
-              opacity={0.3}
-              side={THREE.DoubleSide}
-              blending={THREE.AdditiveBlending}
-            />
-          </mesh>
-        </group>
-
-        {/* 4. Outer Red/Orange Square/Rock Particles Belt */}
-        <instancedMesh
-          ref={rocksRef}
-          args={[undefined, undefined, rockCount]}
-          rotation={[Math.PI / 2.15, 0, 0]}
-        >
-          <boxGeometry args={[1.4, 1.4, 1.4]} />
-          <meshBasicMaterial transparent opacity={0.55} blending={THREE.AdditiveBlending} />
+      {/* All 3 disk layers rotate together */}
+      <group ref={diskGroupRef}>
+        {/* Inner bright glow zone */}
+        <instancedMesh ref={innerDiskRef} args={[undefined, undefined, innerCount]}>
+          <boxGeometry args={[0.7, 0.7, 0.7]} />
+          <meshBasicMaterial vertexColors transparent opacity={1.0} blending={THREE.AdditiveBlending} />
         </instancedMesh>
 
-        {/* Deep Space Soft Ambient Point Light */}
-        <pointLight color="#ffcc00" intensity={6} distance={500} decay={1} />
+        {/* Mid yellow-orange disk */}
+        <instancedMesh ref={midDiskRef} args={[undefined, undefined, midCount]}>
+          <boxGeometry args={[1.0, 1.0, 1.0]} />
+          <meshBasicMaterial vertexColors transparent opacity={0.92} blending={THREE.AdditiveBlending} />
+        </instancedMesh>
+
+        {/* Outer sparse orange-red cloud */}
+        <instancedMesh ref={outerDiskRef} args={[undefined, undefined, outerCount]}>
+          <boxGeometry args={[1.2, 1.2, 1.2]} />
+          <meshBasicMaterial vertexColors transparent opacity={0.78} blending={THREE.AdditiveBlending} />
+        </instancedMesh>
       </group>
+
+      {/* Small perpendicular ring — stands vertical (90° to the disk) */}
+      <group ref={perpGroupRef} rotation={[Math.PI / 2, 0, 0]}>
+        <instancedMesh ref={perpRingRef} args={[undefined, undefined, perpCount]}>
+          <boxGeometry args={[0.8, 0.8, 0.8]} />
+          <meshBasicMaterial vertexColors transparent opacity={0.88} blending={THREE.AdditiveBlending} />
+        </instancedMesh>
+      </group>
+
+      {/* Bright core glow light */}
+      <pointLight color="#ffcc44" intensity={8} distance={500} decay={1.2} />
     </group>
   );
 }
