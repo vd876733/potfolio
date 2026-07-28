@@ -17,13 +17,25 @@
       "profileUrl": "https://leetcode.com/u/Varad_Max11/",
       "globalRanking": "Top 5%",
       "problemsSolved": "450+",
-      "progressPercentage": 65
+      "progressPercentage": 65,
+      "contestRating": "1,850",
+      "activeStreak": "142 Days",
+      "easySolved": 180,
+      "easyTotal": 800,
+      "mediumSolved": 220,
+      "mediumTotal": 1600,
+      "hardSolved": 50,
+      "hardTotal": 700,
+      "topSkills": ["Dynamic Programming", "Graphs", "Trees"]
     },
     "codechef": {
       "profileUrl": "https://www.codechef.com/users/varad_11082005",
       "rating": "1850",
       "highestDivision": "Div 2",
-      "stars": 4
+      "stars": 4,
+      "globalRank": "#1,200",
+      "countryRank": "#340",
+      "highestRating": "1,942"
     },
     "hackerrank": {
       "profileUrl": "https://www.hackerrank.com/profile/vd876733",
@@ -33,8 +45,26 @@
           "stars": 5
         },
         {
-          "topic": "10 Days of JS",
+          "topic": "Python",
           "stars": 5
+        },
+        {
+          "topic": "SQL",
+          "stars": 4
+        }
+      ],
+      "verifiedCertifications": [
+        {
+          "name": "Problem Solving (Intermediate)",
+          "date": "June 2026"
+        },
+        {
+          "name": "React (Basic)",
+          "date": "July 2026"
+        },
+        {
+          "name": "SQL (Advanced)",
+          "date": "July 2026"
         }
       ]
     }
