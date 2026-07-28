@@ -1,5 +1,6 @@
 import { ExternalLink, Code, Terminal } from "lucide-react";
 import portfolioData from "@/data/portfolio.json";
+import AnimatedList from "@/components/AnimatedList/AnimatedList";
 
 export default function WorkshopModal() {
   const { projects } = portfolioData;
@@ -11,13 +12,24 @@ export default function WorkshopModal() {
         <h2 className="text-2xl font-space-grotesk font-bold text-slate-900 dark:text-white">Project Workshops</h2>
       </div>
 
-      <div className="flex flex-col gap-6">
-        {projects.map((project) => (
-          <div key={project.id} className="p-6 bg-slate-50 dark:bg-black/20 rounded-xl border border-slate-200 dark:border-white/5 flex flex-col gap-4">
+      <AnimatedList
+        items={projects}
+        showGradients={true}
+        enableArrowNavigation={true}
+        displayScrollbar={true}
+        renderItem={(project, index, isSelected) => (
+          <div
+            key={project.id}
+            className={`p-6 rounded-xl border flex flex-col gap-4 transition-all duration-200 ${
+              isSelected
+                ? "bg-slate-100/80 dark:bg-white/[0.04] border-neon-accent/50 dark:border-neon-accent/30 shadow-[0_0_15px_rgba(167,139,250,0.05)] scale-[1.01]"
+                : "bg-slate-50 dark:bg-black/20 border-slate-200 dark:border-white/5"
+            }`}
+          >
             <h3 className="text-xl font-space-grotesk font-bold text-slate-900 dark:text-white">{project.title}</h3>
 
             <div className="flex flex-wrap gap-2">
-              {project.stack.map((tech) => (
+              {project.stack.map((tech: string) => (
                 <span key={tech} className="px-3 py-1 bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-white/80 text-xs font-inter rounded-full">
                   {tech}
                 </span>
@@ -39,8 +51,8 @@ export default function WorkshopModal() {
               </a>
             </div>
           </div>
-        ))}
-      </div>
+        )}
+      />
     </div>
   );
 }
