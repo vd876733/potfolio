@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText as GSAPSplitText } from "gsap/SplitText";
@@ -141,24 +141,21 @@ const SplitText = ({
     }
   );
 
-  const Tag = (tag || "p") as keyof JSX.IntrinsicElements;
-
-  return (
-    // @ts-expect-error – dynamic tag with forwarded ref
-    <Tag
-      ref={ref}
-      style={{
+  return React.createElement(
+    tag || "p",
+    {
+      ref,
+      style: {
         textAlign,
         overflow: "hidden",
         display: "inline-block",
         whiteSpace: "normal",
         wordWrap: "break-word",
         willChange: "transform, opacity",
-      }}
-      className={`split-parent ${className}`}
-    >
-      {text}
-    </Tag>
+      },
+      className: `split-parent ${className}`,
+    },
+    text
   );
 };
 
