@@ -354,32 +354,26 @@ export default function ArenaModal() {
     // CodeChef fetching
     (async () => {
       let data = null;
-      // 1. Vercel API
+      let isServerError = false;
       try {
-        const res = await fetch("https://codechef-api.vercel.app/handle/varad_11082005");
+        const res = await fetch("/api/codechef?username=varad_11082005");
         if (res.ok) {
           const json = await res.json();
-          if (json && (json.rating || json.success !== false)) {
-            data = json;
+          const rating = json.rating || json.currentRating;
+          if (rating) {
+            data = {
+              rating: String(rating),
+              stars: json.stars ? (typeof json.stars === 'string' ? parseInt(json.stars.replace(/\D/g, "")) : json.stars) : undefined,
+              globalRank: json.globalRank ? String(json.globalRank) : undefined,
+              countryRank: json.countryRank ? String(json.countryRank) : undefined,
+              highestRating: json.highestRating ? String(json.highestRating) : undefined
+            };
           }
+        } else if (res.status >= 500) {
+          isServerError = true;
         }
       } catch (e) {
-        console.warn("CodeChef primary endpoint failed:", e);
-      }
-
-      // 2. Onrender API
-      if (!data) {
-        try {
-          const res = await fetch("https://codechef-api.onrender.com/handle/varad_11082005");
-          if (res.ok) {
-            const json = await res.json();
-            if (json && (json.rating || json.success !== false)) {
-              data = json;
-            }
-          }
-        } catch (e) {
-          console.warn("CodeChef secondary endpoint failed:", e);
-        }
+        console.warn("CodeChef API route fetch failed:", e);
       }
 
       if (data && isMounted) {
@@ -388,15 +382,15 @@ export default function ArenaModal() {
           codechef: {
             ...prev.codechef,
             rating: data.rating ? String(data.rating) : prev.codechef.rating,
-            stars: data.stars ? (typeof data.stars === "string" ? parseInt(data.stars.replace(/\D/g, "")) : data.stars) || prev.codechef.stars : prev.codechef.stars,
+            stars: data.stars ?? prev.codechef.stars,
             highestRating: data.highestRating ? String(data.highestRating) : prev.codechef.highestRating,
-            globalRank: data.globalRank ? `#${data.globalRank.toLocaleString()}` : prev.codechef.globalRank,
-            countryRank: data.countryRank ? `#${data.countryRank.toLocaleString()}` : prev.codechef.countryRank,
+            globalRank: data.globalRank ? (data.globalRank.startsWith('#') ? data.globalRank : `#${data.globalRank}`) : prev.codechef.globalRank,
+            countryRank: data.countryRank ? (data.countryRank.startsWith('#') ? data.countryRank : `#${data.countryRank}`) : prev.codechef.countryRank,
           }
         }));
         setErrors(prev => ({ ...prev, CodeChef: false }));
       } else {
-        if (isMounted) setErrors(prev => ({ ...prev, CodeChef: true }));
+        if (isMounted && isServerError) setErrors(prev => ({ ...prev, CodeChef: true }));
       }
       if (isMounted) setLoading(prev => ({ ...prev, CodeChef: false }));
     })();
@@ -404,14 +398,17 @@ export default function ArenaModal() {
     // HackerRank fetching
     (async () => {
       let data = null;
+      let isServerError = false;
       try {
-        const url = "https://corsproxy.io/?" + encodeURIComponent("https://www.hackerrank.com/rest/hackers/vd876733/scores_data");
+        const url = "/api/hackerrank?username=vd876733";
         const res = await fetch(url);
         if (res.ok) {
           const json = await res.json();
           if (json && json.model) {
             data = json.model;
           }
+        } else if (res.status >= 500) {
+          isServerError = true;
         }
       } catch (e) {
         console.warn("HackerRank endpoint failed:", e);
@@ -439,7 +436,7 @@ export default function ArenaModal() {
         }));
         setErrors(prev => ({ ...prev, HackerRank: false }));
       } else {
-        if (isMounted) setErrors(prev => ({ ...prev, HackerRank: true }));
+        if (isMounted && isServerError) setErrors(prev => ({ ...prev, HackerRank: true }));
       }
       if (isMounted) setLoading(prev => ({ ...prev, HackerRank: false }));
     })();
