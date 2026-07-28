@@ -367,9 +367,9 @@ export function ShootingStars() {
             <meshBasicMaterial color={s.color} />
           </mesh>
 
-          {/* Tail — a thin elongated box behind the head */}
+          {/* Tail — a thicker elongated box behind the head */}
           <mesh position={[0, 0, -s.trailLen / 2]}>
-            <boxGeometry args={[s.size * 0.18, s.size * 0.18, s.trailLen]} />
+            <boxGeometry args={[s.size * 0.8, s.size * 0.8, s.trailLen]} />
             <meshBasicMaterial
               color={s.color}
               transparent
@@ -1342,6 +1342,80 @@ export function DistantAsteroidField() {
 }
 
 // Preload GLTF Space Models
+// 16. Milky Way Band
+export function MilkyWay() {
+  const meshRef = useRef<THREE.InstancedMesh>(null!);
+  const COUNT = 40000;
+
+  const { matrices, colors } = useMemo(() => {
+    const mats: THREE.Matrix4[] = [];
+    const cols: THREE.Color[] = [];
+    const dummy = new THREE.Object3D();
+    
+    // Mix of ethereal milky way colors
+    const palette = ["#d8b4fe", "#818cf8", "#fbcfe8", "#ffffff", "#c7d2fe", "#fde047", "#38bdf8"];
+    
+    for (let i = 0; i < COUNT; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 600 + Math.random() * 600; // 600 to 1200 distance
+      
+      // Focus particles tightly around the central plane, with some spread
+      // A power function creates a dense core and sparse edges, adjusting power and multiplier for a moderate thickness
+      const spread = (Math.random() - 0.5) * 2; // -1 to 1
+      const spreadY = Math.sign(spread) * Math.pow(Math.abs(spread), 2.5) * 280; 
+      
+      const finalRadius = radius + (Math.random() - 0.5) * 200;
+      
+      dummy.position.set(
+        Math.cos(angle) * finalRadius,
+        spreadY,
+        Math.sin(angle) * finalRadius
+      );
+      
+      dummy.rotation.set(
+        Math.random() * Math.PI,
+        Math.random() * Math.PI,
+        Math.random() * Math.PI
+      );
+
+      const size = Math.random() * 2.0 + 0.5;
+      dummy.scale.setScalar(size);
+      dummy.updateMatrix();
+      
+      mats.push(dummy.matrix.clone());
+      
+      // Assign random color from palette
+      cols.push(new THREE.Color(palette[Math.floor(Math.random() * palette.length)]));
+    }
+    return { matrices: mats, colors: cols };
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!meshRef.current) return;
+    matrices.forEach((m, i) => meshRef.current.setMatrixAt(i, m));
+    colors.forEach((c, i) => meshRef.current.setColorAt(i, c));
+    
+    meshRef.current.instanceMatrix.needsUpdate = true;
+    if (meshRef.current.instanceColor) meshRef.current.instanceColor.needsUpdate = true;
+  }, [matrices, colors]);
+
+  // Rotate the entire band so it sits diagonally in the sky
+  return (
+    <group rotation={[Math.PI / 3.5, 0, Math.PI / 5]}>
+      <instancedMesh ref={meshRef} args={[undefined, undefined, COUNT]} frustumCulled={false}>
+        <sphereGeometry args={[1, 4, 4]} />
+        <meshBasicMaterial 
+          color="#ffffff" 
+          transparent 
+          opacity={0.35} 
+          blending={THREE.AdditiveBlending} 
+          depthWrite={false} 
+        />
+      </instancedMesh>
+    </group>
+  );
+}
+
 useGLTF.preload("/space/Sun by Jarlan Perez - 3XZEucM6wC7.glb");
 useGLTF.preload("/space/Black hole by Poly by Google - bUEMVxbw9Zr.glb");
 useGLTF.preload("/space/Mars by Jarlan Perez - 8sNKYRTUFAe.glb");

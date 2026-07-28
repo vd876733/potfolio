@@ -17,6 +17,7 @@ import {
   GiantTricolorGalaxy,
   MultipleBackgroundGalaxies,
   DistantAsteroidField,
+  MilkyWay,
 } from "./SpaceEnvironment";
 import Orb from "./Orb";
 
@@ -33,6 +34,9 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
       <GiantTricolorGalaxy position={[-200, 180, 1400]} scale={[1.8, 1.0, 0.55] as any} />
       <MultipleBackgroundGalaxies />
       <DistantAsteroidField />
+
+      {/* 8. Milky Way Band */}
+      <MilkyWay />
 
       {/* Cosmic Orb — floating galaxy orb above the solar system */}
       <Html position={[0, 38, -55]} center transform occlude={false} style={{ pointerEvents: "none" }}>
