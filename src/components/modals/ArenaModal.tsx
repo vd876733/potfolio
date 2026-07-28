@@ -517,7 +517,7 @@ export default function ArenaModal() {
           <button
             onClick={() => fetchAllStats()}
             disabled={Object.values(loading).some(Boolean)}
-            className="p-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.02] dark:hover:bg-white/[0.08] border border-slate-200 dark:border-white/10 hover:border-purple-500/30 dark:hover:border-purple-500/30 rounded-lg text-slate-500 hover:text-purple-600 dark:text-white/50 dark:hover:text-purple-300 transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center"
+            className="cursor-target p-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-white/[0.02] dark:hover:bg-white/[0.08] border border-slate-200 dark:border-white/10 hover:border-purple-500/30 dark:hover:border-purple-500/30 rounded-lg text-slate-500 hover:text-purple-600 dark:text-white/50 dark:hover:text-purple-300 transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center"
             title="Refresh Stats"
           >
             <RotateCw
@@ -540,7 +540,7 @@ export default function ArenaModal() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`relative flex items-center justify-center gap-2 py-3 px-1 sm:px-3 rounded-lg font-space-grotesk font-bold text-xs sm:text-sm transition-all duration-300 z-10 cursor-pointer ${
+              className={`cursor-target relative flex items-center justify-center gap-2 py-3 px-1 sm:px-3 rounded-lg font-space-grotesk font-bold text-xs sm:text-sm transition-all duration-300 z-10 cursor-pointer ${
                 isActive 
                   ? "text-purple-600 dark:text-purple-400"
                   : "text-slate-500 hover:text-purple-600 dark:text-white/40 dark:hover:text-purple-300"
@@ -839,7 +839,7 @@ export default function ArenaModal() {
           href={actionProps.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#a855f7]/5 to-[#06b6d4]/5 dark:from-[#a855f7]/10 dark:to-[#06b6d4]/10 hover:from-[#a855f7]/10 hover:to-[#06b6d4]/10 dark:hover:from-[#a855f7]/20 dark:hover:to-[#06b6d4]/20 border border-purple-500/10 dark:border-purple-500/20 hover:border-cyan-500/20 dark:hover:border-cyan-500/40 text-purple-600 dark:text-purple-300 hover:text-cyan-600 dark:hover:text-cyan-300 rounded-xl transition-all duration-300 font-space-grotesk font-bold text-sm w-full cursor-pointer hover:scale-[1.01] shadow-[0_0_20px_rgba(168,85,247,0.02)] dark:shadow-[0_0_20px_rgba(168,85,247,0.05)]"
+          className="cursor-target flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-[#a855f7]/5 to-[#06b6d4]/5 dark:from-[#a855f7]/10 dark:to-[#06b6d4]/10 hover:from-[#a855f7]/10 hover:to-[#06b6d4]/10 dark:hover:from-[#a855f7]/20 dark:hover:to-[#06b6d4]/20 border border-purple-500/10 dark:border-purple-500/20 hover:border-cyan-500/20 dark:hover:border-cyan-500/40 text-purple-600 dark:text-purple-300 hover:text-cyan-600 dark:hover:text-cyan-300 rounded-xl transition-all duration-300 font-space-grotesk font-bold text-sm w-full cursor-pointer hover:scale-[1.01] shadow-[0_0_20px_rgba(168,85,247,0.02)] dark:shadow-[0_0_20px_rgba(168,85,247,0.05)]"
         >
           <span className="mr-0.5 font-sans">↗</span>
           {actionProps.label}
