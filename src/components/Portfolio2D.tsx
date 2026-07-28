@@ -9,6 +9,7 @@ import ForgeModal from "./modals/ForgeModal";
 import AtelierModal from "./modals/AtelierModal";
 import CursorGrid from "./CursorGrid";
 import BorderGlow from "./BorderGlow";
+import TechStack from "./TechStack";
 
 export default function Portfolio2D() {
   const { theme } = useTheme();
@@ -47,6 +48,24 @@ export default function Portfolio2D() {
         <div className="max-w-4xl mx-auto flex flex-col gap-12 sm:gap-16">
           <section id="Command Central" className="w-full">
             <TownPlazaModal />
+          </section>
+
+          <section className="w-full overflow-visible">
+            <BorderGlow
+              edgeSensitivity={30}
+              glowColor={isLight ? "200 80 80" : "260 80 80"}
+              backgroundColor={isLight ? "#faf6ee" : "#161322"}
+              borderRadius={16}
+              glowRadius={35}
+              glowIntensity={0.8}
+              coneSpread={25}
+              colors={isLight ? ['#38bdf8', '#60a5fa', '#93c5fd'] : ['#c084fc', '#a78bfa', '#d8b4fe']}
+              className="w-full text-slate-800 dark:text-[#e2e8f0] transition-colors duration-300"
+            >
+              <div className="p-6 sm:p-8 flex flex-col gap-6">
+                <TechStack />
+              </div>
+            </BorderGlow>
           </section>
 
           <section id="Cyber Arena" className="w-full overflow-visible">
