@@ -6,7 +6,9 @@ import {
   GLTFPlanet,
   JupiterPlanet,
   AsteroidBelt,
+  SphericalAsteroidField,
   ShootingComets,
+  ShootingStars,
   HighOrbitSpaceships,
   Spacewalker,
   ISSStation,
@@ -55,11 +57,17 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
       {/* 1. Sun GLTF (Sun by Jarlan Perez) */}
       <SunGLTF />
 
-      {/* Asteroid Belt */}
+      {/* Asteroid Belt around Sun */}
       <AsteroidBelt />
+
+      {/* Spherical Asteroid Field — rocks spread across the full space sphere */}
+      <SphericalAsteroidField />
 
       {/* Dynamic Shooting Comets */}
       <ShootingComets />
+
+      {/* Shooting Stars — spread across the full sphere of space */}
+      <ShootingStars />
 
       {/* High Orbit Flying Spaceships (FLYING HIGH ABOVE THE PLANETS) */}
       <HighOrbitSpaceships />

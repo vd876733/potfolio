@@ -167,6 +167,96 @@ export function AsteroidBelt() {
   );
 }
 
+// 3b. Spherical Asteroid Field — 5000 rocks distributed across the FULL space sphere
+export function SphericalAsteroidField() {
+  const meshRef   = useRef<THREE.InstancedMesh>(null!);
+  const driftRef  = useRef<THREE.Group>(null!);
+  const COUNT     = 5000;
+
+  // Per-instance tumble axes & speeds (stable, computed once)
+  const tumbleData = useMemo(() => {
+    return Array.from({ length: COUNT }, (_, i) => ({
+      ax: Math.sin(i * 1.37),
+      ay: Math.cos(i * 0.91),
+      az: Math.sin(i * 2.13 + 1),
+      speed: 0.008 + (i % 11) * 0.006,   // 0.008 – 0.068 rad/s
+    }));
+  }, []);
+
+  // Build instance matrices — golden-angle sphere distribution
+  const { matrices, dummy } = useMemo(() => {
+    const d = new THREE.Object3D();
+    const mats: THREE.Matrix4[] = [];
+    for (let i = 0; i < COUNT; i++) {
+      // Fibonacci / golden-angle sphere
+      const y     = 1 - (i / (COUNT - 1)) * 2;          // -1 → +1
+      const r     = Math.sqrt(Math.max(0, 1 - y * y));
+      const phi   = (i * 2.399963) % (Math.PI * 2);      // golden angle
+      const dist  = 150 + (i % 23) * 28;                 // 150 – 766 units
+
+      d.position.set(
+        dist * r * Math.cos(phi),
+        dist * y,
+        dist * r * Math.sin(phi),
+      );
+      // Random initial rotation (deterministic via index)
+      d.rotation.set(
+        i * 0.37 % (Math.PI * 2),
+        i * 0.61 % (Math.PI * 2),
+        i * 0.19 % (Math.PI * 2),
+      );
+      const s = 0.4 + (i % 7) * 0.35;   // scale 0.4 – 2.55
+      d.scale.setScalar(s);
+      d.updateMatrix();
+      mats.push(d.matrix.clone());
+    }
+    return { matrices: mats, dummy: d };
+  }, []);
+
+  // Upload matrices to GPU
+  useLayoutEffect(() => {
+    if (!meshRef.current) return;
+    matrices.forEach((m, i) => meshRef.current.setMatrixAt(i, m));
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  }, [matrices]);
+
+  // Animate: slow global drift + per-instance tumble
+  useFrame((_, delta) => {
+    if (!meshRef.current) return;
+    const mesh = meshRef.current;
+    for (let i = 0; i < COUNT; i++) {
+      const td = tumbleData[i];
+      mesh.getMatrixAt(i, dummy.matrix);
+      dummy.matrix.decompose(dummy.position, dummy.quaternion, dummy.scale);
+      dummy.rotateOnWorldAxis(
+        new THREE.Vector3(td.ax, td.ay, td.az).normalize(),
+        delta * td.speed,
+      );
+      dummy.updateMatrix();
+      mesh.setMatrixAt(i, dummy.matrix);
+    }
+    mesh.instanceMatrix.needsUpdate = true;
+
+    // Slow whole-field rotation so asteroids drift around the scene
+    if (driftRef.current) driftRef.current.rotation.y += delta * 0.003;
+  });
+
+  return (
+    <group ref={driftRef}>
+      <instancedMesh ref={meshRef} args={[undefined, undefined, COUNT]} frustumCulled={false}>
+        <dodecahedronGeometry args={[0.9, 0]} />
+        <meshStandardMaterial
+          color="#6b7280"
+          roughness={0.92}
+          metalness={0.08}
+          emissive="#1e1e2e"
+          emissiveIntensity={0.15}
+        />
+      </instancedMesh>
+    </group>
+  );
+}
+
 // 4. Shooting Comets
 export function ShootingComets() {
   const comet1 = useRef<THREE.Group>(null!);
@@ -202,6 +292,117 @@ export function ShootingComets() {
         </mesh>
         <pointLight color="#f43f5e" intensity={4} distance={20} />
       </group>
+    </group>
+  );
+}
+
+// 4b. Shooting Stars — 25 streakers spread across the full sphere of space
+const STAR_COLORS = [
+  "#ffffff", "#e0f2fe", "#fef9c3", "#d8b4fe",
+  "#bbf7d0", "#fecaca", "#bfdbfe", "#fed7aa",
+];
+
+interface StarDef {
+  origin: THREE.Vector3;
+  dir: THREE.Vector3;
+  speed: number;
+  range: number;
+  phase: number;
+  color: string;
+  size: number;
+  trailLen: number;
+}
+
+export function ShootingStars() {
+  const groupRef = useRef<THREE.Group>(null!);
+
+  // Build star definitions once (stable — no Math.random() in render)
+  const stars = useMemo<StarDef[]>(() => {
+    const list: StarDef[] = [];
+    const count = 25;
+    for (let i = 0; i < count; i++) {
+      // Spread origins all over the sphere (radius 300–900)
+      const theta = Math.acos(2 * (i / count) - 1);
+      const phi   = (i * 2.399963) % (Math.PI * 2); // golden-angle spread
+      const r     = 300 + (i % 7) * 90;
+      const ox    = r * Math.sin(theta) * Math.cos(phi);
+      const oy    = r * Math.sin(theta) * Math.sin(phi);
+      const oz    = r * Math.cos(theta);
+
+      // Direction: random-ish diagonal across the sphere
+      const dx = Math.sin(phi + 1.1) * Math.cos(theta + 0.7);
+      const dy = Math.cos(phi * 0.5 + i * 0.31);
+      const dz = Math.sin(theta * 0.9 + i * 0.17);
+      const dir = new THREE.Vector3(dx, dy, dz).normalize();
+
+      list.push({
+        origin: new THREE.Vector3(ox, oy, oz),
+        dir,
+        speed: 120 + (i % 8) * 30,     // 120 – 330 units/sec
+        range: 600 + (i % 5) * 120,     // wrap distance
+        phase: (i / count) * 10,         // stagger start times
+        color: STAR_COLORS[i % STAR_COLORS.length],
+        size:  0.35 + (i % 4) * 0.15,
+        trailLen: 18 + (i % 6) * 6,
+      });
+    }
+    return list;
+  }, []);
+
+  // Refs for each star's group so we can mutate position directly
+  const starRefs = useRef<(THREE.Group | null)[]>(
+    Array.from({ length: 25 }, () => null)
+  );
+
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    stars.forEach((s, i) => {
+      const g = starRefs.current[i];
+      if (!g) return;
+      const dist = ((t + s.phase) * s.speed) % s.range;
+      g.position.set(
+        s.origin.x + s.dir.x * dist,
+        s.origin.y + s.dir.y * dist,
+        s.origin.z + s.dir.z * dist,
+      );
+      // Orient the trail along the travel direction
+      g.lookAt(
+        g.position.x + s.dir.x,
+        g.position.y + s.dir.y,
+        g.position.z + s.dir.z,
+      );
+    });
+  });
+
+  return (
+    <group ref={groupRef}>
+      {stars.map((s, i) => (
+        <group
+          key={i}
+          ref={(el) => { starRefs.current[i] = el; }}
+        >
+          {/* Glowing head */}
+          <mesh>
+            <sphereGeometry args={[s.size, 8, 8]} />
+            <meshBasicMaterial color={s.color} />
+          </mesh>
+
+          {/* Tail — a thin elongated box behind the head */}
+          <mesh position={[0, 0, -s.trailLen / 2]}>
+            <boxGeometry args={[s.size * 0.18, s.size * 0.18, s.trailLen]} />
+            <meshBasicMaterial
+              color={s.color}
+              transparent
+              opacity={0.45}
+              blending={THREE.AdditiveBlending}
+              depthWrite={false}
+            />
+          </mesh>
+
+          {/* Soft point glow */}
+          <pointLight color={s.color} intensity={2.5} distance={30} decay={2} />
+        </group>
+      ))}
     </group>
   );
 }
