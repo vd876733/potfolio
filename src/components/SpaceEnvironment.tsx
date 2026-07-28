@@ -744,73 +744,102 @@ export function SupermassiveBlackHole({
   );
 }
 
-// 12. Giant Background Spiral Galaxy
-export function BackgroundGalaxy({
-  position = [-650, 120, -600],
-  scale = 1.5,
+// Reusable helper function to build galaxy points data
+export function createMiniGalaxy({
+  count = 3000,
+  branches = 6,
+  radius = 120,
+  colorCore = "#fff7ed",
+  colorInner = "#ec4899",
+  colorMid = "#8b5cf6",
+  colorOuter = "#06b6d4"
+}) {
+  const posArr = new Float32Array(count * 3);
+  const colArr = new Float32Array(count * 3);
+
+  const cCore = new THREE.Color(colorCore);
+  const cInner = new THREE.Color(colorInner);
+  const cMid = new THREE.Color(colorMid);
+  const cOuter = new THREE.Color(colorOuter);
+
+  for (let i = 0; i < count; i++) {
+    const r = Math.pow(Math.random(), 2) * radius;
+    const armAngle = ((i % branches) / branches) * Math.PI * 2;
+    const spinAngle = r * (0.012 * (120 / radius));
+    const angle = armAngle + spinAngle + (Math.random() - 0.5) * 0.28;
+
+    const randomY = (Math.random() - 0.5) * (15 * (radius / 120) * Math.exp(-r / (radius * 0.38)));
+
+    posArr[i * 3] = Math.cos(angle) * r;
+    posArr[i * 3 + 1] = randomY;
+    posArr[i * 3 + 2] = Math.sin(angle) * r;
+
+    const normR = r / radius;
+    let c: THREE.Color;
+    if (normR < 0.15) {
+      c = cCore.clone().lerp(cInner, normR / 0.15);
+    } else if (normR < 0.5) {
+      c = cInner.clone().lerp(cMid, (normR - 0.15) / 0.35);
+    } else {
+      c = cMid.clone().lerp(cOuter, (normR - 0.5) / 0.5);
+    }
+
+    colArr[i * 3] = c.r;
+    colArr[i * 3 + 1] = c.g;
+    colArr[i * 3 + 2] = c.b;
+  }
+  return { positions: posArr, colors: colArr };
+}
+
+// Reusable React Component for a Single Spiral Galaxy
+export function MiniGalaxy({
+  position = [0, 0, 0],
+  scale = 1.0,
+  rotation = [0, 0, 0] as any,
+  count = 3000,
+  branches = 6,
+  radius = 120,
+  colorCore = "#fff7ed",
+  colorInner = "#ec4899",
+  colorMid = "#8b5cf6",
+  colorOuter = "#06b6d4",
+  spinSpeed = 0.015,
 }: {
   position?: [number, number, number];
   scale?: number;
+  rotation?: [number, number, number];
+  count?: number;
+  branches?: number;
+  radius?: number;
+  colorCore?: string;
+  colorInner?: string;
+  colorMid?: string;
+  colorOuter?: string;
+  spinSpeed?: number;
 }) {
   const galaxyRef = useRef<THREE.Group>(null!);
 
-  const particleCount = 14000;
-  const [positions, colors] = useMemo(() => {
-    const posArr = new Float32Array(particleCount * 3);
-    const colArr = new Float32Array(particleCount * 3);
-
-    const arms = 12;
-    const colorCore = new THREE.Color("#fff7ed");   // Bright Cream
-    const colorInner = new THREE.Color("#ec4899");  // Bright Pink
-    const colorMid = new THREE.Color("#8b5cf6");    // Electric Purple
-    const colorOuter = new THREE.Color("#06b6d4");  // Cyan
-
-    for (let i = 0; i < particleCount; i++) {
-      const r = Math.pow(Math.random(), 2) * 320;
-      const armAngle = ((i % arms) / arms) * Math.PI * 2;
-      const spinAngle = r * 0.012;
-      const angle = armAngle + spinAngle + (Math.random() - 0.5) * 0.25;
-
-      const randomY = (Math.random() - 0.5) * (30 * Math.exp(-r / 120));
-
-      posArr[i * 3] = Math.cos(angle) * r;
-      posArr[i * 3 + 1] = randomY;
-      posArr[i * 3 + 2] = Math.sin(angle) * r;
-
-      const normR = r / 320;
-      let c: THREE.Color;
-      if (normR < 0.15) {
-        c = colorCore.clone().lerp(colorInner, normR / 0.15);
-      } else if (normR < 0.5) {
-        c = colorInner.clone().lerp(colorMid, (normR - 0.15) / 0.35);
-      } else {
-        c = colorMid.clone().lerp(colorOuter, (normR - 0.5) / 0.5);
-      }
-
-      colArr[i * 3] = c.r;
-      colArr[i * 3 + 1] = c.g;
-      colArr[i * 3 + 2] = c.b;
-    }
-    return [posArr, colArr];
-  }, [particleCount]);
+  const { positions, colors } = useMemo(() => {
+    return createMiniGalaxy({ count, branches, radius, colorCore, colorInner, colorMid, colorOuter });
+  }, [count, branches, radius, colorCore, colorInner, colorMid, colorOuter]);
 
   useFrame((_, delta) => {
     if (galaxyRef.current) {
-      galaxyRef.current.rotation.y += delta * 0.015;
+      galaxyRef.current.rotation.y += delta * spinSpeed;
     }
   });
 
   return (
-    <group position={position} scale={scale} rotation={[Math.PI / 3, -Math.PI / 6, 0]}>
+    <group position={position} scale={scale} rotation={rotation}>
       {/* Galactic Core Brightness */}
       <mesh>
-        <sphereGeometry args={[25, 32, 32]} />
+        <sphereGeometry args={[radius * 0.08, 16, 16]} />
         <meshBasicMaterial color="#ffffff" transparent opacity={0.8} />
       </mesh>
       <mesh>
-        <sphereGeometry args={[55, 32, 32]} />
+        <sphereGeometry args={[radius * 0.18, 16, 16]} />
         <meshBasicMaterial
-          color="#ec4899"
+          color={colorInner}
           transparent
           opacity={0.3}
           side={THREE.BackSide}
@@ -831,7 +860,7 @@ export function BackgroundGalaxy({
             />
           </bufferGeometry>
           <pointsMaterial
-            size={2.8}
+            size={radius * 0.008}
             vertexColors
             transparent
             opacity={0.8}
@@ -840,6 +869,103 @@ export function BackgroundGalaxy({
         </points>
       </group>
     </group>
+  );
+}
+
+// 12. Giant Background Spiral Galaxy (Refactored wrapper)
+export function BackgroundGalaxy({
+  position = [-650, 120, -600],
+  scale = 1.5,
+}: {
+  position?: [number, number, number];
+  scale?: number;
+}) {
+  return (
+    <MiniGalaxy
+      position={position}
+      scale={scale}
+      rotation={[Math.PI / 3, -Math.PI / 6, 0]}
+      count={14000}
+      branches={12}
+      radius={320}
+      spinSpeed={0.015}
+    />
+  );
+}
+
+// Multiple background mini galaxies component
+export function MultipleBackgroundGalaxies() {
+  const galaxies = useMemo(() => {
+    const list = [];
+    const countOptions = [2000, 3000, 4000, 5000];
+    const branchOptions = [4, 5, 6, 8];
+    const radiusOptions = [80, 100, 120, 140];
+    
+    const palettes = [
+      { core: "#fff7ed", inner: "#ec4899", mid: "#8b5cf6", outer: "#06b6d4" },
+      { core: "#fffbeb", inner: "#f59e0b", mid: "#ef4444", outer: "#ec4899" },
+      { core: "#f0fdf4", inner: "#10b981", mid: "#06b6d4", outer: "#3b82f6" },
+      { core: "#faf5ff", inner: "#a855f7", mid: "#ec4899", outer: "#6366f1" },
+    ];
+
+    // Main black hole is at [650, 110, -550]
+    // Generate 7 mini-galaxies scattered at far distances
+    for (let i = 0; i < 7; i++) {
+      const angle = (i / 7) * Math.PI * 2 + Math.random() * 0.5;
+      const distance = 450 + Math.random() * 450;
+      
+      const x = 650 + Math.cos(angle) * distance;
+      const y = -150 + Math.random() * 500;
+      const z = -550 + Math.sin(angle) * distance;
+
+      const scale = 0.15 + Math.random() * 0.25;
+      const rotX = Math.random() * Math.PI * 2;
+      const rotY = Math.random() * Math.PI * 2;
+      const rotZ = Math.random() * Math.PI * 2;
+
+      const count = countOptions[Math.floor(Math.random() * countOptions.length)];
+      const branches = branchOptions[Math.floor(Math.random() * branchOptions.length)];
+      const radius = radiusOptions[Math.floor(Math.random() * radiusOptions.length)];
+      const palette = palettes[Math.floor(Math.random() * palettes.length)];
+      const spinSpeed = 0.008 + Math.random() * 0.015;
+
+      list.push({
+        id: i,
+        position: [x, y, z] as [number, number, number],
+        scale,
+        rotation: [rotX, rotY, rotZ] as [number, number, number],
+        count,
+        branches,
+        radius,
+        colorCore: palette.core,
+        colorInner: palette.inner,
+        colorMid: palette.mid,
+        colorOuter: palette.outer,
+        spinSpeed,
+      });
+    }
+    return list;
+  }, []);
+
+  return (
+    <>
+      {galaxies.map((g) => (
+        <MiniGalaxy
+          key={g.id}
+          position={g.position}
+          scale={g.scale}
+          rotation={g.rotation}
+          count={g.count}
+          branches={g.branches}
+          radius={g.radius}
+          colorCore={g.colorCore}
+          colorInner={g.colorInner}
+          colorMid={g.colorMid}
+          colorOuter={g.colorOuter}
+          spinSpeed={g.spinSpeed}
+        />
+      ))}
+    </>
   );
 }
 
