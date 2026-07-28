@@ -1041,7 +1041,7 @@ export function MiniGalaxy({
             />
           </bufferGeometry>
           <pointsMaterial
-            size={radius * 0.008}
+            size={radius * 0.014}
             vertexColors
             transparent
             opacity={0.8}
@@ -1056,7 +1056,7 @@ export function MiniGalaxy({
 // 12. Giant Background Spiral Galaxy (Refactored wrapper)
 export function BackgroundGalaxy({
   position = [-650, 120, -600],
-  scale = 1.5,
+  scale = 2.5,
 }: {
   position?: [number, number, number];
   scale?: number;
@@ -1066,7 +1066,7 @@ export function BackgroundGalaxy({
       position={position}
       scale={scale}
       rotation={[Math.PI / 3, -Math.PI / 6, 0]}
-      count={14000}
+      count={25000}
       branches={12}
       radius={320}
       spinSpeed={0.015}
