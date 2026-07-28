@@ -6,7 +6,6 @@ import {
   GLTFPlanet,
   JupiterPlanet,
   AsteroidBelt,
-  SphericalAsteroidField,
   ShootingComets,
   ShootingStars,
   HighOrbitSpaceships,
@@ -59,9 +58,6 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
 
       {/* Asteroid Belt around Sun */}
       <AsteroidBelt />
-
-      {/* Spherical Asteroid Field — rocks spread across the full space sphere */}
-      <SphericalAsteroidField />
 
       {/* Dynamic Shooting Comets */}
       <ShootingComets />

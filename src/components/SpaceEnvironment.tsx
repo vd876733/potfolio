@@ -167,45 +167,41 @@ export function AsteroidBelt() {
   );
 }
 
-// 3b. Spherical Asteroid Field — 5000 rocks distributed across the FULL space sphere
+// 3b. Spherical Asteroid Field — 6000 rocks scattered at GALACTIC distances
 export function SphericalAsteroidField() {
-  const meshRef   = useRef<THREE.InstancedMesh>(null!);
-  const driftRef  = useRef<THREE.Group>(null!);
-  const COUNT     = 5000;
+  const meshRef  = useRef<THREE.InstancedMesh>(null!);
+  const driftRef = useRef<THREE.Group>(null!);
+  const COUNT    = 6000;
 
-  // Per-instance tumble axes & speeds (stable, computed once)
-  const tumbleData = useMemo(() => {
-    return Array.from({ length: COUNT }, (_, i) => ({
-      ax: Math.sin(i * 1.37),
-      ay: Math.cos(i * 0.91),
-      az: Math.sin(i * 2.13 + 1),
-      speed: 0.008 + (i % 11) * 0.006,   // 0.008 – 0.068 rad/s
-    }));
-  }, []);
-
-  // Build instance matrices — golden-angle sphere distribution
+  // Build instance matrices — golden-angle sphere at galaxy-scale distances
   const { matrices, dummy } = useMemo(() => {
-    const d = new THREE.Object3D();
+    const d    = new THREE.Object3D();
     const mats: THREE.Matrix4[] = [];
+
     for (let i = 0; i < COUNT; i++) {
-      // Fibonacci / golden-angle sphere
-      const y     = 1 - (i / (COUNT - 1)) * 2;          // -1 → +1
-      const r     = Math.sqrt(Math.max(0, 1 - y * y));
-      const phi   = (i * 2.399963) % (Math.PI * 2);      // golden angle
-      const dist  = 150 + (i % 23) * 28;                 // 150 – 766 units
+      // Fibonacci sphere — perfect even coverage of all directions
+      const y   = 1 - (i / (COUNT - 1)) * 2;            // -1 → +1
+      const r   = Math.sqrt(Math.max(0, 1 - y * y));
+      const phi = (i * 2.399963) % (Math.PI * 2);        // golden angle
+
+      // Scatter from 300 to 1300 units — the galactic neighbourhood
+      const dist = 300 + (i % 31) * 32.5;                // 300 – 1307 units
 
       d.position.set(
         dist * r * Math.cos(phi),
         dist * y,
         dist * r * Math.sin(phi),
       );
-      // Random initial rotation (deterministic via index)
+
+      // Deterministic initial orientation
       d.rotation.set(
-        i * 0.37 % (Math.PI * 2),
-        i * 0.61 % (Math.PI * 2),
-        i * 0.19 % (Math.PI * 2),
+        (i * 0.37) % (Math.PI * 2),
+        (i * 0.61) % (Math.PI * 2),
+        (i * 0.19) % (Math.PI * 2),
       );
-      const s = 0.4 + (i % 7) * 0.35;   // scale 0.4 – 2.55
+
+      // Larger rocks so they're visible at galactic distances (2–8 units)
+      const s = 2.0 + (i % 9) * 0.7;
       d.scale.setScalar(s);
       d.updateMatrix();
       mats.push(d.matrix.clone());
@@ -213,32 +209,16 @@ export function SphericalAsteroidField() {
     return { matrices: mats, dummy: d };
   }, []);
 
-  // Upload matrices to GPU
+  // Upload to GPU once
   useLayoutEffect(() => {
     if (!meshRef.current) return;
     matrices.forEach((m, i) => meshRef.current.setMatrixAt(i, m));
     meshRef.current.instanceMatrix.needsUpdate = true;
   }, [matrices]);
 
-  // Animate: slow global drift + per-instance tumble
+  // Animate: just a slow whole-field drift rotation (no per-instance tumble at galactic range)
   useFrame((_, delta) => {
-    if (!meshRef.current) return;
-    const mesh = meshRef.current;
-    for (let i = 0; i < COUNT; i++) {
-      const td = tumbleData[i];
-      mesh.getMatrixAt(i, dummy.matrix);
-      dummy.matrix.decompose(dummy.position, dummy.quaternion, dummy.scale);
-      dummy.rotateOnWorldAxis(
-        new THREE.Vector3(td.ax, td.ay, td.az).normalize(),
-        delta * td.speed,
-      );
-      dummy.updateMatrix();
-      mesh.setMatrixAt(i, dummy.matrix);
-    }
-    mesh.instanceMatrix.needsUpdate = true;
-
-    // Slow whole-field rotation so asteroids drift around the scene
-    if (driftRef.current) driftRef.current.rotation.y += delta * 0.003;
+    if (driftRef.current) driftRef.current.rotation.y += delta * 0.002;
   });
 
   return (
@@ -265,12 +245,12 @@ export function ShootingComets() {
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     if (comet1.current) {
-      const speed = 25;
+      const speed = 10;
       const pos = (t * speed) % 250 - 125;
       comet1.current.position.set(pos, 45 - pos * 0.2, -40 + pos * 0.3);
     }
     if (comet2.current) {
-      const speed = 20;
+      const speed = 8;
       const pos = ((t + 4) * speed) % 250 - 125;
       comet2.current.position.set(-pos, 50 - pos * 0.3, 30 - pos * 0.2);
     }
@@ -338,7 +318,7 @@ export function ShootingStars() {
       list.push({
         origin: new THREE.Vector3(ox, oy, oz),
         dir,
-        speed: 120 + (i % 8) * 30,     // 120 – 330 units/sec
+        speed: 30 + (i % 8) * 15,     // Reduced speed: 30 – 135 units/sec
         range: 600 + (i % 5) * 120,     // wrap distance
         phase: (i / count) * 10,         // stagger start times
         color: STAR_COLORS[i % STAR_COLORS.length],
