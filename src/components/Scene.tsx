@@ -96,11 +96,10 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
           ref={controlsRef}
           enableDamping={true}
           dampingFactor={0.05}
-          maxPolarAngle={Math.PI / 1.4}
-          minPolarAngle={Math.PI / 8}
+          enablePan={true}
           target={target}
-          maxDistance={220}
-          minDistance={10}
+          maxDistance={4000}
+          minDistance={1}
         />
 
         {/* Postprocessing Bloom Effect for Glowing Space Lights */}

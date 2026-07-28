@@ -682,6 +682,103 @@ export function EarthPlanet({
   );
 }
 
+// 4e. Mars (Rusty Red/Orange Planet)
+export function MarsPlanet({
+  orbitRadius,
+  size = 1.0,
+  speed = 0.07,
+  initialAngle = 1.2,
+  children,
+}: {
+  orbitRadius: number;
+  size?: number;
+  speed?: number;
+  initialAngle?: number;
+  children?: React.ReactNode;
+}) {
+  const orbitGroupRef = useRef<THREE.Group>(null!);
+  const meshRef = useRef<THREE.Mesh>(null!);
+
+  const marsTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      // Base rusty red
+      ctx.fillStyle = "#9a3412"; 
+      ctx.fillRect(0, 0, 512, 256);
+
+      // Darker rocky patches
+      ctx.fillStyle = "#7c2d12"; 
+      for (let i = 0; i < 80; i++) {
+        ctx.beginPath();
+        ctx.arc(
+          Math.random() * 512, 
+          Math.random() * 256, 
+          Math.random() * 20 + 5, 
+          0, 
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
+
+      // Lighter sandy patches
+      ctx.fillStyle = "#c2410c"; 
+      for (let i = 0; i < 60; i++) {
+        ctx.beginPath();
+        ctx.arc(
+          Math.random() * 512, 
+          Math.random() * 256, 
+          Math.random() * 15 + 5, 
+          0, 
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
+      
+      // Ice caps (small)
+      ctx.fillStyle = "#f8fafc";
+      ctx.fillRect(0, 0, 512, 10); // North pole
+      ctx.fillRect(0, 246, 512, 10); // South pole
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  useFrame((state, delta) => {
+    const t = state.clock.elapsedTime * speed + initialAngle;
+    if (orbitGroupRef.current) {
+      orbitGroupRef.current.position.x = Math.cos(t) * orbitRadius;
+      orbitGroupRef.current.position.z = Math.sin(t) * orbitRadius;
+    }
+    if (meshRef.current) {
+      meshRef.current.rotation.y += delta * 0.4;
+    }
+  });
+
+  return (
+    <group>
+      <group ref={orbitGroupRef}>
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[size, 64, 64]} />
+          <meshStandardMaterial
+            map={marsTexture || undefined}
+            roughness={0.85}
+            metalness={0.1}
+          />
+        </mesh>
+        {/* Glow */}
+        <mesh scale={1.1}>
+           <sphereGeometry args={[size, 32, 32]} />
+           <meshBasicMaterial color="#f43f5e" transparent opacity={0.15} blending={THREE.AdditiveBlending} depthWrite={false} />
+        </mesh>
+        {children}
+      </group>
+    </group>
+  );
+}
+
 // 5. Jupiter Gas Giant with Bands & Red Spot
 export function JupiterPlanet({
   orbitRadius,

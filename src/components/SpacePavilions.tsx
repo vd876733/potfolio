@@ -22,6 +22,7 @@ import {
   MercuryPlanet,
   VenusPlanet,
   EarthPlanet,
+  MarsPlanet,
 } from "./SpaceEnvironment";
 import Orb from "./Orb";
 
@@ -112,14 +113,12 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
         />
       </EarthPlanet>
 
-      {/* 4. Mars GLTF (Cyber Arena Section) */}
-      <GLTFPlanet
-        modelPath="/space/Mars by Jarlan Perez - 8sNKYRTUFAe.glb"
-        orbitRadius={34}
-        scale={2.8}
+      {/* 4. Mars (Cyber Arena Section) */}
+      <MarsPlanet
+        orbitRadius={42}
+        size={1.4}
         speed={0.07}
         initialAngle={1.2}
-        atmosphereColor="#f43f5e"
       >
         {/* ISS Station near Mars */}
         <ISSStation position={[3.2, 2.0, 0]} />
@@ -131,7 +130,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
           offsetY={4.5}
           onClick={onSectionClick}
         />
-      </GLTFPlanet>
+      </MarsPlanet>
 
       {/* 5. Jupiter Gas Giant with Bands & Red Spot (Starship Hangar Section) */}
       <JupiterPlanet
