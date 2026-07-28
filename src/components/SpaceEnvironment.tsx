@@ -619,23 +619,23 @@ export function SupermassiveBlackHole({
   }, [perpCount]);
 
   // ── Yellow/Gold Asteroid Rock Ring
-  const rockCount = 3000;
+  const rockCount = 35000;
   const rockData = useMemo(() => {
     const dummy = new THREE.Object3D();
     const matrices: THREE.Matrix4[] = [];
-    const innerRadius = 185;
-    const outerRadius = 285;
+    const innerRadius = 38;
+    const outerRadius = 180;
     for (let i = 0; i < rockCount; i++) {
       const r = innerRadius + Math.random() * (outerRadius - innerRadius);
       const angle = Math.random() * Math.PI * 2;
-      const h = (Math.random() - 0.5) * (12 + (r - innerRadius) * 0.08);
+      const h = (Math.random() - 0.5) * 0.05;
       dummy.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
       dummy.rotation.set(
         Math.random() * Math.PI * 2,
         Math.random() * Math.PI * 2,
         Math.random() * Math.PI * 2
       );
-      const s = 0.5 + Math.random() * 1.2;
+      const s = 0.3 + Math.random() * 1.5;
       dummy.scale.set(s, s, s);
       dummy.updateMatrix();
       matrices.push(dummy.matrix.clone());
@@ -727,13 +727,13 @@ export function SupermassiveBlackHole({
       {/* Yellow/Gold Rock Asteroid Ring */}
       <group ref={rockRingRef}>
         <instancedMesh ref={rockMeshRef} args={[undefined, undefined, rockCount]}>
-          <dodecahedronGeometry args={[0.9, 0]} />
+          <icosahedronGeometry args={[0.015, 0]} />
           <meshStandardMaterial
-            color="#FFD700"
-            roughness={0.7}
+            color="#FFFFEE"
+            roughness={0.8}
             metalness={0.2}
-            emissive="#FF9900"
-            emissiveIntensity={0.25}
+            emissive="#FFFF00"
+            emissiveIntensity={1.8}
           />
         </instancedMesh>
       </group>
