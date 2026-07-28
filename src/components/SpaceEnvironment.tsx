@@ -709,7 +709,7 @@ export function BackgroundGalaxy({
     const posArr = new Float32Array(particleCount * 3);
     const colArr = new Float32Array(particleCount * 3);
 
-    const arms = 8;
+    const arms = 12;
     const colorCore = new THREE.Color("#fff7ed");   // Bright Cream
     const colorInner = new THREE.Color("#ec4899");  // Bright Pink
     const colorMid = new THREE.Color("#8b5cf6");    // Electric Purple
@@ -719,7 +719,7 @@ export function BackgroundGalaxy({
       const r = Math.pow(Math.random(), 2) * 320;
       const armAngle = ((i % arms) / arms) * Math.PI * 2;
       const spinAngle = r * 0.012;
-      const angle = armAngle + spinAngle + (Math.random() - 0.5) * 0.35;
+      const angle = armAngle + spinAngle + (Math.random() - 0.5) * 0.25;
 
       const randomY = (Math.random() - 0.5) * (30 * Math.exp(-r / 120));
 
