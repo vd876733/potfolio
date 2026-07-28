@@ -711,15 +711,15 @@ export function SupermassiveBlackHole({
   const rockRingRef   = useRef<THREE.Group>(null!);
   const rockMeshRef   = useRef<THREE.InstancedMesh>(null!);
 
-  // ── Layer 1: Dense inner glow zone — 1500 bright yellow particles
-  const innerCount = 1500;
+  // ── Layer 1: Dense inner glow zone — 3000 bright yellow particles
+  const innerCount = 3000;
   const innerData = useMemo(() => {
     const dummy = new THREE.Object3D();
     const matrices: THREE.Matrix4[] = [];
     const colors: THREE.Color[] = [];
     const yellow = new THREE.Color("#ffff00");
     for (let i = 0; i < innerCount; i++) {
-      const r = 38 + Math.pow(Math.random(), 0.6) * 17;
+      const r = 25 + Math.pow(Math.random(), 0.6) * 12; // Reduced radius
       const angle = Math.random() * Math.PI * 2;
       const h = (Math.random() - 0.5) * 1.0;
       dummy.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
@@ -733,15 +733,15 @@ export function SupermassiveBlackHole({
     return { matrices, colors };
   }, [innerCount]);
 
-  // ── Layer 2: Mid accretion disk — 2500 pure yellow particles
-  const midCount = 2500;
+  // ── Layer 2: Mid accretion disk — 5000 pure yellow particles
+  const midCount = 5000;
   const midData = useMemo(() => {
     const dummy = new THREE.Object3D();
     const matrices: THREE.Matrix4[] = [];
     const colors: THREE.Color[] = [];
     const yellow = new THREE.Color("#ffff00");
     for (let i = 0; i < midCount; i++) {
-      const r = 56 + Math.pow(Math.random(), 0.75) * 54;
+      const r = 38 + Math.pow(Math.random(), 0.75) * 32; // Reduced radius
       const angle = Math.random() * Math.PI * 2;
       const h = (Math.random() - 0.5) * 1.8;
       dummy.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
@@ -755,17 +755,17 @@ export function SupermassiveBlackHole({
     return { matrices, colors };
   }, [midCount]);
 
-  // ── Layer 3: Outer ring — 2000 pure yellow particles (tighter radius)
-  const outerCount = 2000;
+  // ── Layer 3: Outer ring — 4000 pure yellow particles (tighter radius)
+  const outerCount = 4000;
   const outerData = useMemo(() => {
     const dummy = new THREE.Object3D();
     const matrices: THREE.Matrix4[] = [];
     const colors: THREE.Color[] = [];
     const yellow = new THREE.Color("#ffff00");
     for (let i = 0; i < outerCount; i++) {
-      const r = 110 + Math.pow(Math.random(), 1.0) * 60;
+      const r = 70 + Math.pow(Math.random(), 1.0) * 45; // Reduced radius
       const angle = Math.random() * Math.PI * 2;
-      const h = (Math.random() - 0.5) * (2.5 + (r - 110) / 25);
+      const h = (Math.random() - 0.5) * (2.5 + (r - 70) / 25);
       dummy.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
       dummy.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
       const s = 0.5 + Math.random() * 1.0;
@@ -777,15 +777,15 @@ export function SupermassiveBlackHole({
     return { matrices, colors };
   }, [outerCount]);
 
-  // ── Small perpendicular ring — 900 pure yellow rocks standing vertical
-  const perpCount = 900;
+  // ── Small perpendicular ring — 1800 pure yellow rocks standing vertical
+  const perpCount = 1800;
   const perpData = useMemo(() => {
     const dummy = new THREE.Object3D();
     const matrices: THREE.Matrix4[] = [];
     const colors: THREE.Color[] = [];
     const yellow = new THREE.Color("#ffff00");
     for (let i = 0; i < perpCount; i++) {
-      const r = 38 + Math.pow(Math.random(), 0.8) * 27;
+      const r = 35 + Math.pow(Math.random(), 0.8) * 25; // Increased radius
       const angle = Math.random() * Math.PI * 2;
       const h = (Math.random() - 0.5) * 2.5;
       dummy.position.set(Math.cos(angle) * r, Math.sin(angle) * r, h);
@@ -800,12 +800,12 @@ export function SupermassiveBlackHole({
   }, [perpCount]);
 
   // ── Yellow/Gold Asteroid Rock Ring
-  const rockCount = 35000;
+  const rockCount = 180000;
   const rockData = useMemo(() => {
     const dummy = new THREE.Object3D();
     const matrices: THREE.Matrix4[] = [];
-    const innerRadius = 38;
-    const outerRadius = 180;
+    const innerRadius = 25; // Reduced radius
+    const outerRadius = 115; // Reduced radius
     for (let i = 0; i < rockCount; i++) {
       const r = innerRadius + Math.random() * (outerRadius - innerRadius);
       const angle = Math.random() * Math.PI * 2;
@@ -816,7 +816,8 @@ export function SupermassiveBlackHole({
         Math.random() * Math.PI * 2,
         Math.random() * Math.PI * 2
       );
-      const s = 0.3 + Math.random() * 1.5;
+      // 2% chance for a massive, thick boulder rock, otherwise regular chunks
+      const s = Math.random() > 0.98 ? 3.0 + Math.random() * 4.0 : 0.8 + Math.random() * 2.5;
       dummy.scale.set(s, s, s);
       dummy.updateMatrix();
       matrices.push(dummy.matrix.clone());
@@ -869,11 +870,11 @@ export function SupermassiveBlackHole({
       {/* Horizontal crossing light band — Saturn-like torus over the equator */}
       <mesh rotation={[0, 0, 0.05]} renderOrder={3}>
         <torusGeometry args={[37, 2.5, 16, 120]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.7} />
+        <meshBasicMaterial color="#ffff00" transparent opacity={0.7} />
       </mesh>
       <mesh rotation={[0, 0, 0.05]} renderOrder={3}>
         <torusGeometry args={[37.5, 5, 16, 120]} />
-        <meshBasicMaterial color="#ffe566" transparent opacity={0.4} blending={THREE.AdditiveBlending} />
+        <meshBasicMaterial color="#ffff00" transparent opacity={0.4} blending={THREE.AdditiveBlending} />
       </mesh>
 
       {/* All 3 disk layers rotate together */}
@@ -881,19 +882,19 @@ export function SupermassiveBlackHole({
         {/* Inner bright glow zone */}
         <instancedMesh ref={innerDiskRef} args={[undefined, undefined, innerCount]}>
           <boxGeometry args={[0.7, 0.7, 0.7]} />
-          <meshBasicMaterial vertexColors transparent opacity={1.0} blending={THREE.AdditiveBlending} />
+          <meshBasicMaterial vertexColors transparent opacity={0.6} blending={THREE.AdditiveBlending} />
         </instancedMesh>
 
         {/* Mid yellow-orange disk */}
         <instancedMesh ref={midDiskRef} args={[undefined, undefined, midCount]}>
           <boxGeometry args={[1.0, 1.0, 1.0]} />
-          <meshBasicMaterial vertexColors transparent opacity={0.92} blending={THREE.AdditiveBlending} />
+          <meshBasicMaterial vertexColors transparent opacity={0.45} blending={THREE.AdditiveBlending} />
         </instancedMesh>
 
         {/* Outer sparse orange-red cloud */}
         <instancedMesh ref={outerDiskRef} args={[undefined, undefined, outerCount]}>
           <boxGeometry args={[1.2, 1.2, 1.2]} />
-          <meshBasicMaterial vertexColors transparent opacity={0.78} blending={THREE.AdditiveBlending} />
+          <meshBasicMaterial vertexColors transparent opacity={0.3} blending={THREE.AdditiveBlending} />
         </instancedMesh>
       </group>
 
@@ -901,26 +902,26 @@ export function SupermassiveBlackHole({
       <group ref={perpGroupRef} rotation={[Math.PI / 2, 0, 0]}>
         <instancedMesh ref={perpRingRef} args={[undefined, undefined, perpCount]}>
           <boxGeometry args={[0.8, 0.8, 0.8]} />
-          <meshBasicMaterial vertexColors transparent opacity={0.88} blending={THREE.AdditiveBlending} />
+          <meshBasicMaterial vertexColors transparent opacity={0.65} blending={THREE.AdditiveBlending} />
         </instancedMesh>
       </group>
 
       {/* Yellow/Gold Rock Asteroid Ring */}
       <group ref={rockRingRef}>
         <instancedMesh ref={rockMeshRef} args={[undefined, undefined, rockCount]}>
-          <icosahedronGeometry args={[0.015, 0]} />
+          <icosahedronGeometry args={[0.25, 0]} />
           <meshStandardMaterial
             color="#FFFFEE"
             roughness={0.8}
             metalness={0.2}
             emissive="#FFFF00"
-            emissiveIntensity={1.8}
+            emissiveIntensity={0.6}
           />
         </instancedMesh>
       </group>
 
       {/* Bright core glow light */}
-      <pointLight color="#ffcc44" intensity={8} distance={500} decay={1.2} />
+      <pointLight color="#ffff00" intensity={4.5} distance={400} decay={1.3} />
     </group>
   );
 }
@@ -1407,12 +1408,37 @@ export function MilkyWay() {
         <meshBasicMaterial 
           color="#ffffff" 
           transparent 
-          opacity={0.35} 
+          opacity={0.65} 
           blending={THREE.AdditiveBlending} 
           depthWrite={false} 
         />
       </instancedMesh>
     </group>
+  );
+}
+
+// 12c. Medium Galaxy at the bottom of the solar system
+export function BottomGalaxy({
+  position = [0, -450, 0],
+  scale = 1.2,
+}: {
+  position?: [number, number, number];
+  scale?: any;
+}) {
+  return (
+    <MiniGalaxy
+      position={position}
+      scale={[2.2 * (scale as number), 1.2 * (scale as number), 0.7 * (scale as number)] as any}
+      rotation={[-Math.PI / 2.5, 0, Math.PI / 4]}
+      count={24000}
+      branches={24}
+      radius={200}
+      colorCore="#fef08a"
+      colorInner="#f97316"
+      colorMid="#eab308"
+      colorOuter="#3b82f6"
+      spinSpeed={0.02}
+    />
   );
 }
 

@@ -18,6 +18,7 @@ import {
   MultipleBackgroundGalaxies,
   DistantAsteroidField,
   MilkyWay,
+  BottomGalaxy,
 } from "./SpaceEnvironment";
 import Orb from "./Orb";
 
@@ -34,6 +35,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
       <GiantTricolorGalaxy position={[-200, 180, 1400]} scale={[1.8, 1.0, 0.55] as any} />
       <MultipleBackgroundGalaxies />
       <DistantAsteroidField />
+      <BottomGalaxy position={[650, -450, 0]} />
 
       {/* 8. Milky Way Band */}
       <MilkyWay />
