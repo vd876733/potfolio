@@ -27,6 +27,7 @@ const Scene = dynamic(() => import("@/components/Scene"), {
 export default function Home() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"3D" | "2D">("3D");
+  const [twoDKey, setTwoDKey] = useState(0);
   const isMobile = useIsMobile();
   const [isInitialized, setIsInitialized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -97,8 +98,12 @@ export default function Home() {
         onNavClick={handleNavClick}
         viewMode={viewMode}
         toggleViewMode={() => {
-          setViewMode(prev => prev === "3D" ? "2D" : "3D");
-          setActiveSection(null); // Clear active modal if switching modes
+          setViewMode(prev => {
+            const next = prev === "3D" ? "2D" : "3D";
+            if (next === "2D") setTwoDKey((k) => k + 1);
+            return next;
+          });
+          setActiveSection(null);
         }}
       />
 
@@ -121,7 +126,7 @@ export default function Home() {
           </AnimatePresence>
         </>
       ) : (
-        <Portfolio2D />
+        <Portfolio2D animationKey={twoDKey} />
       )}
     </main>
   );

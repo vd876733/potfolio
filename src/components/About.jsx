@@ -11,7 +11,6 @@ import { FaLinkedin as SiLinkedin } from "react-icons/fa";
 import portfolioData from "@/data/portfolio.json";
 import VariableProximity from "./VariableProximity";
 import BorderGlow from "./BorderGlow";
-import Dock from "./Dock/Dock";
 
 export default function About() {
   const { personal, codingStats } = portfolioData;
@@ -30,34 +29,33 @@ export default function About() {
       name: "GitHub",
       url: personal?.social?.github || "https://github.com/vd876733",
       icon: SiGithub,
+      hoverColor: "hover:text-[#24292e] dark:hover:text-white",
     },
     {
       name: "LinkedIn",
       url: personal?.social?.linkedin || "https://www.linkedin.com/in/varad-deshmukh-31173a374/",
       icon: SiLinkedin,
+      hoverColor: "hover:text-[#0a66c2] dark:hover:text-[#38bdf8]",
     },
     {
       name: "LeetCode",
       url: codingStats?.leetcode?.profileUrl || "https://leetcode.com/u/Varad_Max11/",
       icon: SiLeetcode,
+      hoverColor: "hover:text-[#ffa116] dark:hover:text-[#ffb74d]",
     },
     {
       name: "HackerRank",
       url: codingStats?.hackerrank?.profileUrl || "https://www.hackerrank.com/profile/vd876733",
       icon: SiHackerrank,
+      hoverColor: "hover:text-[#2ec866] dark:hover:text-[#4ade80]",
     },
     {
       name: "CodeChef",
       url: codingStats?.codechef?.profileUrl || "https://www.codechef.com/users/varad_11082005",
       icon: SiCodechef,
+      hoverColor: "hover:text-[#5b4638] dark:hover:text-[#d6c7b2]",
     },
   ];
-
-  const dockSocialItems = socialLinks.map((item) => ({
-    icon: <item.icon size={20} />,
-    label: item.name,
-    onClick: () => window.open(item.url, "_blank", "noopener,noreferrer"),
-  }));
 
   return (
     <BorderGlow
@@ -118,16 +116,24 @@ export default function About() {
           </div>
         </div>
 
-        {/* Social Profiles – Animated Dock */}
-        <div className="dock-inline flex justify-center sm:justify-start pt-4 border-t border-slate-200 dark:border-white/5">
-          <Dock
-            items={dockSocialItems}
-            panelHeight={54}
-            baseItemSize={42}
-            magnification={62}
-            distance={140}
-            spring={{ mass: 0.1, stiffness: 160, damping: 13 }}
-          />
+        {/* Social Profiles Row */}
+        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 pt-4 border-t border-slate-200 dark:border-white/5">
+          {socialLinks.map((item) => {
+            const Icon = item.icon;
+            return (
+              <a
+                key={item.name}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={item.name}
+                aria-label={item.name}
+                className={`cursor-target p-3.5 bg-sky-50 dark:bg-slate-800/80 hover:bg-sky-100 dark:hover:bg-slate-700/80 border border-sky-100 dark:border-slate-700 text-sky-700 dark:text-sky-300 ${item.hoverColor} rounded-2xl transition-all duration-200 shadow-xs flex items-center justify-center group`}
+              >
+                <Icon className="w-5 h-5" />
+              </a>
+            );
+          })}
         </div>
 
         {/* Download Resume Button */}
