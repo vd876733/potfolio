@@ -91,7 +91,7 @@ export default function FloatingNavbar({
               <button
                 key={item.id}
                 onClick={() => handleTabClick(item.id)}
-                className={`relative px-4 py-1.5 rounded-full transition-colors ${
+                className={`cursor-target relative px-4 py-1.5 rounded-full transition-colors ${
                   isActive
                     ? "text-sky-600 dark:text-sky-400 font-semibold"
                     : "text-slate-600 dark:text-slate-300 hover:text-sky-500 dark:hover:text-sky-400"
@@ -117,7 +117,7 @@ export default function FloatingNavbar({
           {toggleViewMode && (
             <button
               onClick={toggleViewMode}
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/80 text-xs font-inter font-medium text-slate-800 dark:text-slate-200 transition-all active:scale-95 shadow-sm"
+              className="cursor-target flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/80 text-xs font-inter font-medium text-slate-800 dark:text-slate-200 transition-all active:scale-95 shadow-sm"
               title="Toggle View Mode"
             >
               {viewMode === "3D" ? (
@@ -138,7 +138,7 @@ export default function FloatingNavbar({
           {mounted && (
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/80 flex items-center justify-center text-slate-700 dark:text-slate-200 transition-all active:scale-95 shadow-sm"
+              className="cursor-target w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700/80 flex items-center justify-center text-slate-700 dark:text-slate-200 transition-all active:scale-95 shadow-sm"
               title="Toggle Theme"
             >
               {theme === "dark" ? (

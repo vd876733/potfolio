@@ -29,11 +29,11 @@ export default function WorkshopModal() {
             </p>
 
             <div className="flex gap-4 mt-2">
-              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-3 bg-neon-accent/10 hover:bg-neon-accent/20 border border-neon-accent/20 text-neon-accent rounded-xl transition-all font-inter font-semibold text-sm">
+              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="cursor-target flex-1 flex items-center justify-center gap-2 py-3 bg-neon-accent/10 hover:bg-neon-accent/20 border border-neon-accent/20 text-neon-accent rounded-xl transition-all font-inter font-semibold text-sm">
                 <ExternalLink className="w-4 h-4" />
                 Live Preview
               </a>
-              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-3 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white rounded-xl transition-all font-inter font-semibold text-sm">
+              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="cursor-target flex-1 flex items-center justify-center gap-2 py-3 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white rounded-xl transition-all font-inter font-semibold text-sm">
                 <Code className="w-4 h-4" />
                 GitHub Repo
               </a>

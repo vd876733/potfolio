@@ -22,7 +22,7 @@ export default function AtelierModal() {
             key={sketch.id}
             layoutId={`sketch-${sketch.id}`}
             onClick={() => setSelectedImage(sketch.img)}
-            className="cursor-pointer overflow-hidden rounded-xl border border-slate-200 dark:border-white/5 aspect-square"
+            className="cursor-target cursor-pointer overflow-hidden rounded-xl border border-slate-200 dark:border-white/5 aspect-square"
           >
             <motion.img
               src={sketch.img}
@@ -51,7 +51,7 @@ export default function AtelierModal() {
             >
               <button
                 onClick={() => setSelectedImage(null)}
-                className="absolute -top-12 right-0 p-2 text-slate-500 dark:text-white/50 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 rounded-full transition-colors"
+                className="cursor-target absolute -top-12 right-0 p-2 text-slate-500 dark:text-white/50 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 rounded-full transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>

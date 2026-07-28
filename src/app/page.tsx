@@ -16,6 +16,7 @@ import Portfolio2D from "@/components/Portfolio2D";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 import LoadingOverlay from "@/components/LoadingOverlay";
+import TargetCursor from "@/components/TargetCursor/TargetCursor";
 
 // Dynamically import the Scene to avoid SSR issues with Three.js
 const Scene = dynamic(() => import("@/components/Scene"), {
@@ -82,6 +83,13 @@ export default function Home() {
 
   return (
     <main className="relative w-full h-screen overflow-hidden bg-slate-50 dark:bg-obsidian transition-colors duration-300">
+      {/* Interactive Target Cursor */}
+      <TargetCursor 
+        spinDuration={2}
+        hideDefaultCursor={true}
+        parallaxOn={true}
+      />
+
       {/* Full-screen Loading Overlay with ldrs Grid spinner */}
       <LoadingOverlay isLoading={isLoading} caption="Loading 3D World..." />
 

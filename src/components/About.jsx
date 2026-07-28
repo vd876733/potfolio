@@ -128,7 +128,7 @@ export default function About() {
                 rel="noopener noreferrer"
                 title={item.name}
                 aria-label={item.name}
-                className={`p-3.5 bg-sky-50 dark:bg-slate-800/80 hover:bg-sky-100 dark:hover:bg-slate-700/80 border border-sky-100 dark:border-slate-700 text-sky-700 dark:text-sky-300 ${item.hoverColor} rounded-2xl transition-all duration-200 shadow-xs flex items-center justify-center group`}
+                className={`cursor-target p-3.5 bg-sky-50 dark:bg-slate-800/80 hover:bg-sky-100 dark:hover:bg-slate-700/80 border border-sky-100 dark:border-slate-700 text-sky-700 dark:text-sky-300 ${item.hoverColor} rounded-2xl transition-all duration-200 shadow-xs flex items-center justify-center group`}
               >
                 <Icon className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
               </a>
@@ -141,7 +141,7 @@ export default function About() {
           href={personal.resumeUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2.5 w-full py-3.5 px-6 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 border border-sky-200 dark:border-sky-800/60 text-sky-700 dark:text-sky-300 hover:text-sky-800 dark:hover:text-sky-200 font-semibold rounded-2xl transition-all duration-200 shadow-xs text-sm sm:text-base group"
+          className="cursor-target flex items-center justify-center gap-2.5 w-full py-3.5 px-6 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100 dark:hover:bg-sky-900/60 border border-sky-200 dark:border-sky-800/60 text-sky-700 dark:text-sky-300 hover:text-sky-800 dark:hover:text-sky-200 font-semibold rounded-2xl transition-all duration-200 shadow-xs text-sm sm:text-base group"
         >
           <FileDown className="w-5 h-5 text-sky-600 dark:text-sky-400 transition-transform duration-200 group-hover:-translate-y-0.5" />
           <span>Download Resume</span>

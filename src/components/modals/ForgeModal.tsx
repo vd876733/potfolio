@@ -37,7 +37,7 @@ export default function ForgeModal() {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`flex-1 py-2 rounded-lg font-inter font-medium text-sm transition-all ${
+            className={`cursor-target flex-1 py-2 rounded-lg font-inter font-medium text-sm transition-all ${
               activeTab === tab
                 ? "bg-slate-200 dark:bg-white/10 text-slate-900 dark:text-white"
                 : "text-slate-500 dark:text-white/50 hover:text-slate-900 dark:hover:text-white/80 hover:bg-slate-100 dark:hover:bg-white/5"
@@ -102,7 +102,7 @@ export default function ForgeModal() {
                     href={cert.pdfUrl || cert.url || cert.link || cert.verificationUrl || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-2 w-full py-2 px-3 bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs rounded-lg flex items-center justify-center gap-2 transition-all shadow-sm"
+                    className="cursor-target mt-2 w-full py-2 px-3 bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs rounded-lg flex items-center justify-center gap-2 transition-all shadow-sm"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

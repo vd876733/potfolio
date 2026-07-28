@@ -28,7 +28,7 @@ export default function ModalWrapper({ onClose, children }: ModalWrapperProps) {
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-slate-500 dark:text-white/50 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 rounded-full transition-colors z-10"
+          className="cursor-target absolute top-4 right-4 p-2 text-slate-500 dark:text-white/50 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-white/10 rounded-full transition-colors z-10"
         >
           <X className="w-5 h-5" />
         </button>
