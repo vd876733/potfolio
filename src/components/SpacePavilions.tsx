@@ -19,6 +19,9 @@ import {
   DistantAsteroidField,
   MilkyWay,
   BottomGalaxy,
+  MercuryPlanet,
+  VenusPlanet,
+  EarthPlanet,
 } from "./SpaceEnvironment";
 import Orb from "./Orb";
 
@@ -31,7 +34,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
     <group>
       {/* 2x Supermassive Black Hole & Cosmic Spiral Galaxy Deep in Background */}
       <SupermassiveBlackHole position={[650, 110, -550]} scale={2.0} />
-      <BackgroundGalaxy position={[-650, 120, -600]} scale={1.5} />
+      <BackgroundGalaxy position={[-350, 120, -600]} scale={1.5} />
       <GiantTricolorGalaxy position={[-200, 180, 1400]} scale={[1.8, 1.0, 0.55] as any} />
       <MultipleBackgroundGalaxies />
       <DistantAsteroidField />
@@ -75,31 +78,27 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
       <HighOrbitSpaceships />
 
       {/* 1. Mercury (1st planet from Sun) */}
-      <GLTFPlanet
-        modelPath="/space/Planet by Quaternius - IVnmauIgWX.glb"
-        orbitRadius={12}
-        scale={1.3}
+      <MercuryPlanet
+        orbitRadius={14}
+        size={1.1}
         speed={0.15}
         initialAngle={0.5}
       />
 
       {/* 2. Venus (2nd planet from Sun) */}
-      <GLTFPlanet
-        modelPath="/space/Planet by Quaternius - IVnmauIgWX.glb"
-        orbitRadius={18}
-        scale={1.9}
+      <VenusPlanet
+        orbitRadius={22}
+        size={1.6}
         speed={0.12}
         initialAngle={2.1}
       />
 
-      {/* 3. Command Central / About Section */}
-      <GLTFPlanet
-        modelPath="/space/Planet by Quaternius - IVnmauIgWX.glb"
-        orbitRadius={26}
-        scale={2.2}
+      {/* 3. Command Central / About Section (Earth) */}
+      <EarthPlanet
+        orbitRadius={32}
+        size={2.2}
         speed={0.09}
         initialAngle={4.2}
-        atmosphereColor="#38bdf8"
       >
         {/* Floating Astronaut near Command Central */}
         <Spacewalker position={[2.5, 1.4, 0]} />
@@ -111,7 +110,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
           offsetY={3.8}
           onClick={onSectionClick}
         />
-      </GLTFPlanet>
+      </EarthPlanet>
 
       {/* 4. Mars GLTF (Cyber Arena Section) */}
       <GLTFPlanet

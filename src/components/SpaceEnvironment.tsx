@@ -79,12 +79,13 @@ export function SunGLTF() {
         <meshBasicMaterial
           color="#ffaa00"
           transparent
-          opacity={0.25}
+          opacity={0.4}
           side={THREE.BackSide}
+          blending={THREE.AdditiveBlending}
         />
       </mesh>
-      <pointLight intensity={25} color="#ffaa00" distance={220} decay={1} />
-      <pointLight intensity={15} color="#ffffff" distance={140} decay={1} />
+      <pointLight intensity={40} color="#ffaa00" distance={280} decay={1} />
+      <pointLight intensity={25} color="#ffffff" distance={180} decay={1} />
     </group>
   );
 }
@@ -383,6 +384,300 @@ export function ShootingStars() {
           <pointLight color={s.color} intensity={2.5} distance={30} decay={2} />
         </group>
       ))}
+    </group>
+  );
+}
+
+// 4b. Mercury (Rocky, Cratered Planet)
+export function MercuryPlanet({
+  orbitRadius,
+  size = 1.0,
+  speed = 0.15,
+  initialAngle = 0.5,
+  children,
+}: {
+  orbitRadius: number;
+  size?: number;
+  speed?: number;
+  initialAngle?: number;
+  children?: React.ReactNode;
+}) {
+  const orbitGroupRef = useRef<THREE.Group>(null!);
+  const meshRef = useRef<THREE.Mesh>(null!);
+
+  const mercuryTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.fillStyle = "#737373";
+      ctx.fillRect(0, 0, 512, 256);
+      
+      // Procedural Craters
+      for (let i = 0; i < 600; i++) {
+        ctx.fillStyle = Math.random() > 0.5 ? "#525252" : "#8a8a8a";
+        ctx.beginPath();
+        ctx.arc(Math.random() * 512, Math.random() * 256, Math.random() * 6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  useFrame((state, delta) => {
+    const t = state.clock.elapsedTime * speed + initialAngle;
+    if (orbitGroupRef.current) {
+      orbitGroupRef.current.position.x = Math.cos(t) * orbitRadius;
+      orbitGroupRef.current.position.z = Math.sin(t) * orbitRadius;
+    }
+    if (meshRef.current) {
+      meshRef.current.rotation.y += delta * 0.5;
+    }
+  });
+
+  return (
+    <group>
+      <group ref={orbitGroupRef}>
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[size, 64, 64]} />
+          <meshStandardMaterial
+            map={mercuryTexture || undefined}
+            roughness={0.9}
+            metalness={0.2}
+          />
+        </mesh>
+        {children}
+      </group>
+    </group>
+  );
+}
+
+// 4c. Venus (Hot, Cloudy, Yellow-Orange Planet)
+export function VenusPlanet({
+  orbitRadius,
+  size = 1.0,
+  speed = 0.12,
+  initialAngle = 2.1,
+  children,
+}: {
+  orbitRadius: number;
+  size?: number;
+  speed?: number;
+  initialAngle?: number;
+  children?: React.ReactNode;
+}) {
+  const orbitGroupRef = useRef<THREE.Group>(null!);
+  const meshRef = useRef<THREE.Mesh>(null!);
+
+  const venusTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      // Swirly/banded atmosphere
+      const grad = ctx.createLinearGradient(0, 0, 0, 256);
+      grad.addColorStop(0.0, "#d49a46");
+      grad.addColorStop(0.2, "#e6b360");
+      grad.addColorStop(0.4, "#cca35e");
+      grad.addColorStop(0.6, "#f5cc7f");
+      grad.addColorStop(0.8, "#d9aa55");
+      grad.addColorStop(1.0, "#d49a46");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 256);
+
+      // Add some subtle cloud bands
+      ctx.fillStyle = "rgba(255, 230, 180, 0.15)";
+      ctx.fillRect(0, 40, 512, 20);
+      ctx.fillRect(0, 110, 512, 35);
+      ctx.fillRect(0, 190, 512, 15);
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  useFrame((state, delta) => {
+    const t = state.clock.elapsedTime * speed + initialAngle;
+    if (orbitGroupRef.current) {
+      orbitGroupRef.current.position.x = Math.cos(t) * orbitRadius;
+      orbitGroupRef.current.position.z = Math.sin(t) * orbitRadius;
+    }
+    if (meshRef.current) {
+      meshRef.current.rotation.y += delta * 0.4;
+    }
+  });
+
+  return (
+    <group>
+      <group ref={orbitGroupRef}>
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[size, 64, 64]} />
+          <meshStandardMaterial
+            map={venusTexture || undefined}
+            roughness={0.7}
+            metalness={0.1}
+          />
+        </mesh>
+        {children}
+      </group>
+    </group>
+  );
+}
+
+// 4d. Earth (Blue Oceans, Green Continents, Clouds)
+export function EarthPlanet({
+  orbitRadius,
+  size = 1.0,
+  speed = 0.09,
+  initialAngle = 4.2,
+  children,
+}: {
+  orbitRadius: number;
+  size?: number;
+  speed?: number;
+  initialAngle?: number;
+  children?: React.ReactNode;
+}) {
+  const orbitGroupRef = useRef<THREE.Group>(null!);
+  const meshRef = useRef<THREE.Mesh>(null!);
+  const cloudRef = useRef<THREE.Mesh>(null!);
+  const moonGroupRef = useRef<THREE.Group>(null!);
+
+  const earthTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      // Oceans
+      ctx.fillStyle = "#1e40af"; 
+      ctx.fillRect(0, 0, 512, 256);
+
+      // Procedural continents
+      ctx.fillStyle = "#15803d"; 
+      for (let i = 0; i < 60; i++) {
+        ctx.beginPath();
+        ctx.arc(
+          Math.random() * 512, 
+          Math.random() * 256, 
+          Math.random() * 30 + 10, 
+          0, 
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
+      
+      // Ice caps
+      ctx.fillStyle = "#f8fafc";
+      ctx.fillRect(0, 0, 512, 20); // North pole
+      ctx.fillRect(0, 236, 512, 20); // South pole
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+  
+  const cloudTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.clearRect(0, 0, 512, 256);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+      for (let i = 0; i < 150; i++) {
+        ctx.beginPath();
+        ctx.arc(
+          Math.random() * 512, 
+          Math.random() * 256, 
+          Math.random() * 15, 
+          0, 
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  const moonTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 256;
+    canvas.height = 128;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.fillStyle = "#94a3b8";
+      ctx.fillRect(0, 0, 256, 128);
+      for (let i = 0; i < 200; i++) {
+        ctx.fillStyle = Math.random() > 0.5 ? "#64748b" : "#cbd5e1";
+        ctx.beginPath();
+        ctx.arc(Math.random() * 256, Math.random() * 128, Math.random() * 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  useFrame((state, delta) => {
+    const t = state.clock.elapsedTime * speed + initialAngle;
+    if (orbitGroupRef.current) {
+      orbitGroupRef.current.position.x = Math.cos(t) * orbitRadius;
+      orbitGroupRef.current.position.z = Math.sin(t) * orbitRadius;
+    }
+    if (meshRef.current) {
+      meshRef.current.rotation.y += delta * 0.4;
+    }
+    if (cloudRef.current) {
+      cloudRef.current.rotation.y += delta * 0.5;
+    }
+    if (moonGroupRef.current) {
+      moonGroupRef.current.rotation.y += delta * 0.8;
+    }
+  });
+
+  return (
+    <group>
+      <group ref={orbitGroupRef}>
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[size, 64, 64]} />
+          <meshStandardMaterial
+            map={earthTexture || undefined}
+            roughness={0.8}
+            metalness={0.2}
+          />
+        </mesh>
+        <mesh ref={cloudRef} scale={1.02}>
+          <sphereGeometry args={[size, 64, 64]} />
+          <meshStandardMaterial
+            map={cloudTexture || undefined}
+            transparent
+            opacity={0.8}
+            depthWrite={false}
+          />
+        </mesh>
+        {/* Glow */}
+        <mesh scale={1.1}>
+           <sphereGeometry args={[size, 32, 32]} />
+           <meshBasicMaterial color="#38bdf8" transparent opacity={0.15} blending={THREE.AdditiveBlending} depthWrite={false} />
+        </mesh>
+        
+        {/* The Moon */}
+        <group ref={moonGroupRef}>
+          <mesh position={[size * 2.8, 0, 0]}>
+            <sphereGeometry args={[size * 0.25, 32, 32]} />
+            <meshStandardMaterial
+              map={moonTexture || undefined}
+              roughness={0.9}
+              metalness={0.1}
+            />
+          </mesh>
+        </group>
+
+        {children}
+      </group>
     </group>
   );
 }
