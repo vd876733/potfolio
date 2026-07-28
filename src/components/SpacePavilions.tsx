@@ -23,6 +23,10 @@ import {
   VenusPlanet,
   EarthPlanet,
   MarsPlanet,
+  SaturnPlanet,
+  UranusPlanet,
+  NeptunePlanet,
+  PlutoPlanet,
   RedNebula,
 } from "./SpaceEnvironment";
 import Orb from "./Orb";
@@ -136,7 +140,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
 
       {/* 5. Jupiter Gas Giant with Bands & Red Spot (Starship Hangar Section) */}
       <JupiterPlanet
-        orbitRadius={48}
+        orbitRadius={60}
         size={5.2}
         speed={0.04}
         initialAngle={3.5}
@@ -150,48 +154,51 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
         />
       </JupiterPlanet>
 
-      {/* 6. Saturn GLTF (Quantum Forge Section) */}
-      <GLTFPlanet
-        modelPath="/space/Saturn by Jarlan Perez - b-y9HDTsu7q.glb"
-        orbitRadius={64}
-        scale={4.8}
+      {/* 6. Saturn (Forge Section) */}
+      <SaturnPlanet
+        orbitRadius={80}
+        size={4.2}
         speed={0.03}
-        initialAngle={0.8}
-      >
-        {/* Quantum Forge Waypoint */}
-        <SpaceWaypoint
-          label="Quantum Forge"
-          color="#10B981"
-          offsetY={7.0}
-          onClick={onSectionClick}
-        />
-      </GLTFPlanet>
-
-      {/* 7. Uranus */}
-      <GLTFPlanet
-        modelPath="/space/Planet by Quaternius - IVnmauIgWX.glb"
-        orbitRadius={78}
-        scale={3.5}
-        speed={0.02}
-        initialAngle={2.8}
-      />
-
-      {/* 8. Neptune GLTF (Starlight Gallery Section) */}
-      <GLTFPlanet
-        modelPath="/space/Neptune by Poly by Google - fxLCXXDYUwC.glb"
-        orbitRadius={92}
-        scale={3.8}
-        speed={0.015}
         initialAngle={5.1}
       >
-        {/* Starlight Gallery Waypoint */}
         <SpaceWaypoint
-          label="Starlight Gallery"
-          color="#A855F7"
+          label="The Forge"
+          color="#F97316"
           offsetY={6.0}
           onClick={onSectionClick}
         />
-      </GLTFPlanet>
+      </SaturnPlanet>
+
+      {/* 7. Uranus */}
+      <UranusPlanet
+        orbitRadius={100}
+        size={3.2}
+        speed={0.02}
+        initialAngle={2.5}
+      />
+
+      {/* 8. Neptune (Starlight Gallery Section) */}
+      <NeptunePlanet
+        orbitRadius={120}
+        size={3.0}
+        speed={0.015}
+        initialAngle={1.7}
+      >
+        <SpaceWaypoint
+          label="Starlight Gallery"
+          color="#3B82F6"
+          offsetY={6.0}
+          onClick={onSectionClick}
+        />
+      </NeptunePlanet>
+
+      {/* 9. Pluto */}
+      <PlutoPlanet
+        orbitRadius={140}
+        size={0.8}
+        speed={0.008}
+        initialAngle={0.5}
+      />
     </group>
   );
 }

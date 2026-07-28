@@ -439,6 +439,8 @@ export function MercuryPlanet({
 
   return (
     <group>
+      <OrbitRing radius={orbitRadius} />
+
       <group ref={orbitGroupRef}>
         <mesh ref={meshRef}>
           <sphereGeometry args={[size, 64, 64]} />
@@ -511,6 +513,8 @@ export function VenusPlanet({
 
   return (
     <group>
+      <OrbitRing radius={orbitRadius} />
+
       <group ref={orbitGroupRef}>
         <mesh ref={meshRef}>
           <sphereGeometry args={[size, 64, 64]} />
@@ -640,6 +644,8 @@ export function EarthPlanet({
 
   return (
     <group>
+      <OrbitRing radius={orbitRadius} />
+
       <group ref={orbitGroupRef}>
         <mesh ref={meshRef}>
           <sphereGeometry args={[size, 64, 64]} />
@@ -759,6 +765,8 @@ export function MarsPlanet({
 
   return (
     <group>
+      <OrbitRing radius={orbitRadius} />
+
       <group ref={orbitGroupRef}>
         <mesh ref={meshRef}>
           <sphereGeometry args={[size, 64, 64]} />
@@ -1446,7 +1454,390 @@ export function MiniGalaxy({
   );
 }
 
-// 12. Giant Background Spiral Galaxy (Refactored wrapper)
+// 6. Saturn (Gas Giant with Rings)
+export function SaturnPlanet({
+  orbitRadius,
+  size = 4.2,
+  speed = 0.03,
+  initialAngle = 5.1,
+  children,
+}: {
+  orbitRadius: number;
+  size?: number;
+  speed?: number;
+  initialAngle?: number;
+  children?: React.ReactNode;
+}) {
+  const orbitGroupRef = useRef<THREE.Group>(null!);
+  const meshRef = useRef<THREE.Mesh>(null!);
+  const ringRef = useRef<THREE.Mesh>(null!);
+
+  const saturnTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      const grad = ctx.createLinearGradient(0, 0, 0, 256);
+      grad.addColorStop(0.0, "#d1b48c"); // Tan
+      grad.addColorStop(0.2, "#e6cc98"); // Light yellow/tan
+      grad.addColorStop(0.4, "#cda573"); // Darker tan
+      grad.addColorStop(0.6, "#f4e0c4"); // Pale
+      grad.addColorStop(0.8, "#cda573"); // Darker tan
+      grad.addColorStop(1.0, "#d1b48c"); // Tan
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 256);
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  const ringTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 256;
+    canvas.height = 4;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      const grad = ctx.createLinearGradient(0, 0, 256, 0);
+      grad.addColorStop(0.0, "rgba(200, 180, 140, 0.0)");
+      grad.addColorStop(0.1, "rgba(220, 200, 160, 0.8)");
+      grad.addColorStop(0.3, "rgba(180, 150, 110, 0.6)");
+      grad.addColorStop(0.5, "rgba(240, 220, 180, 0.9)");
+      grad.addColorStop(0.7, "rgba(160, 130, 90, 0.4)");
+      grad.addColorStop(0.9, "rgba(210, 190, 150, 0.7)");
+      grad.addColorStop(1.0, "rgba(200, 180, 140, 0.0)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 256, 4);
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  useFrame((state, delta) => {
+    const t = state.clock.elapsedTime * speed + initialAngle;
+    if (orbitGroupRef.current) {
+      orbitGroupRef.current.position.x = Math.cos(t) * orbitRadius;
+      orbitGroupRef.current.position.z = Math.sin(t) * orbitRadius;
+    }
+    if (meshRef.current) {
+      meshRef.current.rotation.y += delta * 0.3;
+    }
+    if (ringRef.current) {
+      ringRef.current.rotation.z -= delta * 0.1;
+    }
+  });
+
+  return (
+    <group>
+      <OrbitRing radius={orbitRadius} />
+
+      <group ref={orbitGroupRef}>
+        {/* Planet */}
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[size, 64, 64]} />
+          <meshStandardMaterial
+            map={saturnTexture || undefined}
+            roughness={0.6}
+            metalness={0.1}
+          />
+        </mesh>
+        
+        {/* Rings */}
+        <mesh ref={ringRef} rotation={[Math.PI / 2.2, 0, 0]}>
+          <ringGeometry args={[size * 1.3, size * 2.2, 64]} />
+          <meshStandardMaterial
+            map={ringTexture || undefined}
+            side={THREE.DoubleSide}
+            transparent
+            opacity={0.9}
+            roughness={0.5}
+          />
+        </mesh>
+
+        {children}
+      </group>
+    </group>
+  );
+}
+
+// 7. Uranus (Ice Giant with Vertical Rings)
+export function UranusPlanet({
+  orbitRadius,
+  size = 3.2,
+  speed = 0.02,
+  initialAngle = 2.5,
+  children,
+}: {
+  orbitRadius: number;
+  size?: number;
+  speed?: number;
+  initialAngle?: number;
+  children?: React.ReactNode;
+}) {
+  const orbitGroupRef = useRef<THREE.Group>(null!);
+  const meshRef = useRef<THREE.Mesh>(null!);
+  const ringRef = useRef<THREE.Mesh>(null!);
+
+  const uranusTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      const grad = ctx.createLinearGradient(0, 0, 0, 256);
+      grad.addColorStop(0.0, "#a5f3fc"); // Cyan 200
+      grad.addColorStop(0.5, "#67e8f9"); // Cyan 300
+      grad.addColorStop(1.0, "#a5f3fc"); // Cyan 200
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 256);
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  const ringTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 256;
+    canvas.height = 4;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      const grad = ctx.createLinearGradient(0, 0, 256, 0);
+      grad.addColorStop(0.0, "rgba(255, 255, 255, 0.0)");
+      grad.addColorStop(0.4, "rgba(255, 255, 255, 0.1)");
+      grad.addColorStop(0.5, "rgba(255, 255, 255, 0.4)");
+      grad.addColorStop(0.6, "rgba(255, 255, 255, 0.1)");
+      grad.addColorStop(1.0, "rgba(255, 255, 255, 0.0)");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 256, 4);
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  useFrame((state, delta) => {
+    const t = state.clock.elapsedTime * speed + initialAngle;
+    if (orbitGroupRef.current) {
+      orbitGroupRef.current.position.x = Math.cos(t) * orbitRadius;
+      orbitGroupRef.current.position.z = Math.sin(t) * orbitRadius;
+    }
+    if (meshRef.current) {
+      meshRef.current.rotation.x += delta * 0.4;
+    }
+    if (ringRef.current) {
+      ringRef.current.rotation.y -= delta * 0.2;
+    }
+  });
+
+  return (
+    <group>
+      <OrbitRing radius={orbitRadius} />
+
+      <group ref={orbitGroupRef}>
+        {/* Planet */}
+        <mesh ref={meshRef} rotation={[0, 0, Math.PI / 2]}>
+          <sphereGeometry args={[size, 64, 64]} />
+          <meshStandardMaterial
+            map={uranusTexture || undefined}
+            roughness={0.4}
+            metalness={0.2}
+          />
+        </mesh>
+        
+        {/* Vertical Rings */}
+        <mesh ref={ringRef} rotation={[0, Math.PI / 2, 0]}>
+          <ringGeometry args={[size * 1.5, size * 1.8, 64]} />
+          <meshStandardMaterial
+            map={ringTexture || undefined}
+            side={THREE.DoubleSide}
+            transparent
+            opacity={0.6}
+            depthWrite={false}
+          />
+        </mesh>
+        
+        {/* Glow */}
+        <mesh scale={1.05}>
+           <sphereGeometry args={[size, 32, 32]} />
+           <meshBasicMaterial color="#a5f3fc" transparent opacity={0.1} blending={THREE.AdditiveBlending} depthWrite={false} />
+        </mesh>
+
+        {children}
+      </group>
+    </group>
+  );
+}
+
+// 8. Neptune (Deep Blue Ice/Gas Giant)
+export function NeptunePlanet({
+  orbitRadius,
+  size = 3.0,
+  speed = 0.015,
+  initialAngle = 1.7,
+  children,
+}: {
+  orbitRadius: number;
+  size?: number;
+  speed?: number;
+  initialAngle?: number;
+  children?: React.ReactNode;
+}) {
+  const orbitGroupRef = useRef<THREE.Group>(null!);
+  const meshRef = useRef<THREE.Mesh>(null!);
+
+  const neptuneTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      // Deep azure/blue gradient
+      const grad = ctx.createLinearGradient(0, 0, 0, 256);
+      grad.addColorStop(0.0, "#1e3a8a"); // Blue 900
+      grad.addColorStop(0.3, "#1d4ed8"); // Blue 700
+      grad.addColorStop(0.5, "#2563eb"); // Blue 600
+      grad.addColorStop(0.7, "#1d4ed8"); // Blue 700
+      grad.addColorStop(1.0, "#1e3a8a"); // Blue 900
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 256);
+
+      // Faint high-altitude cloud streaks
+      ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+      ctx.fillRect(0, 80, 512, 5);
+      ctx.fillRect(0, 150, 512, 8);
+      
+      // A dark spot (like the Great Dark Spot)
+      ctx.fillStyle = "#172554"; // Blue 950
+      ctx.beginPath();
+      ctx.ellipse(350, 130, 30, 15, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  useFrame((state, delta) => {
+    const t = state.clock.elapsedTime * speed + initialAngle;
+    if (orbitGroupRef.current) {
+      orbitGroupRef.current.position.x = Math.cos(t) * orbitRadius;
+      orbitGroupRef.current.position.z = Math.sin(t) * orbitRadius;
+    }
+    if (meshRef.current) {
+      meshRef.current.rotation.y += delta * 0.35;
+    }
+  });
+
+  return (
+    <group>
+      <OrbitRing radius={orbitRadius} />
+
+      <group ref={orbitGroupRef}>
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[size, 64, 64]} />
+          <meshStandardMaterial
+            map={neptuneTexture || undefined}
+            roughness={0.5}
+            metalness={0.1}
+          />
+        </mesh>
+        
+        {/* Glow */}
+        <mesh scale={1.05}>
+           <sphereGeometry args={[size, 32, 32]} />
+           <meshBasicMaterial color="#3b82f6" transparent opacity={0.15} blending={THREE.AdditiveBlending} depthWrite={false} />
+        </mesh>
+
+        {children}
+      </group>
+    </group>
+  );
+}
+
+// 9. Pluto (Dwarf Planet with Heart-shaped Glacier)
+export function PlutoPlanet({
+  orbitRadius,
+  size = 0.8,
+  speed = 0.008,
+  initialAngle = 0.5,
+  children,
+}: {
+  orbitRadius: number;
+  size?: number;
+  speed?: number;
+  initialAngle?: number;
+  children?: React.ReactNode;
+}) {
+  const orbitGroupRef = useRef<THREE.Group>(null!);
+  const meshRef = useRef<THREE.Mesh>(null!);
+
+  const plutoTexture = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      // Base rocky/icy tan color
+      ctx.fillStyle = "#a89f91";
+      ctx.fillRect(0, 0, 512, 256);
+
+      // Darker reddish/brown region (Cthulhu Macula)
+      ctx.fillStyle = "#5c4033";
+      ctx.beginPath();
+      ctx.ellipse(150, 150, 80, 40, 0, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // The Heart (Tombaugh Regio) - bright icy white/tan
+      ctx.fillStyle = "#f3eada";
+      ctx.beginPath();
+      ctx.moveTo(300, 100);
+      ctx.bezierCurveTo(300, 70, 250, 70, 250, 100);
+      ctx.bezierCurveTo(250, 70, 200, 70, 200, 100);
+      ctx.bezierCurveTo(200, 140, 250, 170, 250, 190);
+      ctx.bezierCurveTo(250, 170, 300, 140, 300, 100);
+      ctx.fill();
+      
+      // Procedural craters
+      for (let i = 0; i < 100; i++) {
+        ctx.fillStyle = Math.random() > 0.5 ? "rgba(0,0,0,0.15)" : "rgba(255,255,255,0.15)";
+        ctx.beginPath();
+        ctx.arc(Math.random() * 512, Math.random() * 256, Math.random() * 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, []);
+
+  useFrame((state, delta) => {
+    const t = state.clock.elapsedTime * speed + initialAngle;
+    if (orbitGroupRef.current) {
+      orbitGroupRef.current.position.x = Math.cos(t) * orbitRadius;
+      orbitGroupRef.current.position.z = Math.sin(t) * orbitRadius;
+    }
+    if (meshRef.current) {
+      meshRef.current.rotation.y += delta * 0.2;
+    }
+  });
+
+  return (
+    <group>
+      <OrbitRing radius={orbitRadius} />
+
+      <group ref={orbitGroupRef}>
+        <mesh ref={meshRef}>
+          <sphereGeometry args={[size, 64, 64]} />
+          <meshStandardMaterial
+            map={plutoTexture || undefined}
+            roughness={0.9}
+            metalness={0.1}
+          />
+        </mesh>
+        {children}
+      </group>
+    </group>
+  );
+}
+
+// 7. Background Galaxy (Pink / Purple Spiral) Galaxy (Refactored wrapper)
 export function BackgroundGalaxy({
   position = [-650, 120, -600],
   scale = 2.5,
