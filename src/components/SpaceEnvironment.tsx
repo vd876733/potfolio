@@ -969,6 +969,70 @@ export function MultipleBackgroundGalaxies() {
   );
 }
 
+// 13. Distant Asteroid Field
+export function DistantAsteroidField() {
+  const pointsRef = useRef<THREE.Points>(null!);
+  const count = 15000;
+
+  const [positions, colors] = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    const cols = new Float32Array(count * 3);
+    const minRadius = 850;
+    const maxRadius = 1650;
+
+    const colorOptions = [
+      new THREE.Color("#888888"),
+      new THREE.Color("#aaaaaa"),
+      new THREE.Color("#667788"),
+      new THREE.Color("#778899"),
+    ];
+
+    for (let i = 0; i < count; i++) {
+      const r = minRadius + Math.random() * (maxRadius - minRadius);
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+
+      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      pos[i * 3 + 2] = r * Math.cos(phi);
+
+      const color = colorOptions[Math.floor(Math.random() * colorOptions.length)];
+      cols[i * 3] = color.r;
+      cols[i * 3 + 1] = color.g;
+      cols[i * 3 + 2] = color.b;
+    }
+    return [pos, cols];
+  }, [count]);
+
+  useFrame((_, delta) => {
+    if (pointsRef.current) {
+      pointsRef.current.rotation.y += delta * 0.018; // ~0.0003 rad per frame at 60fps
+    }
+  });
+
+  return (
+    <points ref={pointsRef}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          args={[positions, 3]}
+        />
+        <bufferAttribute
+          attach="attributes-color"
+          args={[colors, 3]}
+        />
+      </bufferGeometry>
+      <pointsMaterial
+        size={4.5}
+        vertexColors
+        transparent
+        opacity={0.7}
+        depthWrite={false}
+      />
+    </points>
+  );
+}
+
 // Preload GLTF Space Models
 useGLTF.preload("/space/Sun by Jarlan Perez - 3XZEucM6wC7.glb");
 useGLTF.preload("/space/Black hole by Poly by Google - bUEMVxbw9Zr.glb");

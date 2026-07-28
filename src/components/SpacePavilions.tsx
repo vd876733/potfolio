@@ -14,6 +14,7 @@ import {
   SupermassiveBlackHole,
   BackgroundGalaxy,
   MultipleBackgroundGalaxies,
+  DistantAsteroidField,
 } from "./SpaceEnvironment";
 import Orb from "./Orb";
 
@@ -28,6 +29,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
       <SupermassiveBlackHole position={[650, 110, -550]} scale={2.0} />
       <BackgroundGalaxy position={[-650, 120, -600]} scale={1.5} />
       <MultipleBackgroundGalaxies />
+      <DistantAsteroidField />
 
       {/* Cosmic Orb — floating galaxy orb above the solar system */}
       <Html position={[0, 38, -55]} center transform occlude={false} style={{ pointerEvents: "none" }}>
