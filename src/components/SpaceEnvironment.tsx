@@ -527,6 +527,8 @@ export function SupermassiveBlackHole({
   const perpRingRef   = useRef<THREE.InstancedMesh>(null!);
   const diskGroupRef  = useRef<THREE.Group>(null!);
   const perpGroupRef  = useRef<THREE.Group>(null!);
+  const rockRingRef   = useRef<THREE.Group>(null!);
+  const rockMeshRef   = useRef<THREE.InstancedMesh>(null!);
 
   // ── Layer 1: Dense inner glow zone — 1500 bright yellow particles
   const innerCount = 1500;
@@ -616,6 +618,31 @@ export function SupermassiveBlackHole({
     return { matrices, colors };
   }, [perpCount]);
 
+  // ── Yellow/Gold Asteroid Rock Ring
+  const rockCount = 3000;
+  const rockData = useMemo(() => {
+    const dummy = new THREE.Object3D();
+    const matrices: THREE.Matrix4[] = [];
+    const innerRadius = 185;
+    const outerRadius = 285;
+    for (let i = 0; i < rockCount; i++) {
+      const r = innerRadius + Math.random() * (outerRadius - innerRadius);
+      const angle = Math.random() * Math.PI * 2;
+      const h = (Math.random() - 0.5) * (12 + (r - innerRadius) * 0.08);
+      dummy.position.set(Math.cos(angle) * r, h, Math.sin(angle) * r);
+      dummy.rotation.set(
+        Math.random() * Math.PI * 2,
+        Math.random() * Math.PI * 2,
+        Math.random() * Math.PI * 2
+      );
+      const s = 0.5 + Math.random() * 1.2;
+      dummy.scale.set(s, s, s);
+      dummy.updateMatrix();
+      matrices.push(dummy.matrix.clone());
+    }
+    return matrices;
+  }, [rockCount]);
+
   // Upload all instance data to GPU
   const uploadToMesh = (
     meshRef: MutableRefObject<THREE.InstancedMesh>,
@@ -635,10 +662,19 @@ export function SupermassiveBlackHole({
   useLayoutEffect(() => uploadToMesh(outerDiskRef,  outerData),  [outerData]);
   useLayoutEffect(() => uploadToMesh(perpRingRef,   perpData),   [perpData]);
 
+  useLayoutEffect(() => {
+    if (!rockMeshRef.current) return;
+    rockData.forEach((mat, i) => {
+      rockMeshRef.current.setMatrixAt(i, mat);
+    });
+    rockMeshRef.current.instanceMatrix.needsUpdate = true;
+  }, [rockData]);
+
   // Slow orbital rotation
   useFrame((_, delta) => {
     if (diskGroupRef.current) diskGroupRef.current.rotation.y += delta * 0.04;
     if (perpGroupRef.current) perpGroupRef.current.rotation.z -= delta * 0.06;
+    if (rockRingRef.current) rockRingRef.current.rotation.y += delta * 0.015;
   });
 
   return (
@@ -685,6 +721,20 @@ export function SupermassiveBlackHole({
         <instancedMesh ref={perpRingRef} args={[undefined, undefined, perpCount]}>
           <boxGeometry args={[0.8, 0.8, 0.8]} />
           <meshBasicMaterial vertexColors transparent opacity={0.88} blending={THREE.AdditiveBlending} />
+        </instancedMesh>
+      </group>
+
+      {/* Yellow/Gold Rock Asteroid Ring */}
+      <group ref={rockRingRef}>
+        <instancedMesh ref={rockMeshRef} args={[undefined, undefined, rockCount]}>
+          <dodecahedronGeometry args={[0.9, 0]} />
+          <meshStandardMaterial
+            color="#FFD700"
+            roughness={0.7}
+            metalness={0.2}
+            emissive="#FF9900"
+            emissiveIntensity={0.25}
+          />
         </instancedMesh>
       </group>
 
