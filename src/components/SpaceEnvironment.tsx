@@ -893,58 +893,184 @@ export function BackgroundGalaxy({
   );
 }
 
-// Multiple background mini galaxies component
+// 12b. Giant Tricolor Spiral Galaxy — green / red / white
+export function GiantTricolorGalaxy({
+  position = [200, -180, -1400],
+  scale = 1.0,
+}: {
+  position?: [number, number, number];
+  scale?: number;
+}) {
+  const galaxyRef   = useRef<THREE.Group>(null!);
+  const coreRef     = useRef<THREE.Group>(null!);
+
+  const STAR_COUNT  = 30_000;
+  const BRANCHES    = 10;
+  const RADIUS      = 550;
+
+  const { positions, colors } = useMemo(() => {
+    const posArr = new Float32Array(STAR_COUNT * 3);
+    const colArr = new Float32Array(STAR_COUNT * 3);
+
+    // Colour stops: brilliant green core → fiery red arms → pure white fringe
+    const cGreen  = new THREE.Color("#00ff88");
+    const cRed    = new THREE.Color("#ff2244");
+    const cOrange = new THREE.Color("#ff6600");
+    const cWhite  = new THREE.Color("#ffffff");
+
+    for (let i = 0; i < STAR_COUNT; i++) {
+      const r         = Math.pow(Math.random(), 1.6) * RADIUS;
+      const armAngle  = ((i % BRANCHES) / BRANCHES) * Math.PI * 2;
+      const spinAngle = r * 0.009;
+      const scatter   = (Math.random() - 0.5) * 0.35;
+      const angle     = armAngle + spinAngle + scatter;
+
+      // Height profile: flat disk with slight bulge at core
+      const h = (Math.random() - 0.5) * 28 * Math.exp(-r / (RADIUS * 0.35));
+
+      posArr[i * 3]     = Math.cos(angle) * r;
+      posArr[i * 3 + 1] = h;
+      posArr[i * 3 + 2] = Math.sin(angle) * r;
+
+      // Colour zones
+      const n = r / RADIUS;          // 0 = core, 1 = edge
+      let c: THREE.Color;
+      if (n < 0.15) {
+        c = cGreen.clone().lerp(cGreen, n / 0.15);
+      } else if (n < 0.45) {
+        c = cGreen.clone().lerp(cRed, (n - 0.15) / 0.30);
+      } else if (n < 0.75) {
+        c = cRed.clone().lerp(cOrange, (n - 0.45) / 0.30);
+      } else {
+        c = cOrange.clone().lerp(cWhite, (n - 0.75) / 0.25);
+      }
+
+      colArr[i * 3]     = c.r;
+      colArr[i * 3 + 1] = c.g;
+      colArr[i * 3 + 2] = c.b;
+    }
+    return { positions: posArr, colors: colArr };
+  }, []);
+
+  useFrame((_, delta) => {
+    if (galaxyRef.current) galaxyRef.current.rotation.y += delta * 0.008;
+    if (coreRef.current)   coreRef.current.rotation.y   += delta * 0.025;
+  });
+
+  return (
+    <group position={position} scale={scale} rotation={[Math.PI / 5, -Math.PI / 6, 0.3]}>
+      {/* Glowing core */}
+      <mesh>
+        <sphereGeometry args={[RADIUS * 0.045, 20, 20]} />
+        <meshBasicMaterial color="#aaffcc" transparent opacity={0.95} />
+      </mesh>
+      <mesh>
+        <sphereGeometry args={[RADIUS * 0.12, 20, 20]} />
+        <meshBasicMaterial color="#00ff88" transparent opacity={0.18} side={THREE.BackSide} />
+      </mesh>
+
+      {/* Slowly spinning core glow group */}
+      <group ref={coreRef}>
+        <pointLight color="#00ff88" intensity={6} distance={800} decay={1.4} />
+      </group>
+
+      {/* Spiral arms star field */}
+      <group ref={galaxyRef}>
+        <points>
+          <bufferGeometry>
+            <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+            <bufferAttribute attach="attributes-color"    args={[colors, 3]} />
+          </bufferGeometry>
+          <pointsMaterial
+            size={RADIUS * 0.007}
+            vertexColors
+            transparent
+            opacity={0.85}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+          />
+        </points>
+      </group>
+    </group>
+  );
+}
+
+// Multiple background mini galaxies component — distributed over the FULL sphere of space
 export function MultipleBackgroundGalaxies() {
   const galaxies = useMemo(() => {
-    const list = [];
-    const countOptions = [2000, 3000, 4000, 5000];
-    const branchOptions = [4, 5, 6, 8];
-    const radiusOptions = [80, 100, 120, 140];
-    
     const palettes = [
       { core: "#fff7ed", inner: "#ec4899", mid: "#8b5cf6", outer: "#06b6d4" },
       { core: "#fffbeb", inner: "#f59e0b", mid: "#ef4444", outer: "#ec4899" },
       { core: "#f0fdf4", inner: "#10b981", mid: "#06b6d4", outer: "#3b82f6" },
       { core: "#faf5ff", inner: "#a855f7", mid: "#ec4899", outer: "#6366f1" },
+      { core: "#fff1f2", inner: "#f43f5e", mid: "#fb923c", outer: "#fbbf24" },
+      { core: "#ecfeff", inner: "#22d3ee", mid: "#818cf8", outer: "#c084fc" },
+      { core: "#fefce8", inner: "#eab308", mid: "#f97316", outer: "#ec4899" },
+      { core: "#f0f9ff", inner: "#38bdf8", mid: "#a78bfa", outer: "#f472b6" },
+      // Green galaxy palette
+      { core: "#f0fdf4", inner: "#4ade80", mid: "#22c55e", outer: "#86efac" },
     ];
 
-    // Main black hole is at [650, 110, -550]
-    // Generate 7 mini-galaxies scattered at far distances
-    for (let i = 0; i < 7; i++) {
-      const angle = (i / 7) * Math.PI * 2 + Math.random() * 0.5;
-      const distance = 450 + Math.random() * 450;
-      
-      const x = 650 + Math.cos(angle) * distance;
-      const y = -150 + Math.random() * 500;
-      const z = -550 + Math.sin(angle) * distance;
+    // 24 galaxies: deliberately placed all around the full sphere
+    const placements: Array<[number, number, number]> = [
+      // --- Near black hole region ---
+      [1100,  200, -900],
+      [ 300,  -80, -1200],
+      [ 900,  400, -300],
+      // --- Opposite side (near/behind solar system) ---
+      [-800,  150,  500],
+      [-600, -200,  700],
+      [-1100,  50,  200],
+      // --- Above the whole scene ---
+      [ 100,  900, -400],
+      [-300,  750,  600],
+      [ 700, 1100,  100],
+      // --- Below the whole scene ---
+      [ 200, -800,  300],
+      [-400, -700, -500],
+      [ 800, -900, -200],
+      // --- Far +Z side ---
+      [  50,  100, 1100],
+      [ 500, -300,  950],
+      [-200,  500, 1300],
+      // --- Far -Z side ---
+      [-100,  200, -1200],
+      [ 400, -400, -1000],
+      [-700,  300, -800],
+      // --- Deep diagonal corners ---
+      [1200, -300,  700],
+      [-900,  600, -700],
+      [ 600,  800,  900],
+      [-1000,-500,  600],
+      [ 350, -600, -900],
+      [-500,  900, -100],
+      // --- Green galaxy ---
+      [-200, -300, -1100],
+    ];
 
-      const scale = 0.15 + Math.random() * 0.25;
-      const rotX = Math.random() * Math.PI * 2;
-      const rotY = Math.random() * Math.PI * 2;
-      const rotZ = Math.random() * Math.PI * 2;
-
-      const count = countOptions[Math.floor(Math.random() * countOptions.length)];
-      const branches = branchOptions[Math.floor(Math.random() * branchOptions.length)];
-      const radius = radiusOptions[Math.floor(Math.random() * radiusOptions.length)];
-      const palette = palettes[Math.floor(Math.random() * palettes.length)];
-      const spinSpeed = 0.008 + Math.random() * 0.015;
-
-      list.push({
+    return placements.map((pos, i) => {
+      // Last entry always uses the green palette
+      const isGreen = i === placements.length - 1;
+      const p = isGreen ? palettes[palettes.length - 1] : palettes[i % (palettes.length - 1)];
+      return {
         id: i,
-        position: [x, y, z] as [number, number, number],
-        scale,
-        rotation: [rotX, rotY, rotZ] as [number, number, number],
-        count,
-        branches,
-        radius,
-        colorCore: palette.core,
-        colorInner: palette.inner,
-        colorMid: palette.mid,
-        colorOuter: palette.outer,
-        spinSpeed,
-      });
-    }
-    return list;
+        position: pos as [number, number, number],
+        scale: isGreen ? 0.26 : 0.14 + (i % 5) * 0.03,
+        rotation: [
+          Math.PI * ((i * 0.37) % 2),
+          Math.PI * ((i * 0.61) % 2),
+          Math.PI * ((i * 0.19) % 2),
+        ] as [number, number, number],
+        count: isGreen ? 6000 : 2500 + (i % 4) * 1000,
+        branches: isGreen ? 8 : 4 + (i % 5),
+        radius: isGreen ? 150 : 90 + (i % 5) * 15,
+        colorCore: p.core,
+        colorInner: p.inner,
+        colorMid: p.mid,
+        colorOuter: p.outer,
+        spinSpeed: isGreen ? 0.018 : 0.007 + (i % 8) * 0.001,
+      };
+    });
   }, []);
 
   return (
@@ -968,6 +1094,7 @@ export function MultipleBackgroundGalaxies() {
     </>
   );
 }
+
 
 // 13. Distant Asteroid Field
 export function DistantAsteroidField() {

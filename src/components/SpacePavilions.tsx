@@ -13,6 +13,7 @@ import {
   SpaceWaypoint,
   SupermassiveBlackHole,
   BackgroundGalaxy,
+  GiantTricolorGalaxy,
   MultipleBackgroundGalaxies,
   DistantAsteroidField,
 } from "./SpaceEnvironment";
@@ -28,6 +29,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
       {/* 2x Supermassive Black Hole & Cosmic Spiral Galaxy Deep in Background */}
       <SupermassiveBlackHole position={[650, 110, -550]} scale={2.0} />
       <BackgroundGalaxy position={[-650, 120, -600]} scale={1.5} />
+      <GiantTricolorGalaxy position={[-200, 180, 1400]} scale={[1.8, 1.0, 0.55] as any} />
       <MultipleBackgroundGalaxies />
       <DistantAsteroidField />
 
