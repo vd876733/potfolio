@@ -23,6 +23,7 @@ import {
   VenusPlanet,
   EarthPlanet,
   MarsPlanet,
+  RedNebula,
 } from "./SpaceEnvironment";
 import Orb from "./Orb";
 
@@ -37,6 +38,7 @@ export default function SpacePavilions({ onSectionClick }: SpacePavilionsProps) 
       <SupermassiveBlackHole position={[650, 110, -550]} scale={2.0} />
       <BackgroundGalaxy position={[-350, 120, -600]} scale={1.5} />
       <GiantTricolorGalaxy position={[-200, 180, 1400]} scale={[1.8, 1.0, 0.55] as any} />
+      <RedNebula position={[-450, 150, 150]} scale={3.5} />
       <MultipleBackgroundGalaxies />
       <DistantAsteroidField />
       <BottomGalaxy position={[650, -450, 0]} />

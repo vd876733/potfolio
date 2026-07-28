@@ -1834,6 +1834,78 @@ export function BottomGalaxy({
   );
 }
 
+// 12d. Red Nebula
+export function RedNebula({
+  position = [0, 0, 0],
+  scale = 1.0,
+}: {
+  position?: [number, number, number];
+  scale?: number;
+}) {
+  const meshRef = useRef<THREE.InstancedMesh>(null!);
+  const COUNT = 18000;
+
+  const { matrices, colors } = useMemo(() => {
+    const mats: THREE.Matrix4[] = [];
+    const cols: THREE.Color[] = [];
+    const dummy = new THREE.Object3D();
+    
+    // Deep reds, magentas, and bright whites for stars
+    const palette = ["#be123c", "#e11d48", "#f43f5e", "#86198f", "#d946ef", "#ffffff", "#fda4af"];
+    
+    for (let i = 0; i < COUNT; i++) {
+      // Create 3 main clumps/nodes
+      const clump = Math.floor(Math.random() * 3);
+      let cx = 0, cy = 0, cz = 0;
+      if (clump === 0) { cx = -80; cy = 40; cz = 0; }
+      if (clump === 1) { cx = 50; cy = -60; cz = 30; }
+      if (clump === 2) { cx = 20; cy = 80; cz = -20; }
+      
+      const r = Math.random() * 80 + Math.random() * 50;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(Math.random() * 2 - 1);
+      
+      const x = cx + r * Math.sin(phi) * Math.cos(theta);
+      const y = cy + r * Math.sin(phi) * Math.sin(theta);
+      const z = cz + r * Math.cos(phi);
+
+      dummy.position.set(x, y, z);
+      const s = Math.random() * 2.0 + 0.5;
+      dummy.scale.set(s, s, s);
+      dummy.updateMatrix();
+      mats.push(dummy.matrix.clone());
+
+      cols.push(new THREE.Color(palette[Math.floor(Math.random() * palette.length)]));
+    }
+    return { matrices: mats, colors: cols };
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!meshRef.current) return;
+    matrices.forEach((m, i) => meshRef.current.setMatrixAt(i, m));
+    colors.forEach((c, i) => meshRef.current.setColorAt(i, c));
+    
+    meshRef.current.instanceMatrix.needsUpdate = true;
+    if (meshRef.current.instanceColor) meshRef.current.instanceColor.needsUpdate = true;
+  }, [matrices, colors]);
+
+  useFrame((_, delta) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y += delta * 0.01;
+      meshRef.current.rotation.z += delta * 0.005;
+    }
+  });
+
+  return (
+    <group position={position} scale={scale}>
+      <instancedMesh ref={meshRef} args={[undefined, undefined, COUNT]} frustumCulled={false}>
+        <sphereGeometry args={[2.5, 4, 4]} />
+        <meshBasicMaterial vertexColors transparent opacity={0.85} blending={THREE.AdditiveBlending} depthWrite={false} />
+      </instancedMesh>
+    </group>
+  );
+}
+
 useGLTF.preload("/space/Sun by Jarlan Perez - 3XZEucM6wC7.glb");
 useGLTF.preload("/space/Black hole by Poly by Google - bUEMVxbw9Zr.glb");
 useGLTF.preload("/space/Mars by Jarlan Perez - 8sNKYRTUFAe.glb");
