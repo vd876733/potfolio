@@ -964,38 +964,42 @@ export function HighOrbitSpaceships() {
 
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
+    const radius = 160; // 10th position (following Pluto at 140)
 
     if (ship1Ref.current) {
-      const radius = 50;
-      const speed = 0.2;
+      const speed = 0.08;
       ship1Ref.current.position.x = Math.cos(t * speed) * radius;
       ship1Ref.current.position.z = Math.sin(t * speed) * radius;
-      ship1Ref.current.position.y = 26 + Math.sin(t * 0.5) * 4;
+      ship1Ref.current.position.y = Math.sin(t * 0.5) * 2;
       ship1Ref.current.rotation.y = -t * speed + Math.PI / 2;
-      ship1Ref.current.rotation.z = Math.sin(t * 0.5) * 0.15;
+      ship1Ref.current.rotation.z = Math.sin(t * 0.5) * 0.08;
     }
 
     if (ship2Ref.current) {
-      const radius = 65;
-      const speed = 0.15;
-      ship2Ref.current.position.x = Math.cos(-t * speed + 2) * radius;
-      ship2Ref.current.position.z = Math.sin(-t * speed + 2) * radius;
-      ship2Ref.current.position.y = 36 + Math.cos(t * 0.4) * 5;
+      const speed = 0.08;
+      // Orbiting in opposite direction, offset by Math.PI
+      ship2Ref.current.position.x = Math.cos(-t * speed + Math.PI) * radius;
+      ship2Ref.current.position.z = Math.sin(-t * speed + Math.PI) * radius;
+      ship2Ref.current.position.y = Math.cos(t * 0.4) * 2;
       ship2Ref.current.rotation.y = t * speed - Math.PI / 2;
-      ship2Ref.current.rotation.x = 0.1;
+      ship2Ref.current.rotation.x = 0.05;
     }
   });
 
   return (
-    <group>
-      <group ref={ship1Ref} position={[50, 26, 0]}>
+    // Tilt the entire orbital plane diagonally (about 22.5 degrees on X and Z axes)
+    <group rotation={[Math.PI / 8, 0, Math.PI / 8]}>
+      {/* 10th Orbit Ring */}
+      <OrbitRing radius={160} />
+
+      <group ref={ship1Ref} position={[160, 0, 0]}>
         <SpaceModel
           path="/space/Spaceship by Quaternius - VSxUAFhzbA.glb"
           scale={1.5}
         />
       </group>
 
-      <group ref={ship2Ref} position={[-65, 36, 0]}>
+      <group ref={ship2Ref} position={[-160, 0, 0]}>
         <SpaceModel
           path="/space/Spaceship by Quaternius - uCeLfsdmNP.glb"
           scale={1.8}
