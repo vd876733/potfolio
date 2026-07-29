@@ -140,7 +140,7 @@ const OptionWheel = ({
 
   // Single rAF loop that eases the wheel position toward its target
   const runFrame = useCallback((now: number) => {
-    const dt = Math.min((now - lastRef.current) / 1000, 0.05);
+    const dt = Math.max(0, Math.min((now - lastRef.current) / 1000, 0.05));
     lastRef.current = now;
     const cfg = cfgRef.current;
     const tau = Math.max(cfg.smoothing, 1) / 1000;
@@ -200,25 +200,40 @@ const OptionWheel = ({
     [startLoop, playTick]
   );
 
-  // Wheel / touchpad scrolling
-  useEffect(() => {
-    const el = rootRef.current;
-    if (!el) return;
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      const cfg = cfgRef.current;
-      const delta = e.deltaMode === 1 ? e.deltaY * 24 : e.deltaY;
-      const step = Math.max(-1, Math.min(1, delta / cfg.rowH));
-      applyTarget(targetRef.current + step, false);
-      if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current);
-      wheelTimerRef.current = setTimeout(() => applyTarget(targetRef.current, true), 140);
-    };
-    el.addEventListener('wheel', onWheel, { passive: false });
-    return () => {
-      el.removeEventListener('wheel', onWheel);
-      if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current);
-    };
-  }, [applyTarget]);
+  const onWheelRef = useRef<((e: WheelEvent) => void) | null>(null);
+
+  // Keep scroll handler logic updated with latest state
+  onWheelRef.current = (e: WheelEvent) => {
+    e.preventDefault();
+    const cfg = cfgRef.current;
+    const delta = e.deltaMode === 1 ? e.deltaY * 24 : e.deltaY;
+    const step = Math.max(-1, Math.min(1, delta / cfg.rowH));
+    applyTarget(targetRef.current + step, false);
+    if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current);
+    wheelTimerRef.current = setTimeout(() => applyTarget(targetRef.current, true), 140);
+  };
+
+  const rootRefCallback = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      rootRef.current = node;
+      const handleWheel = (e: WheelEvent) => {
+        if (onWheelRef.current) {
+          onWheelRef.current(e);
+        }
+      };
+      node.addEventListener('wheel', handleWheel, { passive: false });
+      (node as any)._wheelHandler = handleWheel;
+    } else {
+      if (rootRef.current) {
+        const prevNode = rootRef.current;
+        if ((prevNode as any)._wheelHandler) {
+          prevNode.removeEventListener('wheel', (prevNode as any)._wheelHandler);
+        }
+        rootRef.current = null;
+      }
+    }
+  }, []);
+
 
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (!cfgRef.current.draggable) return;
@@ -299,7 +314,7 @@ const OptionWheel = ({
 
   return (
     <div
-      ref={rootRef}
+      ref={rootRefCallback}
       role="listbox"
       tabIndex={0}
       aria-label="Option wheel"
