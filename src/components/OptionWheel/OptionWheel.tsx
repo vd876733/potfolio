@@ -200,17 +200,27 @@ const OptionWheel = ({
     [startLoop, playTick]
   );
 
+  const scrollAccumulatorRef = useRef<number>(0);
   const onWheelRef = useRef<((e: WheelEvent) => void) | null>(null);
 
   // Keep scroll handler logic updated with latest state
   onWheelRef.current = (e: WheelEvent) => {
     e.preventDefault();
     const cfg = cfgRef.current;
-    const delta = e.deltaMode === 1 ? e.deltaY * 24 : e.deltaY;
-    const step = Math.max(-1, Math.min(1, delta / cfg.rowH));
-    applyTarget(targetRef.current + step, false);
+    const deltaY = e.deltaMode === 1 ? e.deltaY * 24 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY;
+    scrollAccumulatorRef.current += deltaY;
+    const threshold = 60;
+    
+    if (Math.abs(scrollAccumulatorRef.current) >= threshold) {
+      const steps = Math.trunc(scrollAccumulatorRef.current / threshold);
+      scrollAccumulatorRef.current = scrollAccumulatorRef.current % threshold;
+      applyTarget(targetRef.current + steps, true);
+    }
+    
     if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current);
-    wheelTimerRef.current = setTimeout(() => applyTarget(targetRef.current, true), 140);
+    wheelTimerRef.current = setTimeout(() => {
+      scrollAccumulatorRef.current = 0;
+    }, 150);
   };
 
   const rootRefCallback = useCallback((node: HTMLDivElement | null) => {

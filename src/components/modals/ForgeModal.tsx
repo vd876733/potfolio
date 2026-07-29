@@ -70,7 +70,7 @@ export default function ForgeModal() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="absolute inset-0 w-full grid grid-cols-1 sm:grid-cols-2 gap-4"
+              className="relative md:absolute md:inset-0 w-full grid grid-cols-1 sm:grid-cols-2 gap-4"
             >
               {Object.entries(skills).map(([category, items]) => (
                 <div key={category} className="p-4 bg-slate-50 dark:bg-black/20 rounded-xl border border-slate-200 dark:border-white/5">
@@ -100,7 +100,7 @@ export default function ForgeModal() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="absolute inset-0 w-full grid grid-cols-1 md:grid-cols-5 gap-6"
+              className="relative md:absolute md:inset-0 w-full grid grid-cols-1 md:grid-cols-5 gap-6"
             >
               {/* Left Side: OptionWheel Selector */}
               <div className="md:col-span-2 relative h-[180px] md:h-full border border-slate-200 dark:border-white/5 rounded-xl bg-slate-50/55 dark:bg-black/15 flex flex-col justify-center overflow-hidden">
@@ -138,7 +138,7 @@ export default function ForgeModal() {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -15 }}
                       transition={{ duration: 0.15 }}
-                      className="flex flex-col justify-between h-full w-full gap-4"
+                      className="flex flex-col justify-between min-h-full w-full gap-4"
                     >
                       <div className="flex flex-col gap-2">
                         <div className="flex items-center justify-between gap-2">
