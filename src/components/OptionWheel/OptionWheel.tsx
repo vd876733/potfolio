@@ -205,20 +205,44 @@ const OptionWheel = ({
   );
 
   const scrollAccumulatorRef = useRef<number>(0);
+  const lastScrollTimeRef = useRef<number>(0);
   const onWheelRef = useRef<((e: WheelEvent) => void) | null>(null);
 
   // Keep scroll handler logic updated with latest state
   onWheelRef.current = (e: WheelEvent) => {
-    e.preventDefault();
     const cfg = cfgRef.current;
-    const deltaY = e.deltaMode === 1 ? e.deltaY * 24 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY;
-    scrollAccumulatorRef.current += deltaY;
-    const threshold = 60;
+    if (!cfg || !cfg.count) return;
+
+    const isAtTop = targetRef.current <= 0;
+    const isAtBottom = targetRef.current >= cfg.count - 1;
     
-    if (Math.abs(scrollAccumulatorRef.current) >= threshold) {
-      const steps = Math.trunc(scrollAccumulatorRef.current / threshold);
-      scrollAccumulatorRef.current = scrollAccumulatorRef.current % threshold;
-      applyTarget(targetRef.current + steps, true);
+    if (!cfg.loop && ((isAtTop && e.deltaY < 0) || (isAtBottom && e.deltaY > 0))) {
+      // Allow page scroll chaining when boundaries of the wheel are reached
+      return;
+    }
+
+    e.preventDefault();
+
+    // Reset accumulator on direction change to make response snappy
+    const currentSign = Math.sign(scrollAccumulatorRef.current);
+    const deltaSign = Math.sign(e.deltaY);
+    if (scrollAccumulatorRef.current !== 0 && currentSign !== deltaSign) {
+      scrollAccumulatorRef.current = e.deltaY;
+    } else {
+      scrollAccumulatorRef.current += e.deltaY;
+    }
+
+    const now = performance.now();
+    const timeDiff = now - lastScrollTimeRef.current;
+    const threshold = 30; // accumulated scroll delta threshold in pixels
+
+    if (timeDiff > 100) { // Throttle step changes to max 10 steps per second (100ms)
+      if (Math.abs(scrollAccumulatorRef.current) >= threshold) {
+        const dir = Math.sign(scrollAccumulatorRef.current);
+        applyTarget(targetRef.current + dir, true);
+        lastScrollTimeRef.current = now;
+        scrollAccumulatorRef.current = 0;
+      }
     }
     
     if (wheelTimerRef.current) clearTimeout(wheelTimerRef.current);
