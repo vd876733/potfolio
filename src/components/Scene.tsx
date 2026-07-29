@@ -6,6 +6,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Stars } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import SpacePavilions from "./SpacePavilions";
+import { playClickSound } from "@/utils/sound";
 
 interface SceneProps {
   onSectionClick: (section: string) => void;
@@ -29,12 +30,14 @@ export default function Scene({ onSectionClick, isMobile }: SceneProps) {
   const handleSectionClick = (section: string, position?: [number, number, number]) => {
     setSelectedSection(section);
     onSectionClick(section);
+    playClickSound();
     if (position) {
       setTarget(position);
     }
   };
 
   const handleResetView = () => {
+    playClickSound();
     setSelectedSection(null);
     setTarget([0, 0, 0]);
   };

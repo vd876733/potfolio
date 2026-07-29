@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback, useEffect } from 'react';
 import './OptionWheel.css';
+import { playHoverSound } from '@/utils/sound';
 
 const DEFAULT_ITEMS = [
   'Ambient',
@@ -166,7 +167,10 @@ const OptionWheel = ({
 
   const playTick = useCallback(() => {
     const { soundUrl, soundVolume } = cfgRef.current;
-    if (!soundUrl) return;
+    if (!soundUrl) {
+      playHoverSound();
+      return;
+    }
     const now = performance.now();
     if (now - lastTickRef.current < 70) return;
     lastTickRef.current = now;
