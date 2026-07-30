@@ -71,6 +71,19 @@
   },
   "projects": [
     {
+      "id": "it-helpdesk-ticket-system",
+      "title": "IT Helpdesk Ticket System",
+      "stack": [
+        "React",
+        "Spring Boot",
+        "Java",
+        "Tailwind CSS"
+      ],
+      "description": "A full-stack IT Helpdesk & Ticketing System designed to streamline technical support management, issue tracking, and ticket resolution workflows.",
+      "liveUrl": "https://it-helpdesk-ticket-system-psi.vercel.app/",
+      "githubUrl": "https://github.com/vd876733/-IT-Helpdesk-Ticket-System"
+    },
+    {
       "id": "expense-tracker-pro",
       "title": "Expense Tracker",
       "stack": [
