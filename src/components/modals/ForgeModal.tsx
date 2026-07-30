@@ -6,6 +6,7 @@ import { BookOpen, Code, Database, Brain, Cloud, FileText } from "lucide-react";
 import portfolioData from "@/data/portfolio.json";
 import AnimatedList from "@/components/AnimatedList/AnimatedList";
 import OptionWheel from "@/components/OptionWheel/OptionWheel";
+import KnowledgeForge from "@/components/KnowledgeForge";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface Certificate {
@@ -70,26 +71,9 @@ export default function ForgeModal() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="relative md:absolute md:inset-0 w-full grid grid-cols-1 sm:grid-cols-2 gap-4"
+              className="w-full"
             >
-              {Object.entries(skills).map(([category, items]) => (
-                <div key={category} className="p-4 bg-slate-50 dark:bg-black/20 rounded-xl border border-slate-200 dark:border-white/5">
-                  <div className="flex items-center gap-2 mb-3">
-                    {category === "Frontend" && <Code className="w-5 h-5 text-neon-accent" />}
-                    {category === "Backend" && <Database className="w-5 h-5 text-neon-accent" />}
-                    {category === "AI/ML" && <Brain className="w-5 h-5 text-neon-accent" />}
-                    {category === "DevOps" && <Cloud className="w-5 h-5 text-neon-accent" />}
-                    <h3 className="text-slate-900 dark:text-white font-bold font-space-grotesk">{category}</h3>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {items.map((skill) => (
-                      <span key={skill} className="px-2 py-1 bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-700 dark:text-white/80 text-xs font-inter rounded-md">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
+              <KnowledgeForge />
             </motion.div>
           )}
 
