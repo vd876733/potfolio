@@ -71,6 +71,20 @@
   },
   "projects": [
     {
+      "id": "dsa-leetcode-platform",
+      "title": "DSA LeetCode Platform",
+      "stack": [
+        "React",
+        "Node.js",
+        "Monaco Editor",
+        "Docker",
+        "C++"
+      ],
+      "description": "An enterprise online judge & algorithmic problem-solving environment featuring containerized execution sandboxes, real-time telemetry, and automated Big-O complexity profiling.",
+      "liveUrl": "https://dsa-website-two.vercel.app/",
+      "githubUrl": "https://github.com/vd876733"
+    },
+    {
       "id": "it-helpdesk-ticket-system",
       "title": "IT Helpdesk Ticket System",
       "stack": [

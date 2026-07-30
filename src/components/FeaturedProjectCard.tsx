@@ -124,7 +124,7 @@ public:
 export default function FeaturedProjectCard({
   title = "DSA LeetCode Platform",
   tagline = "An enterprise online judge & algorithmic environment with containerized sandboxes and real-time Big-O complexity profiling.",
-  liveUrl = "https://dsa-leetcode.example.com",
+  liveUrl = "https://dsa-website-two.vercel.app/",
   githubUrl = "https://github.com",
   stats = {
     problemsSolved: "100+ Solved",

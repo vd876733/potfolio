@@ -258,7 +258,7 @@ export default function Portfolio2D({ animationKey = 0 }: Portfolio2DProps) {
 
           {/* ── Featured DSA LeetCode Platform Showcase ── */}
           <section id="Featured Platform" className="w-full overflow-visible">
-            <FeaturedProjectCard />
+            <FeaturedProjectCard liveUrl="https://dsa-website-two.vercel.app/" />
           </section>
 
           <section id="Starship Hangar" className="w-full overflow-visible">
