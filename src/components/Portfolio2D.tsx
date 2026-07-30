@@ -11,6 +11,7 @@ import CursorGrid from "./CursorGrid";
 import BorderGlow from "./BorderGlow";
 import TechStack from "./TechStack";
 import SplitText from "./SplitText/SplitText";
+import FeaturedProjectCard from "./FeaturedProjectCard";
 
 interface Portfolio2DProps {
   animationKey?: number;
@@ -253,6 +254,11 @@ export default function Portfolio2D({ animationKey = 0 }: Portfolio2DProps) {
                 <ArenaModal />
               </div>
             </BorderGlow>
+          </section>
+
+          {/* ── Featured DSA LeetCode Platform Showcase ── */}
+          <section id="Featured Platform" className="w-full overflow-visible">
+            <FeaturedProjectCard />
           </section>
 
           <section id="Starship Hangar" className="w-full overflow-visible">
