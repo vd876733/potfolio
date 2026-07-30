@@ -22,7 +22,7 @@ const navItems = [
 
 export default function FloatingNavbar({
   onNavClick,
-  viewMode = "3D",
+  viewMode = "2D",
   toggleViewMode,
 }: FloatingNavbarProps) {
   const [activeTab, setActiveTab] = useState<string>("Command Central");

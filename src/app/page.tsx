@@ -15,6 +15,8 @@ import TopNav from "@/components/TopNav";
 import Portfolio2D from "@/components/Portfolio2D";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
+import { useTheme } from "next-themes";
+
 import LoadingOverlay from "@/components/LoadingOverlay";
 import TargetCursor from "@/components/TargetCursor/TargetCursor";
 
@@ -26,29 +28,20 @@ const Scene = dynamic(() => import("@/components/Scene"), {
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<"3D" | "2D">("3D");
+  const [viewMode, setViewMode] = useState<"3D" | "2D">("2D");
   const [twoDKey, setTwoDKey] = useState(0);
   const isMobile = useIsMobile();
   const [isInitialized, setIsInitialized] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const { setTheme } = useTheme();
 
   useEffect(() => {
-    // Determine the initial layout depending on the screen size
     if (!isInitialized) {
-      if (window.innerWidth < 768) {
-        setViewMode("2D");
-      }
+      setViewMode("2D");
+      setTheme("light");
       setIsInitialized(true);
     }
-  }, [isInitialized]);
-
-  useEffect(() => {
-    // Simulate initial loading completion or bridge with 3D loader events
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1200);
-    return () => clearTimeout(timer);
-  }, []);
+  }, [isInitialized, setTheme]);
 
   const handleNavClick = (section: string) => {
     if (viewMode === "3D") {
@@ -100,7 +93,15 @@ export default function Home() {
         toggleViewMode={() => {
           setViewMode(prev => {
             const next = prev === "3D" ? "2D" : "3D";
-            if (next === "2D") setTwoDKey((k) => k + 1);
+            if (next === "3D") {
+              setIsLoading(true);
+              setTimeout(() => {
+                setIsLoading(false);
+              }, 1200);
+            } else {
+              setIsLoading(false);
+              setTwoDKey((k) => k + 1);
+            }
             return next;
           });
           setActiveSection(null);

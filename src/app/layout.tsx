@@ -35,7 +35,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="bg-slate-50 text-slate-900 dark:bg-obsidian dark:text-slate-100 transition-colors duration-300">
-        <ThemeProvider attribute="class" defaultTheme="dark">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           {children}
         </ThemeProvider>
       </body>
