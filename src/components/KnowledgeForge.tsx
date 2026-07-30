@@ -143,8 +143,8 @@ export function useSkillState<T>(initialData: T) {
     proficiency: "Advanced",
     yearsOfExp: "3+ Years",
     masteryPercentage: 90,
-    icon: <SiNextdotjs className="w-6 h-6 text-white" />,
-    brandColor: "#ffffff",
+    icon: <SiNextdotjs className="w-6 h-6 text-slate-900 dark:text-white" />,
+    brandColor: "#a855f7",
     description: "App Router architecture, Server Actions, Partial Prerendering (PPR), Edge API routes, and SSG/ISR caching.",
     projects: [
       {
@@ -182,7 +182,7 @@ export async function GET(request: Request) {
     proficiency: "Advanced",
     yearsOfExp: "2+ Years",
     masteryPercentage: 85,
-    icon: <SiThreedotjs className="w-6 h-6 text-white" />,
+    icon: <SiThreedotjs className="w-6 h-6 text-slate-900 dark:text-white" />,
     brandColor: "#a855f7",
     description: "3D scene graph orchestration, GLSL shaders, post-processing bloom, lighting, and WebGL optimization.",
     projects: [
@@ -974,7 +974,7 @@ export default function KnowledgeForge({
   };
 
   return (
-    <div className={`w-full text-slate-100 ${className}`}>
+    <div className={`w-full text-slate-900 dark:text-slate-100 ${className}`}>
       {/* Category Filter Pills */}
       <div className="flex flex-wrap items-center gap-2 mb-6">
         {["All", ...Object.keys(CATEGORIES)].map((cat) => (
@@ -983,8 +983,8 @@ export default function KnowledgeForge({
             onClick={() => setActiveCategoryFilter(cat)}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center gap-1.5 border ${
               activeCategoryFilter === cat
-                ? "bg-purple-600/30 border-purple-500/60 text-white shadow-[0_0_12px_rgba(168,85,247,0.3)]"
-                : "bg-slate-900/60 dark:bg-[#131022] border-white/10 text-slate-400 hover:text-white hover:bg-slate-800/60"
+                ? "bg-purple-600/20 dark:bg-purple-600/30 border-purple-500 text-purple-700 dark:text-purple-300 font-semibold shadow-[0_0_12px_rgba(168,85,247,0.25)]"
+                : "bg-slate-100 dark:bg-[#131022] border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800/60"
             }`}
           >
             {cat !== "All" && getCategoryIcon(cat)}
@@ -1000,22 +1000,22 @@ export default function KnowledgeForge({
           .map(([categoryName, skillList]) => (
             <div
               key={categoryName}
-              className="p-5 rounded-2xl bg-[#0f0d19]/80 dark:bg-[#0f0d19]/90 border border-purple-500/15 shadow-xl backdrop-blur-xl relative overflow-hidden group hover:border-purple-500/30 transition-all duration-300"
+              className="p-5 rounded-2xl bg-slate-50/90 dark:bg-[#0f0d19]/90 border border-slate-200 dark:border-purple-500/15 shadow-md dark:shadow-xl backdrop-blur-xl relative overflow-hidden group hover:border-purple-400/40 dark:hover:border-purple-500/30 transition-all duration-300"
             >
               {/* Subtle ambient corner gradient */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-600/5 rounded-full blur-2xl pointer-events-none group-hover:bg-purple-600/10 transition-all" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 dark:bg-purple-600/5 rounded-full blur-2xl pointer-events-none group-hover:bg-purple-500/10 dark:group-hover:bg-purple-600/10 transition-all" />
 
               {/* Category Header */}
-              <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-3">
+              <div className="flex items-center justify-between mb-4 border-b border-slate-200 dark:border-white/5 pb-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                  <div className="p-2 rounded-lg bg-slate-200/60 dark:bg-white/5 border border-slate-300/60 dark:border-white/10">
                     {getCategoryIcon(categoryName)}
                   </div>
-                  <h3 className="text-base font-bold tracking-tight text-white font-space-grotesk">
+                  <h3 className="text-base font-bold tracking-tight text-slate-900 dark:text-white font-space-grotesk">
                     {categoryName}
                   </h3>
                 </div>
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/20 font-semibold">
                   {skillList.length} Skills
                 </span>
               </div>
@@ -1036,8 +1036,8 @@ export default function KnowledgeForge({
                       aria-label={`Open details for ${skillName}`}
                       className={`cursor-pointer group/chip relative px-3.5 py-2 rounded-xl text-xs font-medium flex items-center gap-2.5 transition-all duration-300 border ${
                         isSelected
-                          ? "bg-purple-600/40 border-purple-400 text-white shadow-[0_0_20px_rgba(168,85,247,0.5)] ring-1 ring-purple-400/50"
-                          : "bg-slate-900/80 dark:bg-[#17132b]/80 border-purple-500/20 text-slate-200 hover:border-purple-500/60 hover:shadow-[0_0_18px_rgba(168,85,247,0.35)] hover:text-white"
+                          ? "bg-purple-600/20 dark:bg-purple-600/40 border-purple-500 dark:border-purple-400 text-purple-900 dark:text-white shadow-[0_0_20px_rgba(168,85,247,0.3)] ring-1 ring-purple-400/50 font-bold"
+                          : "bg-white dark:bg-[#17132b]/80 border-slate-200 dark:border-purple-500/20 text-slate-700 dark:text-slate-200 hover:border-purple-400/60 dark:hover:border-purple-500/60 hover:shadow-md dark:hover:shadow-[0_0_18px_rgba(168,85,247,0.35)] hover:text-slate-900 dark:hover:text-white"
                       }`}
                     >
                       {/* Icon with subtle hover pulse */}
@@ -1072,7 +1072,7 @@ export default function KnowledgeForge({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               onClick={handleClose}
-              className="fixed inset-0 bg-[#08060f]/80 backdrop-blur-md z-40 cursor-pointer"
+              className="fixed inset-0 bg-slate-900/40 dark:bg-[#08060f]/80 backdrop-blur-md z-40 cursor-pointer"
               aria-hidden="true"
             />
 
@@ -1085,7 +1085,7 @@ export default function KnowledgeForge({
               role="dialog"
               aria-modal="true"
               aria-label={`${selectedSkill.name} Skill Details`}
-              className="fixed top-0 right-0 bottom-0 z-50 h-full w-full max-w-xl sm:w-[500px] md:w-[560px] lg:w-[600px] bg-[#0f0d19] border-l border-purple-500/20 shadow-2xl flex flex-col overflow-hidden"
+              className="fixed top-0 right-0 bottom-0 z-50 h-full w-full max-w-xl sm:w-[500px] md:w-[560px] lg:w-[600px] bg-white dark:bg-[#0f0d19] border-l border-slate-200 dark:border-purple-500/20 shadow-2xl flex flex-col overflow-hidden text-slate-900 dark:text-white"
             >
               {/* Drawer Ambient Header Gradient */}
               <div
@@ -1096,24 +1096,24 @@ export default function KnowledgeForge({
               />
 
               {/* Sticky Top Bar */}
-              <div className="relative z-10 flex items-center justify-between p-6 border-b border-white/10 bg-[#0f0d19]/90 backdrop-blur-md">
+              <div className="relative z-10 flex items-center justify-between p-6 border-b border-slate-200 dark:border-white/10 bg-white/90 dark:bg-[#0f0d19]/90 backdrop-blur-md">
                 <div className="flex items-center gap-3.5">
                   <div
-                    className="p-3 rounded-2xl bg-white/5 border border-white/10 shadow-inner flex items-center justify-center"
+                    className="p-3 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-inner flex items-center justify-center"
                     style={{ boxShadow: `0 0 15px ${selectedSkill.brandColor}33` }}
                   >
                     {selectedSkill.icon}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h2 className="text-xl font-bold text-white font-space-grotesk">
+                      <h2 className="text-xl font-bold text-slate-900 dark:text-white font-space-grotesk">
                         {selectedSkill.name}
                       </h2>
-                      <span className="px-2.5 py-0.5 text-[10px] font-mono rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                      <span className="px-2.5 py-0.5 text-[10px] font-mono rounded-full bg-purple-500/10 text-purple-700 dark:text-purple-300 border border-purple-500/30 font-semibold">
                         {selectedSkill.category}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400 mt-0.5">Technical Competency & Experience</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Technical Competency & Experience</p>
                   </div>
                 </div>
 
@@ -1121,7 +1121,7 @@ export default function KnowledgeForge({
                 <button
                   onClick={handleClose}
                   aria-label="Close drawer"
-                  className="p-2 rounded-xl bg-white/5 hover:bg-white/15 text-slate-400 hover:text-white border border-white/10 transition-all cursor-pointer"
+                  className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/15 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/10 transition-all cursor-pointer"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1130,24 +1130,24 @@ export default function KnowledgeForge({
               {/* Drawer Scrollable Body Content */}
               <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
                 {/* Overview Description */}
-                <div className="p-4 rounded-xl bg-white/[0.03] border border-white/5 text-sm text-slate-300 leading-relaxed font-inter">
+                <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/5 text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-inter">
                   {selectedSkill.description}
                 </div>
 
                 {/* Proficiency & Years of Experience Bar */}
-                <div className="p-5 rounded-2xl bg-slate-900/60 border border-purple-500/20 relative overflow-hidden">
+                <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-purple-500/20 relative overflow-hidden">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <Award className="w-4 h-4 text-purple-400" />
-                      <span className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                      <Award className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                      <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                         Proficiency & Experience
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-xs">
-                      <span className="px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-300 font-semibold border border-purple-500/30">
+                      <span className="px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-700 dark:text-purple-300 font-semibold border border-purple-500/30">
                         {selectedSkill.proficiency}
                       </span>
-                      <span className="text-slate-400 font-mono">
+                      <span className="text-slate-500 dark:text-slate-400 font-mono">
                         • {selectedSkill.yearsOfExp}
                       </span>
                     </div>
@@ -1155,11 +1155,11 @@ export default function KnowledgeForge({
 
                   {/* Progress Bar Container */}
                   <div className="space-y-1.5">
-                    <div className="flex justify-between text-xs font-mono text-slate-400">
+                    <div className="flex justify-between text-xs font-mono text-slate-500 dark:text-slate-400">
                       <span>Skill Mastery</span>
-                      <span className="text-purple-300 font-bold">{selectedSkill.masteryPercentage}%</span>
+                      <span className="text-purple-700 dark:text-purple-300 font-bold">{selectedSkill.masteryPercentage}%</span>
                     </div>
-                    <div className="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden p-0.5 border border-white/5">
+                    <div className="w-full h-2.5 rounded-full bg-slate-200 dark:bg-slate-950 overflow-hidden p-0.5 border border-slate-300/50 dark:border-white/5">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${selectedSkill.masteryPercentage}%` }}
@@ -1172,8 +1172,8 @@ export default function KnowledgeForge({
 
                 {/* Key Projects Built */}
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                    <FolderGit2 className="w-4 h-4 text-indigo-400" />
+                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                    <FolderGit2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                     <span>Key Projects Built ({selectedSkill.projects.length})</span>
                   </div>
 
@@ -1181,10 +1181,10 @@ export default function KnowledgeForge({
                     {selectedSkill.projects.map((proj, idx) => (
                       <div
                         key={idx}
-                        className="p-4 rounded-xl bg-slate-900/50 border border-white/10 hover:border-purple-500/30 transition-all group/proj"
+                        className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 hover:border-purple-400/40 dark:hover:border-purple-500/30 transition-all group/proj"
                       >
                         <div className="flex items-start justify-between gap-2 mb-1.5">
-                          <h4 className="text-sm font-bold text-white font-space-grotesk group-hover/proj:text-purple-300 transition-colors">
+                          <h4 className="text-sm font-bold text-slate-900 dark:text-white font-space-grotesk group-hover/proj:text-purple-600 dark:group-hover/proj:text-purple-300 transition-colors">
                             {proj.name}
                           </h4>
                           {(proj.link || proj.github) && (
@@ -1192,14 +1192,14 @@ export default function KnowledgeForge({
                               href={proj.link || proj.github}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-slate-400 hover:text-white p-1 rounded-md hover:bg-white/10 transition-colors"
+                              className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white p-1 rounded-md hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
                               title="View Project"
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
                             </a>
                           )}
                         </div>
-                        <p className="text-xs text-slate-400 leading-relaxed mb-3">
+                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
                           {proj.description}
                         </p>
 
@@ -1208,7 +1208,7 @@ export default function KnowledgeForge({
                           {proj.techTags.map((tag) => (
                             <span
                               key={tag}
-                              className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-white/5 border border-white/10 text-slate-300"
+                              className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-slate-200/70 dark:bg-white/5 border border-slate-300/70 dark:border-white/10 text-slate-700 dark:text-slate-300 font-medium"
                             >
                               {tag}
                             </span>
@@ -1222,20 +1222,20 @@ export default function KnowledgeForge({
                 {/* Quick Code Snippet Box */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 uppercase tracking-wider">
-                      <Terminal className="w-4 h-4 text-emerald-400" />
+                    <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                      <Terminal className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                       <span>Code Snippet / Sample Usage</span>
                     </div>
 
                     {/* Copy Code Button */}
                     <button
                       onClick={handleCopyCode}
-                      className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-white px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 transition-all cursor-pointer"
+                      className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/15 border border-slate-300 dark:border-white/10 transition-all cursor-pointer"
                     >
                       {copied ? (
                         <>
-                          <Check className="w-3.5 h-3.5 text-emerald-400" />
-                          <span className="text-emerald-400 font-medium">Copied!</span>
+                          <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
+                          <span className="text-emerald-600 dark:text-emerald-400 font-medium">Copied!</span>
                         </>
                       ) : (
                         <>
@@ -1275,7 +1275,7 @@ export default function KnowledgeForge({
               </div>
 
               {/* Drawer Footer Actions */}
-              <div className="p-4 border-t border-white/10 bg-[#0f0d19] flex items-center justify-between text-xs text-slate-400">
+              <div className="p-4 border-t border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#0f0d19] flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                 <span className="font-mono">ESC to close</span>
                 <button
                   onClick={handleClose}
