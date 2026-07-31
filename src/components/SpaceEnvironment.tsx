@@ -1270,18 +1270,18 @@ export function SupermassiveBlackHole({
     <group position={position} scale={scale}>
       {/* Pitch-black event horizon sphere */}
       <mesh renderOrder={2}>
-        <sphereGeometry args={[35, 64, 64]} />
+        <sphereGeometry args={[42, 64, 64]} />
         <meshBasicMaterial color="#000000" depthWrite />
       </mesh>
 
-      {/* Horizontal crossing light band — Saturn-like torus over the equator */}
+      {/* Thick Ring — inner white core + outer yellow glow = white-yellow combo */}
       <mesh rotation={[0, 0, 0.05]} renderOrder={3}>
-        <torusGeometry args={[37, 2.5, 16, 120]} />
-        <meshBasicMaterial color="#ffff00" transparent opacity={0.85} />
+        <torusGeometry args={[47, 5, 16, 120]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.72} />
       </mesh>
       <mesh rotation={[0, 0, 0.05]} renderOrder={3}>
-        <torusGeometry args={[37.5, 5, 16, 120]} />
-        <meshBasicMaterial color="#ffff00" transparent opacity={0.65} blending={THREE.AdditiveBlending} />
+        <torusGeometry args={[53, 11, 16, 120]} />
+        <meshBasicMaterial color="#ffff00" transparent opacity={0.52} blending={THREE.AdditiveBlending} />
       </mesh>
 
       {/* All 3 disk layers rotate together */}
@@ -1305,11 +1305,17 @@ export function SupermassiveBlackHole({
         </instancedMesh>
       </group>
 
-      {/* Small perpendicular ring — stands vertical (90° to the disk) */}
+      {/* Vertical perpendicular ring — made of very small rocks */}
       <group ref={perpGroupRef} rotation={[Math.PI / 2, 0, 0]}>
         <instancedMesh ref={perpRingRef} args={[undefined, undefined, perpCount]}>
-          <boxGeometry args={[0.8, 0.8, 0.8]} />
-          <meshBasicMaterial vertexColors transparent opacity={0.28} blending={THREE.AdditiveBlending} />
+          <icosahedronGeometry args={[0.18, 0]} />
+          <meshStandardMaterial
+            color="#ffffff"
+            roughness={0.85}
+            metalness={0.1}
+            emissive="#ffff00"
+            emissiveIntensity={0.55}
+          />
         </instancedMesh>
       </group>
 
@@ -1318,11 +1324,11 @@ export function SupermassiveBlackHole({
         <instancedMesh ref={rockMeshRef} args={[undefined, undefined, rockCount]}>
           <icosahedronGeometry args={[0.25, 0]} />
           <meshStandardMaterial
-            color="#FFFFEE"
+            color="#ffffff"
             roughness={0.8}
             metalness={0.2}
-            emissive="#FFFF00"
-            emissiveIntensity={0.25}
+            emissive="#ffff00"
+            emissiveIntensity={0.68}
           />
         </instancedMesh>
       </group>
