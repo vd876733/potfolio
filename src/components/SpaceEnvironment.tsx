@@ -4,6 +4,9 @@ import { useMemo, useRef, useLayoutEffect, MutableRefObject } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, Float, Html } from "@react-three/drei";
 import * as THREE from "three";
+import EnduranceSpacecraft from "./EnduranceSpacecraft";
+export { EnduranceSpacecraft };
+
 
 // Safe GLTF Loader helper with shadow support
 function SpaceModel({
@@ -1274,11 +1277,11 @@ export function SupermassiveBlackHole({
       {/* Horizontal crossing light band — Saturn-like torus over the equator */}
       <mesh rotation={[0, 0, 0.05]} renderOrder={3}>
         <torusGeometry args={[37, 2.5, 16, 120]} />
-        <meshBasicMaterial color="#ffff00" transparent opacity={0.7} />
+        <meshBasicMaterial color="#ffff00" transparent opacity={0.85} />
       </mesh>
       <mesh rotation={[0, 0, 0.05]} renderOrder={3}>
         <torusGeometry args={[37.5, 5, 16, 120]} />
-        <meshBasicMaterial color="#ffff00" transparent opacity={0.4} blending={THREE.AdditiveBlending} />
+        <meshBasicMaterial color="#ffff00" transparent opacity={0.65} blending={THREE.AdditiveBlending} />
       </mesh>
 
       {/* All 3 disk layers rotate together */}
@@ -1286,19 +1289,19 @@ export function SupermassiveBlackHole({
         {/* Inner bright glow zone */}
         <instancedMesh ref={innerDiskRef} args={[undefined, undefined, innerCount]}>
           <boxGeometry args={[0.7, 0.7, 0.7]} />
-          <meshBasicMaterial vertexColors transparent opacity={0.6} blending={THREE.AdditiveBlending} />
+          <meshBasicMaterial vertexColors transparent opacity={0.28} blending={THREE.AdditiveBlending} />
         </instancedMesh>
 
         {/* Mid yellow-orange disk */}
         <instancedMesh ref={midDiskRef} args={[undefined, undefined, midCount]}>
           <boxGeometry args={[1.0, 1.0, 1.0]} />
-          <meshBasicMaterial vertexColors transparent opacity={0.45} blending={THREE.AdditiveBlending} />
+          <meshBasicMaterial vertexColors transparent opacity={0.2} blending={THREE.AdditiveBlending} />
         </instancedMesh>
 
         {/* Outer sparse orange-red cloud */}
         <instancedMesh ref={outerDiskRef} args={[undefined, undefined, outerCount]}>
           <boxGeometry args={[1.2, 1.2, 1.2]} />
-          <meshBasicMaterial vertexColors transparent opacity={0.3} blending={THREE.AdditiveBlending} />
+          <meshBasicMaterial vertexColors transparent opacity={0.13} blending={THREE.AdditiveBlending} />
         </instancedMesh>
       </group>
 
@@ -1306,7 +1309,7 @@ export function SupermassiveBlackHole({
       <group ref={perpGroupRef} rotation={[Math.PI / 2, 0, 0]}>
         <instancedMesh ref={perpRingRef} args={[undefined, undefined, perpCount]}>
           <boxGeometry args={[0.8, 0.8, 0.8]} />
-          <meshBasicMaterial vertexColors transparent opacity={0.65} blending={THREE.AdditiveBlending} />
+          <meshBasicMaterial vertexColors transparent opacity={0.28} blending={THREE.AdditiveBlending} />
         </instancedMesh>
       </group>
 
@@ -1319,13 +1322,21 @@ export function SupermassiveBlackHole({
             roughness={0.8}
             metalness={0.2}
             emissive="#FFFF00"
-            emissiveIntensity={0.6}
+            emissiveIntensity={0.25}
           />
         </instancedMesh>
       </group>
 
       {/* Bright core glow light */}
-      <pointLight color="#ffff00" intensity={4.5} distance={400} decay={1.3} />
+      <pointLight color="#ffff00" intensity={2.0} distance={400} decay={1.3} />
+
+      {/* Interstellar Endurance Spacecraft hovering directly above the accretion disc */}
+      <EnduranceSpacecraft
+        position={[-50, 10, -75]}
+        scale={0.14}
+        rotation={[0, 0, 0]}
+        spinSpeed={0.35}
+      />
     </group>
   );
 }
