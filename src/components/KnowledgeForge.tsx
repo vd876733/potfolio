@@ -100,6 +100,13 @@ const SKILLS_DATABASE: Record<string, SkillDetail> = {
     description: "Component-driven UI architecture, custom hooks, state optimization, Concurrent React 19, and Server Components.",
     projects: [
       {
+        name: "3rd I Studio - Styling OS",
+        description: "Mobile-first ERP logistics portal with drag-and-drop prop mood boards and pre-signed assets uploading.",
+        techTags: ["React 19", "Next.js", "Tailwind CSS"],
+        link: "https://3rd-i-studio.vercel.app/dashboard",
+        github: "https://github.com/vd876733/3rd_i_studio"
+      },
+      {
         name: "3D Interactive Portfolio",
         description: "An immersive web portfolio built with React 19, Three.js canvas integration, and fluid Framer Motion transitions.",
         techTags: ["React 19", "Three.js", "Tailwind CSS"],
@@ -147,6 +154,13 @@ export function useSkillState<T>(initialData: T) {
     brandColor: "#a855f7",
     description: "App Router architecture, Server Actions, Partial Prerendering (PPR), Edge API routes, and SSG/ISR caching.",
     projects: [
+      {
+        name: "3rd I Studio - Styling OS",
+        description: "Mobile-first interior design studio ERP featuring a barcode scan-to-pack module and PWA offline fallback caching.",
+        techTags: ["Next.js", "Prisma", "Serwist", "PWA"],
+        link: "https://3rd-i-studio.vercel.app/dashboard",
+        github: "https://github.com/vd876733/3rd_i_studio"
+      },
       {
         name: "Architectural 3D Web App",
         description: "Next.js 16 app router portfolio with server-rendered metadata and client-side webGL viewports.",
@@ -226,6 +240,13 @@ export function createGlowingMesh() {
     description: "Utility-first design systems, custom color token mapping, dark mode themes, and responsive CSS architectures.",
     projects: [
       {
+        name: "3rd I Studio - Styling OS UI",
+        description: "Mobile-responsive ERP dashboard styled with custom brand palettes and flexible grid layouts.",
+        techTags: ["Tailwind CSS", "React", "Mobile-First"],
+        link: "https://3rd-i-studio.vercel.app/dashboard",
+        github: "https://github.com/vd876733/3rd_i_studio"
+      },
+      {
         name: "Knowledge Forge UI System",
         description: "Dark purple glowing glassmorphism theme components with dynamic backdrop blurs.",
         techTags: ["Tailwind", "CSS Grid", "React"]
@@ -293,6 +314,13 @@ export const drawerVariants = {
     brandColor: "#3178c6",
     description: "Strict static typing, conditional types, mapped types, generics, and compile-time type safety.",
     projects: [
+      {
+        name: "3rd I Studio - Styling OS",
+        description: "Type-safe interactive mood board compositor implementing dynamic scaling, rotations, and layer sequencing.",
+        techTags: ["TypeScript", "Next.js", "React"],
+        link: "https://3rd-i-studio.vercel.app/dashboard",
+        github: "https://github.com/vd876733/3rd_i_studio"
+      },
       {
         name: "Type-Safe State Machine",
         description: "Discriminated union-based event emitter and reducer engine for state management.",

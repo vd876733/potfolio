@@ -71,6 +71,21 @@
   },
   "projects": [
     {
+      "id": "3rd-i-studio",
+      "title": "3rd I Studio - Styling OS",
+      "stack": [
+        "Next.js",
+        "React",
+        "Tailwind CSS",
+        "Prisma",
+        "SQLite",
+        "PWA"
+      ],
+      "description": "A mobile-first ERP and warehouse logistics platform designed specifically for interior design studios, managing prop inventory, team assignments, real-time packing progress with barcode scanning, and visual mood boards.",
+      "liveUrl": "https://3rd-i-studio.vercel.app/dashboard",
+      "githubUrl": "https://github.com/vd876733/3rd_i_studio"
+    },
+    {
       "id": "dsa-leetcode-platform",
       "title": "DSA LeetCode Platform",
       "stack": [
