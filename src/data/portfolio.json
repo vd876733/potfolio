@@ -233,6 +233,27 @@
   },
   "certificates": [
     {
+      "id": "PLAN-56138075980A",
+      "title": "1M1B | AI for Sustainability Virtual Internship",
+      "issuer": "IBM SkillsBuild & 1M1B",
+      "date": "August 2026",
+      "pdfUrl": "/certificates/skillsbuild-1m1b-ai-sustainability-virtual-internship.pdf"
+    },
+    {
+      "id": "PLAN-F60F1D7DADA9",
+      "title": "1M1B | AI for Sustainability",
+      "issuer": "IBM SkillsBuild & 1M1B",
+      "date": "August 2026",
+      "pdfUrl": "/certificates/skillsbuild-1m1b-ai-sustainability.pdf"
+    },
+    {
+      "id": "IICT-07072652331",
+      "title": "Foundation Course on AI Readiness",
+      "issuer": "Govt of India (MIB), IICT & Google / YouTube",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/govt-google-youtube-ai-readiness.pdf"
+    },
+    {
       "id": "103481398OCI26DCFA",
       "title": "Oracle AI Database Certified Foundations Associate",
       "issuer": "Oracle Corporation",
