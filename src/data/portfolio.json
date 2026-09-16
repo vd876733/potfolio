@@ -122,7 +122,7 @@
         "Tailwind CSS"
       ],
       "description": "A comprehensive full-stack expense tracking application built with Spring Boot and React. Enables users to securely log daily expenses, monitor budgets, and visualize financial trends with an intuitive UI.",
-      "liveUrl": "#",
+      "liveUrl": "https://expense-tracker-spring-boot-and-rea.vercel.app/login",
       "githubUrl": "https://github.com/vd876733/Expense_Tracker-Spring-boot-And-React-"
     },
     {
@@ -261,6 +261,20 @@
       "score": "88%",
       "pdfUrl": "/certificates/oci26dcfa.jpg",
       "verificationUrl": "https://certview.oracle.com"
+    },
+    {
+      "id": "google-ai-mod4",
+      "title": "Oracle E-Certificate",
+      "issuer": "Oracle",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/ecertificate.pdf"
+    },
+    {
+      "id": "google-ai-mod5",
+      "title": "Oracle Score Report",
+      "issuer": "Oracle",
+      "date": "July 2026",
+      "pdfUrl": "/certificates/scorereport.pdf"
     },
     {
       "id": "google-ai-essentials",
@@ -406,21 +420,8 @@
       "issuer": "Google",
       "date": "July 2026",
       "pdfUrl": "/certificates/googlepromptingessentialsbadge20260711-20-bz6zqz.pdf"
-    },
-    {
-      "id": "google-ai-mod4",
-      "title": "Oracle E-Certificate",
-      "issuer": "Oracle",
-      "date": "July 2026",
-      "pdfUrl": "/certificates/ecertificate.pdf"
-    },
-    {
-      "id": "google-ai-mod5",
-      "title": "Oracle Score Report",
-      "issuer": "Oracle",
-      "date": "July 2026",
-      "pdfUrl": "/certificates/scorereport.pdf"
     }
+    
   ],
   "sketches": [
     {
