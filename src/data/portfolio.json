@@ -122,7 +122,7 @@
         "Tailwind CSS"
       ],
       "description": "A comprehensive full-stack expense tracking application built with Spring Boot and React. Enables users to securely log daily expenses, monitor budgets, and visualize financial trends with an intuitive UI.",
-      "liveUrl": "https://expense-tracker-spring-boot-and-rea.vercel.app/login",
+      "liveUrl": "https://expense-tracker-spring-boot-and-rea.vercel.app/",
       "githubUrl": "https://github.com/vd876733/Expense_Tracker-Spring-boot-And-React-"
     },
     {
